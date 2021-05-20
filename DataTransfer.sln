@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransfer", "DataTransfer\DataTransfer.csproj", "{BA4E6A4C-763F-4330-8AD0-5E50EA2ACDDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoystickExample", "JoystickExample\JoystickExample.csproj", "{1F553482-96A9-4271-9881-510383266728}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA4E6A4C-763F-4330-8AD0-5E50EA2ACDDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4E6A4C-763F-4330-8AD0-5E50EA2ACDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA4E6A4C-763F-4330-8AD0-5E50EA2ACDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA4E6A4C-763F-4330-8AD0-5E50EA2ACDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F553482-96A9-4271-9881-510383266728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F553482-96A9-4271-9881-510383266728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F553482-96A9-4271-9881-510383266728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F553482-96A9-4271-9881-510383266728}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {649B40A4-0820-4E92-AEDA-4C84FD4250D1}
+	EndGlobalSection
+EndGlobal
