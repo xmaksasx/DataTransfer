@@ -2,6 +2,7 @@
 {
 	class ChannelTvHeadEffectStruct
 	{
+		#region Fields
 		/// <summary>
 		/// использовать адаптацию яркости [0/1]
 		/// </summary>
@@ -31,7 +32,7 @@
 		/// использовать фильтр сглаживания [0/1]
 		/// </summary>
 		private int use_blur;
-		
+
 		/// <summary>
 		/// Значение яркости [-1 .. 1] 
 		/// </summary>
@@ -82,5 +83,6 @@
 		/// </summary>
 		private float tv_gamma;
 
+		#endregion
 	}
 }

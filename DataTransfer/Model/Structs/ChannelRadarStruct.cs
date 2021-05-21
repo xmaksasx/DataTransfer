@@ -2,6 +2,7 @@
 {
 	class ChannelRadarStruct
 	{
+		#region Fields
 
 		/// <summary>
 		/// яркость РЛ изображения, 0..1
@@ -37,6 +38,6 @@
 		/// Номер выбранной цели для работы на РЛС, 1..4
 		/// </summary>
 		char SelTrg;
-
+		#endregion
 	}
 }

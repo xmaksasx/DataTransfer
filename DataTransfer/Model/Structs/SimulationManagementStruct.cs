@@ -2,18 +2,24 @@
 {
 	class SimulationManagementStruct
 	{
-		// 0 - стоп
-		// 1 - старт
-		// 2 - пауза
-		// Команда на управление
+		#region Fields
+		/// <summary>
+		/// 0 - стоп
+		/// 1 - старт
+		/// 2 - пауза
+		/// Команда на управление 
+		/// </summary>
 		private double ModeState;
 
-		// 0 - автопилот
-		// 1 - сеть
-		// 2 - джойстик НИИЭС
-		// 3 - локальный джойстик
-		// Тип огранов управления
-		private double TypeCockpit;
+		/// <summary>
+		/// 0 - автопилот
+		/// 1 - сеть
+		/// 2 - джойстик НИИЭС
+		/// 3 - локальный джойстик
+		/// Тип огранов управления
+		/// </summary>
+		private double TypeCockpit; 
+		#endregion
 
 	}
 }

@@ -3,13 +3,18 @@ using DataTransfer.Model.Structs;
 
 namespace DataTransfer.Model.Component
 {
-	class ChannelThermalEffect : BaseComponent
+	class ChannelThermalEffect : IUpdate
 	{
 		private ChannelThermalEffectStruct _channelThermalEffect;
 
 		public ChannelThermalEffect()
 		{
 			_channelThermalEffect = new ChannelThermalEffectStruct();
+		}
+
+		public void UpdateData(byte[] dgram)
+		{
+
 		}
 	}
 }

@@ -2,6 +2,7 @@
 {
 	class ChannelThermalEffectStruct
 	{
+		#region Fields
 		/// <summary>
 		/// использовать коррекцию яркость/констраст [0 / 1]
 		/// </summary>
@@ -95,6 +96,7 @@
 		/// <summary>
 		/// [5..100]
 		/// </summary>
-		float agc_adoptation_scale;
+		float agc_adoptation_scale; 
+		#endregion
 	}
 }

@@ -3,13 +3,18 @@ using DataTransfer.Model.Structs;
 
 namespace DataTransfer.Model.Component
 {
-	class ChannelRadar : BaseComponent
+	class ChannelRadar : IUpdate
 	{
 		private ChannelRadarStruct _channelRadar;
 
 		public ChannelRadar()
 		{
 			_channelRadar = new ChannelRadarStruct();
+		}
+
+		public void UpdateData(byte[] dgram)
+		{
+
 		}
 	}
 }

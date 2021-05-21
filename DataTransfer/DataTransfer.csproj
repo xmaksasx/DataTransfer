@@ -64,7 +64,7 @@
     <Compile Include="Model\Component\SimulationManagement.cs" />
     <Compile Include="Model\Component\StartPosition.cs" />
     <Compile Include="Model\Structs\ControlElementStruct.cs" />
-    <Compile Include="Model\Component\Base\BaseComponent.cs" />
+    <Compile Include="Model\Component\Base\IUpdate.cs" />
     <Compile Include="Model\Component\ChannelRadar.cs" />
     <Compile Include="Model\Component\ChannelThermalEffect.cs" />
     <Compile Include="Model\Component\ChannelTvHeadEffect.cs" />
