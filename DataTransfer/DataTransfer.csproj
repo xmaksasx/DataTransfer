@@ -60,9 +60,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\ControlElement.cs" />
-    <Compile Include="Model\SimulationManagement.cs" />
-    <Compile Include="Model\StartPosition.cs" />
+    <Compile Include="Model\Component\ControlElement.cs" />
+    <Compile Include="Model\Component\SimulationManagement.cs" />
+    <Compile Include="Model\Component\StartPosition.cs" />
+    <Compile Include="Model\Structs\ControlElementStruct.cs" />
+    <Compile Include="Model\Component\Base\BaseComponent.cs" />
+    <Compile Include="Model\Component\ChannelRadar.cs" />
+    <Compile Include="Model\Component\ChannelThermalEffect.cs" />
+    <Compile Include="Model\Component\ChannelTvHeadEffect.cs" />
+    <Compile Include="Model\Component\DynamicModel.cs" />
+    <Compile Include="Model\Component\SpecialWindow.cs" />
+    <Compile Include="Model\Structs\ChannelRadarStruct.cs" />
+    <Compile Include="Model\Structs\ChannelThermalEffectStruct.cs" />
+    <Compile Include="Model\Structs\ChannelTvHeadEffectStruct.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct.cs" />
+    <Compile Include="Model\Structs\SpecialWindowStruct.cs" />
+    <Compile Include="Model\Structs\SimulationManagementStruct.cs" />
+    <Compile Include="Model\Structs\StartPositionStruct..cs" />
     <Compile Include="Services\ControlElements\DeviceControlElement.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -73,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\DataManager\DataManager.cs" />
+    <Compile Include="Services\DataManager\IDataManager.cs" />
     <Compile Include="ViewModel\Base\ViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

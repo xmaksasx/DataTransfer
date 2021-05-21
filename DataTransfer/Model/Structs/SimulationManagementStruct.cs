@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataTransfer.Model
+﻿namespace DataTransfer.Model.Structs
 {
-	class SimulationManagement
+	class SimulationManagementStruct
 	{
 		// 0 - стоп
 		// 1 - старт

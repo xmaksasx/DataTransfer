@@ -1,12 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataTransfer.Model.Component;
 
 namespace DataTransfer.Services.DataManager
 {
-	class DataManager
+	class DataManager: IDataManager
 	{
+
+		private DynamicModel _dynamicModel;
+
+
+		public DataManager(DynamicModel dynamicModel)
+		{
+			this._dynamicModel = dynamicModel;
+			this._dynamicModel.SetDataManager(this);
+			
+		}
+
+
+		public void Notify(string header, byte[] dgram)
+		{
+			if (true)
+			{
+				Console.WriteLine("Mediator reacts on A and triggers folowing operations:");
+
+			}
+			if (true)
+			{
+				Console.WriteLine("Mediator reacts on D and triggers following operations:");
+			}
+		}
 	}
 }

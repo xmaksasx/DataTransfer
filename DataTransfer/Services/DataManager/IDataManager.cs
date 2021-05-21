@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransfer.Model
+namespace DataTransfer.Services.DataManager
 {
-	class ControlElement
+	interface IDataManager
 	{
-
+		void Notify(string header, byte[] dgram);
 	}
 }
