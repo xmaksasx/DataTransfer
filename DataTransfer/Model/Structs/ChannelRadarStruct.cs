@@ -1,10 +1,10 @@
 ﻿using System.Runtime.InteropServices;
-using DataTransfer.Model.Component.Derived;
+using DataTransfer.Model.Component.BaseComponent;
 
 namespace DataTransfer.Model.Structs
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	class ChannelRadarStruct: ReverseObject
+	class ChannelRadarStruct: Base
 	{
 		#region Fields
 

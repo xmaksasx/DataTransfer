@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SharpDX.DirectInput;
 
 namespace DataTransfer.Model.IncomingData
 {
 	class IncomingJoystick : IIncomingData
 	{
-		List<int> _list = new List<int>();
+		private JoystickState _data;
 
-		private JoystickState _joystickState;
-
-		public JoystickState JoystickState
+		public JoystickState Data
 		{
-			get { return _joystickState; }
-			set { _joystickState = value; }
+			get { return _data; }
+			set { _data = value; }
 		}
 
 		

@@ -1,8 +1,8 @@
-﻿using DataTransfer.Model.Component.Derived;
+﻿using DataTransfer.Model.Component.BaseComponent;
 
 namespace DataTransfer.Model.Structs
 {
-	class StartPositionStruct : DirectObject
+	class StartPositionStruct : Base
 	{
 	}
 }

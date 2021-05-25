@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component.BaseComponent;
-using DataTransfer.Model.Component.Derived;
+using DataTransfer.Model.IncomingData;
 using DataTransfer.Model.Structs;
 using DataTransfer.Services.ControlElements;
 
@@ -12,7 +12,9 @@ namespace DataTransfer.Services.DataManager
 {
 	class DataManager
 	{
-		private DirectObject _channelRadar;
+		IncomingByteArray _incomingByteArray = new IncomingByteArray();
+		IncomingJoystick _incomingJoystick = new IncomingJoystick();
+		private Base _channelRadar;
 		private Base _channelThermalEffect;
 		private Base _channelTvHeadEffect;
 		private Base _controlElement;
@@ -28,21 +30,17 @@ namespace DataTransfer.Services.DataManager
 		private Thread _receiveThread;
 
 
-		List<Base> _components = new List<Base>();
-	
+
 		public DataManager()
 		{
 			_udpHelper = new UdpHelper();
-
-	 _deviceControlElement = new DeviceControlElement();
-	 var t = _deviceControlElement.SearchJoystick();
-
-	 _deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
-
+			_deviceControlElement = new DeviceControlElement();
+			var t = _deviceControlElement.SearchJoystick();
+			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
+			var te = _deviceControlElement.ReadData("0402044f-0000-0000-0000-504944564944");
 
 
-	 var te = _deviceControlElement.ReadData("0402044f-0000-0000-0000-504944564944");
-			   _channelRadar = new  ChannelRadarStruct();
+			_channelRadar = new ChannelRadarStruct();
 			_channelThermalEffect = new ChannelThermalEffectStruct();
 			_channelTvHeadEffect = new ChannelTvHeadEffectStruct();
 			_controlElement = new ControlElementStruct();
@@ -50,16 +48,6 @@ namespace DataTransfer.Services.DataManager
 			_simulationManagement = new SimulationManagementStruct();
 			_specialWindow = new SpecialWindowStruct();
 			_startPosition = new StartPositionStruct();
-
-
-			_components.Add(_channelRadar);
-			_components.Add(_channelThermalEffect);
-			_components.Add(_channelTvHeadEffect);
-			_components.Add(_controlElement);
-			_components.Add(_dynamicModel);
-			_components.Add(_simulationManagement);
-			_components.Add(_specialWindow);
-			_components.Add(_startPosition);
 
 			_receiveThread = new Thread(Receive);
 
@@ -69,7 +57,7 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (true)
 			{
-				var receivedBytes = _udpHelper.Receive();
+				 var receivedBytes = _udpHelper.Receive();
 				if (receivedBytes.Length == 0) continue;
 				string header = Encoding.UTF8.GetString(receivedBytes, 0, 30).Trim('\0');
 				ProcessingPackage(header, receivedBytes);
@@ -81,7 +69,7 @@ namespace DataTransfer.Services.DataManager
 			switch (header)
 			{
 				case "ChannelRadar":
-					_channelRadar.UpdateData(new RawStruct(){innerStruct = (object)receivedBytes});
+					_channelRadar.UpdateData(receivedBytes);
 					break;
 
 				case "ChannelThermalEffect":

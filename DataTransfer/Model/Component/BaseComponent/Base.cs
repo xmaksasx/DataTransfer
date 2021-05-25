@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.IncomingData;
 
 namespace DataTransfer.Model.Component.BaseComponent
@@ -8,25 +9,21 @@ namespace DataTransfer.Model.Component.BaseComponent
 	{
 	    public virtual void UpdateData(IIncomingData incomingData)
 	    {
-
-		    var bytes = GetByte(incomingData);
-			Reverse(bytes);
-			Assign(bytes);
+			Reverse(incomingData);
+			Assign(incomingData);
 		}
 
 
-	    public virtual byte[] GetByte(IIncomingData incomingData)
-	    {
-		    return incomingData.GetByte();
-	    }
 
 
-		public virtual void Reverse(byte[] dgram)
+
+		public virtual void Reverse(IIncomingData incomingData)
 		{
 		}
 
-		public virtual void Assign(byte[] dgram)
+		public virtual void Assign(IIncomingData incomingData)
 		{
+			ConvertHelper.ByteToObject(incomingData.GetByte(), this);
 
 		}
 	}

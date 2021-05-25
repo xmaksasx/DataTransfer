@@ -63,10 +63,7 @@
     <Compile Include="Infrastructure\Helpers\ConvertHelper.cs" />
     <Compile Include="Infrastructure\Helpers\UdpHelper.cs" />
     <Compile Include="Model\Component\BaseComponent\Base.cs" />
-    <Compile Include="Model\Component\Derived\DirectObject.cs" />
     <Compile Include="Model\Component\BaseComponent\Header.cs" />
-    <Compile Include="Model\Component\Derived\JoystickObject.cs" />
-    <Compile Include="Model\Component\Derived\ReverseObject.cs" />
     <Compile Include="Model\IncomingData\IIncomingData.cs" />
     <Compile Include="Model\IncomingData\IncomingByteArray.cs" />
     <Compile Include="Model\IncomingData\IncomingJoystick.cs" />
