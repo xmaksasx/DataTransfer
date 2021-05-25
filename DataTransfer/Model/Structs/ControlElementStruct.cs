@@ -1,6 +1,8 @@
-﻿namespace DataTransfer.Model.Structs
+﻿using DataTransfer.Model.Component.Derived;
+
+namespace DataTransfer.Model.Structs
 {
-	class ControlElementStruct
+	class ControlElementStruct : JoystickObject
 	{
 
 	}

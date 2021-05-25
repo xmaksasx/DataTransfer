@@ -1,6 +1,10 @@
-﻿namespace DataTransfer.Model.Structs
+﻿using System.Runtime.InteropServices;
+using DataTransfer.Model.Component.Derived;
+
+namespace DataTransfer.Model.Structs
 {
-	class SpecialWindowStruct
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	class SpecialWindowStruct : ReverseObject
 	{
 		#region Fields
 		/// <summary>
@@ -101,7 +105,28 @@
 		/// <summary>
 		/// видим (1) невидим (0)
 		/// </summary>
-		char WindowVisibility4;  
+		char WindowVisibility4;
+
+		/// <summary>
+		/// тип изображения первого окна
+		/// </summary>
+		char WindowType1;
+
+		/// <summary>
+		/// тип изображения второго окна
+		/// </summary>
+		char WindowType2;
+
+		/// <summary>
+		/// тип изображения третьего окна
+		/// </summary>
+		char WindowType3;
+
+		/// <summary>
+		/// тип изображения четвертого окна
+		/// </summary>
+		char WindowType4;
+		
 		#endregion
 	}
 }

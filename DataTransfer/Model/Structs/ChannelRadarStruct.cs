@@ -1,6 +1,10 @@
-﻿namespace DataTransfer.Model.Structs
+﻿using System.Runtime.InteropServices;
+using DataTransfer.Model.Component.Derived;
+
+namespace DataTransfer.Model.Structs
 {
-	class ChannelRadarStruct
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	class ChannelRadarStruct: ReverseObject
 	{
 		#region Fields
 
@@ -38,6 +42,7 @@
 		/// Номер выбранной цели для работы на РЛС, 1..4
 		/// </summary>
 		char SelTrg;
+
 		#endregion
 	}
 }

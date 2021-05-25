@@ -60,16 +60,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Component\ControlElement.cs" />
-    <Compile Include="Model\Component\SimulationManagement.cs" />
-    <Compile Include="Model\Component\StartPosition.cs" />
+    <Compile Include="Infrastructure\Helpers\ConvertHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\UdpHelper.cs" />
+    <Compile Include="Model\Component\BaseComponent\Base.cs" />
+    <Compile Include="Model\Component\Derived\DirectObject.cs" />
+    <Compile Include="Model\Component\BaseComponent\Header.cs" />
+    <Compile Include="Model\Component\Derived\JoystickObject.cs" />
+    <Compile Include="Model\Component\Derived\ReverseObject.cs" />
+    <Compile Include="Model\IncomingData\IIncomingData.cs" />
+    <Compile Include="Model\IncomingData\IncomingByteArray.cs" />
+    <Compile Include="Model\IncomingData\IncomingJoystick.cs" />
     <Compile Include="Model\Structs\ControlElementStruct.cs" />
-    <Compile Include="Model\Component\Base\IUpdate.cs" />
-    <Compile Include="Model\Component\ChannelRadar.cs" />
-    <Compile Include="Model\Component\ChannelThermalEffect.cs" />
-    <Compile Include="Model\Component\ChannelTvHeadEffect.cs" />
-    <Compile Include="Model\Component\DynamicModel.cs" />
-    <Compile Include="Model\Component\SpecialWindow.cs" />
     <Compile Include="Model\Structs\ChannelRadarStruct.cs" />
     <Compile Include="Model\Structs\ChannelThermalEffectStruct.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffectStruct.cs" />
@@ -87,7 +88,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\DataManager\DataManager.cs" />
-    <Compile Include="Services\DataManager\IDataManager.cs" />
     <Compile Include="ViewModel\Base\ViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

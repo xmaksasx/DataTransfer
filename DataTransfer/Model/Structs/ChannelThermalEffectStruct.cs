@@ -1,6 +1,10 @@
-﻿namespace DataTransfer.Model.Structs
+﻿using System.Runtime.InteropServices;
+using DataTransfer.Model.Component.Derived;
+
+namespace DataTransfer.Model.Structs
 {
-	class ChannelThermalEffectStruct
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	class ChannelThermalEffectStruct : ReverseObject
 	{
 		#region Fields
 		/// <summary>

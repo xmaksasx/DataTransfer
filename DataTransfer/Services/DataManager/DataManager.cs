@@ -1,48 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataTransfer.Model.Component;
-using DataTransfer.Model.Component.Base;
+using System.Text;
+using System.Threading;
+using DataTransfer.Infrastructure.Helpers;
+using DataTransfer.Model.Component.BaseComponent;
+using DataTransfer.Model.Component.Derived;
+using DataTransfer.Model.Structs;
+using DataTransfer.Services.ControlElements;
 
 namespace DataTransfer.Services.DataManager
 {
-	class DataManager: IDataManager
+	class DataManager
 	{
+		private DirectObject _channelRadar;
+		private Base _channelThermalEffect;
+		private Base _channelTvHeadEffect;
+		private Base _controlElement;
+		private Base _dynamicModel;
+		private Base _simulationManagement;
+		private Base _specialWindow;
+		private Base _startPosition;
 
-		private DynamicModel _dynamicModel;
-		private ChannelRadar _channelRadar;
+		private DeviceControlElement _deviceControlElement;
 
-		List<IUpdate> _updates = new List<IUpdate>();
+		private UdpHelper _udpHelper;
 
+		private Thread _receiveThread;
+
+
+		List<Base> _components = new List<Base>();
+	
 		public DataManager()
 		{
-			_updates.Add(_dynamicModel);
-			_updates.Add(_channelRadar);
+			_udpHelper = new UdpHelper();
+
+	 _deviceControlElement = new DeviceControlElement();
+	 var t = _deviceControlElement.SearchJoystick();
+
+	 _deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
+
+
+
+	 var te = _deviceControlElement.ReadData("0402044f-0000-0000-0000-504944564944");
+			   _channelRadar = new  ChannelRadarStruct();
+			_channelThermalEffect = new ChannelThermalEffectStruct();
+			_channelTvHeadEffect = new ChannelTvHeadEffectStruct();
+			_controlElement = new ControlElementStruct();
+			_dynamicModel = new DynamicModelStruct();
+			_simulationManagement = new SimulationManagementStruct();
+			_specialWindow = new SpecialWindowStruct();
+			_startPosition = new StartPositionStruct();
+
+
+			_components.Add(_channelRadar);
+			_components.Add(_channelThermalEffect);
+			_components.Add(_channelTvHeadEffect);
+			_components.Add(_controlElement);
+			_components.Add(_dynamicModel);
+			_components.Add(_simulationManagement);
+			_components.Add(_specialWindow);
+			_components.Add(_startPosition);
+
+			_receiveThread = new Thread(Receive);
+
 		}
-		public DataManager(DynamicModel dynamicModel)
+
+		private void Receive()
 		{
-			this._dynamicModel = dynamicModel;
-			this._dynamicModel.SetDataManager(this);
-			
-		}
-
-
-
-		public void UpdateData(string header, byte[] dgram)
-		{
-				_dynamicModel.UpdateData(new byte[4]);
-		}
-
-		public void Notify(string header, byte[] dgram)
-		{
-			if (true)
+			while (true)
 			{
-				_dynamicModel.UpdateData(new byte[4]);
-
-			}
-			if (true)
-			{
-				Console.WriteLine("Mediator reacts on D and triggers following operations:");
+				var receivedBytes = _udpHelper.Receive();
+				if (receivedBytes.Length == 0) continue;
+				string header = Encoding.UTF8.GetString(receivedBytes, 0, 30).Trim('\0');
+				ProcessingPackage(header, receivedBytes);
 			}
 		}
-	}
+
+		private void ProcessingPackage(string header, byte[] receivedBytes)
+		{
+			switch (header)
+			{
+				case "ChannelRadar":
+					_channelRadar.UpdateData(new RawStruct(){innerStruct = (object)receivedBytes});
+					break;
+
+				case "ChannelThermalEffect":
+					_channelThermalEffect.UpdateData(receivedBytes);
+					break;
+
+				case "ChannelTvHeadEffect":
+					_channelTvHeadEffect.UpdateData(receivedBytes);
+					break;
+
+				case "DynamicModel":
+					_dynamicModel.UpdateData(receivedBytes);
+					break;
+
+				case "SpecialWindow":
+					_specialWindow.UpdateData(receivedBytes);
+					break;
+
+
+				default:
+					break;
+			}
+		}
+
+		}
 }

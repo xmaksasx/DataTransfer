@@ -19,15 +19,15 @@ namespace DataTransfer.Services.ControlElements
 			return joystick;
 		}
 
-		private List<DeviceInstance> SearchJoystick()
+		public List<DeviceInstance> SearchJoystick()
 		{
-			return _directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices).ToList();
+			return _deviceInstances = _directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices).ToList();
 		}
 
-		public JoystickState ReadData(Guid guid)
+		public JoystickState ReadData(string guid)
 		{
 			foreach (var joystick in _joysticks)
-				if (guid == joystick.Information.ProductGuid)
+				if (guid == joystick.Information.ProductGuid.ToString())
 					return joystick.GetCurrentState();
 
 			return new JoystickState();

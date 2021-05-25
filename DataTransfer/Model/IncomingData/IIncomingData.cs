@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransfer.Services.DataManager
+namespace DataTransfer.Model.IncomingData
 {
-	interface IDataManager
+	public interface IIncomingData
 	{
-		void Notify(string header, byte[] dgram);
+		byte[] GetByte<T>(T data);
 	}
 }

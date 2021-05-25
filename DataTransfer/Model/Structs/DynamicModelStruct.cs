@@ -1,8 +1,10 @@
 ﻿using System.Runtime.InteropServices;
+using DataTransfer.Model.Component.Derived;
 
 namespace DataTransfer.Model.Structs
 {
-	class DynamicModelStruct
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	class DynamicModelStruct : DirectObject
 	{
 		#region Fields
 		/// <summary>
