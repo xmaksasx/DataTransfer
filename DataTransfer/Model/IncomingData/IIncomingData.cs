@@ -8,6 +8,6 @@ namespace DataTransfer.Model.IncomingData
 {
 	public interface IIncomingData
 	{
-		byte[] GetByte<T>(T data);
+		byte[] GetByte();
 	}
 }

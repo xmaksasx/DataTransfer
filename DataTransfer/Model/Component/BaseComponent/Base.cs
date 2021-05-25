@@ -6,16 +6,22 @@ namespace DataTransfer.Model.Component.BaseComponent
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public class Base : Header
 	{
-		public virtual IIncomingData IncomingData {get; set; }
+	    public virtual void UpdateData(IIncomingData incomingData)
+	    {
 
-		public virtual void UpdateData(byte[] dgram)
-		{
-			var bb = IncomingData.GetByte(dgram);
-			Reverse();
-			Assign(dgram);
+		    var bytes = GetByte(incomingData);
+			Reverse(bytes);
+			Assign(bytes);
 		}
 
-		public virtual void Reverse()
+
+	    public virtual byte[] GetByte(IIncomingData incomingData)
+	    {
+		    return incomingData.GetByte();
+	    }
+
+
+		public virtual void Reverse(byte[] dgram)
 		{
 		}
 

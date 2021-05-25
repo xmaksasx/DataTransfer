@@ -2,9 +2,9 @@
 {
 	class IncomingByteArray:IIncomingData
 	{
-		public byte[] GetByte<T>(T data)
+		public byte[] GetByte()
 		{
-			return data;
+			return new byte[1];
 		}
 	}
 }
