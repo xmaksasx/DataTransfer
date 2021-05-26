@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component.BaseComponent;
 
 namespace DataTransfer.Model.Component.Derived

@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using DataTransfer.Model.Component.BaseComponent;
 using DataTransfer.Services.DataManager;
+using DataTransfer.View;
 
 namespace DataTransfer
 {
@@ -11,7 +14,17 @@ namespace DataTransfer
 		public MainWindow()
 		{
 			InitializeComponent();
-			DataManager dataManager = new DataManager();
+			
+			Header f = new Header();
+			f.GetHeadDouble("dynamicModel");
+			DataManager dataManager = DataManager.GetInstance();
+			dataManager.Start();
+		}
+
+		private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+		{
+			DeviceWindow dw = new DeviceWindow();
+			dw.ShowDialog();
 		}
 	}
 }

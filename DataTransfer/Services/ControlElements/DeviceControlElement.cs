@@ -9,8 +9,21 @@ namespace DataTransfer.Services.ControlElements
 	{
 		private DirectInput _directInput = new DirectInput();
 		private List<Joystick> _joysticks = new List<Joystick>();
-		private List<DeviceInstance> _deviceInstances = new List<DeviceInstance>();
+		private List<DeviceInstance> _deviceInstances;
 
+		private static DeviceControlElement _instance;
+		public static DeviceControlElement GetInstance()
+		{
+			if (_instance == null)
+			{
+				_instance = new DeviceControlElement();
+			}
+			return _instance;
+		}
+		private DeviceControlElement()
+		{
+			_deviceInstances = SearchJoystick();
+		}
 		private Joystick SetDevice(Guid guidJoystick)
 		{
 			var joystick = new Joystick(_directInput, guidJoystick);
@@ -21,7 +34,7 @@ namespace DataTransfer.Services.ControlElements
 
 		public List<DeviceInstance> SearchJoystick()
 		{
-			return _deviceInstances = _directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices).ToList();
+			return  _directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices).ToList();
 		}
 
 		public JoystickState ReadData(string guid)

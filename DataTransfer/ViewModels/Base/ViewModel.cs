@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace DataTransfer.ViewModel.Base
+namespace DataTransfer.ViewModels.Base
 {
 	internal abstract class ViewModel : INotifyPropertyChanged, IDisposable
 	{

@@ -1,25 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using SharpDX.DirectInput;
+﻿using DataTransfer.Model.Component.BaseComponent;
+
 
 namespace DataTransfer.Model.IncomingData
 {
-	class IncomingJoystick : IIncomingData
+	class IncomingJoystick : Base
 	{
-		List<int> _list = new List<int>();
-
-		private JoystickState _joystickState;
-
-		public JoystickState JoystickState
-		{
-			get { return _joystickState; }
-			set { _joystickState = value; }
-		}
-
 		
-		public byte[] GetByte()
-		{
-			return new byte[1];
-		}
 	}
 }

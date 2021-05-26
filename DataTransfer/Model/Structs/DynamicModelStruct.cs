@@ -101,7 +101,7 @@ namespace DataTransfer.Model.Structs
 		/// [19..22] of single;
 		/// </summary>
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-		float in_19_22;
+		float[] in_19_22;
 
 		/// <summary>
 		/// Исходная барометрическая высота  полёта вертолёта    м
@@ -142,7 +142,7 @@ namespace DataTransfer.Model.Structs
 		/// array[30..41] of single
 		/// </summary>
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-		private float in_30_41;
+		private float[] in_30_41;
 
 		/// <summary>
 		/// Вертикальная составляющая силы ветра
@@ -153,7 +153,7 @@ namespace DataTransfer.Model.Structs
 		/// array[43..100] of single
 		/// </summary>
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 58)]
-		private float in_43_100;
+		private float[] in_43_100;
 
 		// управляющие сигналы
 
@@ -323,7 +323,7 @@ namespace DataTransfer.Model.Structs
 		///  array[33..100] of integer
 		/// </summary>
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 68)]
-		private int upr_33_100;
+		private int[] upr_33_100;
 
 		// выходные параметры
 
@@ -658,7 +658,7 @@ namespace DataTransfer.Model.Structs
 		/// array[65..89] of single
 		/// </summary>
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 25)]
-		private float out_65_89;
+		private float[] out_65_89;
 
 
 		/// <summary>

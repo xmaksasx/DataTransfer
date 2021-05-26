@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using DataTransfer.Infrastructure.Helpers;
-using DataTransfer.Model.Component.BaseComponent;
 using DataTransfer.Model.Component.Derived;
 using DataTransfer.Model.Structs;
 using DataTransfer.Services.ControlElements;
@@ -12,37 +9,82 @@ namespace DataTransfer.Services.DataManager
 {
 	class DataManager
 	{
-		private DirectObject _channelRadar;
-		private Base _channelThermalEffect;
-		private Base _channelTvHeadEffect;
-		private Base _controlElement;
-		private Base _dynamicModel;
-		private Base _simulationManagement;
-		private Base _specialWindow;
-		private Base _startPosition;
-
-		private DeviceControlElement _deviceControlElement;
+		#region Objects
+		private ReverseObject _channelRadar;
+		private ReverseObject _channelThermalEffect;
+		private ReverseObject _channelTvHeadEffect;
+		private ControlElementStruct _controlElement;
+		private DirectObject _dynamicModel;
+		private DirectObject _simulationManagement;
+		private ReverseObject _specialWindow;
+		private DirectObject _startPosition;
+		private DeviceControlElement _deviceControlElement; 
+		#endregion
 
 		private UdpHelper _udpHelper;
-
+		
 		private Thread _receiveThread;
+		private Thread _sendThread;
+		private Thread _pollThread;
+		private string _ipIup = "127.0.0.1";
+		private string _ipModel = "127.0.0.1";
+		private string _broadcast = "127.0.0.1";
+
+		private bool _isSend = true;
+		private bool _isPoll = true;
+		private bool _isReceive = true;
 
 
-		List<Base> _components = new List<Base>();
-	
-		public DataManager()
+		//_ipModel
+		//_ipIup
+
+		//_portModel			20030	Димамическая модель
+		//_portSvvo				6001	Система внекабинной обстановки
+		//_portIup				20040	Информационно-упраляющая система(ОУ) 
+		//						20041	Информационно-упраляющая система(ДМ) 
+		//						20042	Информационно-упраляющая система(ПУЭ)
+		//						20043	Информационно-упраляющая система(СИВО)
+		//						20044	Информационно-упраляющая система(РТО)
+		//_portTacticalEditor	20060	Редактор тактической обстановки
+
+		private DataManager()
 		{
 			_udpHelper = new UdpHelper();
+			_deviceControlElement =  DeviceControlElement.GetInstance();
+			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
+			_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
+			InitObject();
+			InitThread();
+		}
+		private static DataManager _instance;
+		public static DataManager GetInstance()
+		{
+			if (_instance == null)
+			{
+				_instance = new DataManager();
+			}
+			return _instance;
+		}
 
-	 _deviceControlElement = new DeviceControlElement();
-	 var t = _deviceControlElement.SearchJoystick();
+		
 
-	 _deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
+		public void Start()
+		{
+			_receiveThread.Start();
+			_sendThread.Start();
+			_pollThread.Start();
+		}
 
+		private void InitThread()
+		{
+			_receiveThread = new Thread(Receive);
+			_sendThread = new Thread(Send);
+			_pollThread = new Thread(Poll);
+		}
 
-
-	 var te = _deviceControlElement.ReadData("0402044f-0000-0000-0000-504944564944");
-			   _channelRadar = new  ChannelRadarStruct();
+		private void InitObject()
+		{
+			_channelRadar = new ChannelRadarStruct();
 			_channelThermalEffect = new ChannelThermalEffectStruct();
 			_channelTvHeadEffect = new ChannelTvHeadEffectStruct();
 			_controlElement = new ControlElementStruct();
@@ -50,24 +92,21 @@ namespace DataTransfer.Services.DataManager
 			_simulationManagement = new SimulationManagementStruct();
 			_specialWindow = new SpecialWindowStruct();
 			_startPosition = new StartPositionStruct();
+		}
 
-
-			_components.Add(_channelRadar);
-			_components.Add(_channelThermalEffect);
-			_components.Add(_channelTvHeadEffect);
-			_components.Add(_controlElement);
-			_components.Add(_dynamicModel);
-			_components.Add(_simulationManagement);
-			_components.Add(_specialWindow);
-			_components.Add(_startPosition);
-
-			_receiveThread = new Thread(Receive);
-
+		private void Poll()
+		{
+			while (_isPoll)
+			{
+				_controlElement.UpdateRus(_deviceControlElement.ReadData("0402044f-0000-0000-0000-504944564944"));
+				_controlElement.UpdateRud(_deviceControlElement.ReadData("0404044f-0000-0000-0000-504944564944"));
+				Thread.Sleep(20);
+			}
 		}
 
 		private void Receive()
 		{
-			while (true)
+			while (_isReceive)
 			{
 				var receivedBytes = _udpHelper.Receive();
 				if (receivedBytes.Length == 0) continue;
@@ -81,7 +120,7 @@ namespace DataTransfer.Services.DataManager
 			switch (header)
 			{
 				case "ChannelRadar":
-					_channelRadar.UpdateData(new RawStruct(){innerStruct = (object)receivedBytes});
+					_channelRadar.UpdateData(receivedBytes);
 					break;
 
 				case "ChannelThermalEffect":
@@ -106,5 +145,45 @@ namespace DataTransfer.Services.DataManager
 			}
 		}
 
+
+		void Send()
+		{
+			while (_isSend)
+			{
+
+				//Отправка на СВВО
+				// Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 6100);
+				//_udpHelper.Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 33333);
+
+				//Отправка на модель
+				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20030);
+		
+
+				//Отправка на ИУП
+				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
+				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
+				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
+				_udpHelper.Send(_specialWindow.GetBytes(), _ipIup, 20046);
+
+				//Отправка на спец изображение
+				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
+				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
+				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
+				_udpHelper.Send(_specialWindow.GetBytes(), _ipIup, 20046);
+
+
+				//Отправка на УСО
+				_udpHelper.Send(_controlElement.GetBytes(), _broadcast, 20050);
+
+				//Отправка на редактор
+				//_udpHelper.Send(_sendTacticalEditor.GetByte(_receiveModel), _ipTacticalEditor, 20060);
+
+				//Отправка на ПУЭ
+				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
+
+			
+				Thread.Sleep(20);
+			}
 		}
+	}
 }

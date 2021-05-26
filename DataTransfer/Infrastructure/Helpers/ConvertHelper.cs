@@ -13,5 +13,17 @@ namespace DataTransfer.Infrastructure.Helpers
 			Marshal.PtrToStructure(i, obj);
 			Marshal.FreeHGlobal(i);
 		}
-    }
+
+
+		public static byte[] ObjectToByte<T>(T obj)
+		{
+			var size = Marshal.SizeOf(obj);
+			var bytes = new byte[size];
+			var ptr = Marshal.AllocHGlobal(size);
+			Marshal.StructureToPtr(obj, ptr, false);
+			Marshal.Copy(ptr, bytes, 0, size);
+			Marshal.FreeHGlobal(ptr);
+			return bytes;
+		}
+	}
 }

@@ -1,33 +1,32 @@
 ﻿using System.Runtime.InteropServices;
-using DataTransfer.Model.IncomingData;
+using DataTransfer.Infrastructure.Helpers;
 
 namespace DataTransfer.Model.Component.BaseComponent
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public class Base : Header
 	{
-	    public virtual void UpdateData(IIncomingData incomingData)
+	    public virtual void UpdateData(byte[] dgram)
 	    {
-
-		    var bytes = GetByte(incomingData);
-			Reverse(bytes);
-			Assign(bytes);
+			Reverse(ref dgram);
+			Assign(dgram);
 		}
 
 
-	    public virtual byte[] GetByte(IIncomingData incomingData)
-	    {
-		    return incomingData.GetByte();
-	    }
-
-
-		public virtual void Reverse(byte[] dgram)
+	    public virtual void Reverse(ref byte[] dgram)
 		{
 		}
 
 		public virtual void Assign(byte[] dgram)
 		{
-
+			ConvertHelper.ByteToObject(dgram,this);
 		}
+
+		public virtual byte[] GetBytes()
+		{
+			return ConvertHelper.ObjectToByte(this);
+		}
+
+
 	}
 }

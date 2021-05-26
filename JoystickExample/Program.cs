@@ -52,13 +52,11 @@ namespace JoystickExample
 
 			while (true)
 			{
-				//joystick.Poll();
-			var t=	joystick.GetCurrentState();
-			var t2 = joystick.Information;
-			var t1 = joystick;
-			//var datas = joystick.GetBufferedData();
-			//foreach (var state in datas)
-			//	Console.WriteLine(state);
+				joystick.Poll();
+
+			var datas = joystick.GetBufferedData();
+			foreach (var state in datas)
+				Console.WriteLine(state);
 			}
         }
 

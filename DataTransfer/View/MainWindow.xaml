@@ -9,7 +9,7 @@
     <Grid>
         <Menu VerticalAlignment="Top">
 	        <MenuItem Header="УСО">
-		        <MenuItem Header="Диспетчер УСО"></MenuItem>
+		        <MenuItem Header="Диспетчер УСО" Click="MenuItem_OnClick"></MenuItem>
 				<MenuItem Header="Перезапуск"></MenuItem>
 			</MenuItem>
         </Menu>

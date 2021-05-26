@@ -75,10 +75,15 @@
     <Compile Include="Model\Structs\ChannelThermalEffectStruct.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffectStruct.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct.cs" />
+    <Compile Include="Model\Structs\JoystickStruct.cs" />
     <Compile Include="Model\Structs\SpecialWindowStruct.cs" />
     <Compile Include="Model\Structs\SimulationManagementStruct.cs" />
     <Compile Include="Model\Structs\StartPositionStruct..cs" />
     <Compile Include="Services\ControlElements\DeviceControlElement.cs" />
+    <Page Include="View\DeviceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -88,7 +93,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\DataManager\DataManager.cs" />
-    <Compile Include="ViewModel\Base\ViewModel.cs" />
+    <Compile Include="ViewModels\Base\ViewModel.cs" />
+    <Compile Include="ViewModels\DeviceWindowViewModel.cs" />
+    <Compile Include="View\DeviceWindow.xaml.cs">
+      <DependentUpon>DeviceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
