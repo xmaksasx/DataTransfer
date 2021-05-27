@@ -17,7 +17,7 @@ namespace DataTransfer.Services.DataManager
 		private SimulationManagement _simulationManagement;
 		private SpecialWindow _specialWindow;
 		private StartPosition _startPosition;
-		private DeviceControlElement _deviceControlElement; 
+		private readonly DeviceControlElement _deviceControlElement; 
 		#endregion
 
 		private UdpHelper _udpHelper;
