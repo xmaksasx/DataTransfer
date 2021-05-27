@@ -1,23 +1,107 @@
-﻿<Window x:Class="DataTransfer.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DataTransfer"
-        xmlns:vm="clr-namespace:DataTransfer.ViewModels"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+﻿<Window
+	x:Class="DataTransfer.Views.MainWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:DataTransfer"
+	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="clr-namespace:DataTransfer.ViewModels"
+	Title="MainWindow"
+	Width="800"
+	Height="450"
+	ResizeMode="NoResize"
+	WindowStartupLocation="CenterScreen"
+	WindowState="Normal"
+	WindowStyle="None"
+	mc:Ignorable="d" MouseMove="Window_MouseMove" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 	<Window.DataContext>
-		<vm:MainWindowViewModel/>
+		<vm:MainWindowViewModel />
 	</Window.DataContext>
-	<Grid>
-        <Menu VerticalAlignment="Top">
-	        <MenuItem Header="УСО">
-		        <MenuItem Header="Диспетчер УСО" Click="MenuItem_OnClick"></MenuItem>
-				<MenuItem Header="Перезапуск"></MenuItem>
-			</MenuItem>
-        </Menu>
-		<Button Command="{Binding StartModelingCommand}" Content="Button" HorizontalAlignment="Left" Height="58" Margin="118,154,0,0" VerticalAlignment="Top" Width="186"/>
-		<Button Command="{Binding CloseAppCommand}" Content="закрыть это" HorizontalAlignment="Left" Height="58" Margin="568,23,0,0" VerticalAlignment="Top" Width="186"/>
+	<Grid >
+		<Grid.RowDefinitions>
+			<RowDefinition Height="35" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="35" />
+		</Grid.RowDefinitions>
+		<Grid>
+			<StackPanel Orientation="Horizontal" >
+				<materialDesign:PackIcon
+					Width="30"
+					Height="30"
+					Margin="10,5,0,5"
+					VerticalAlignment="Center"
+					Kind="AirplaneTakeoff" />
+				<Menu VerticalAlignment="Center">
+					<MenuItem VerticalAlignment="Center" Header="Файл">
+						<MenuItem Header="Перезапуск" />
+						<Separator />
+						<MenuItem Header="Выход" Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
+					</MenuItem>
+					<MenuItem VerticalAlignment="Center" Header="УСО">
+						<MenuItem Click="MenuItem_OnClick" Header="Диспетчер УСО" />
+						<MenuItem Header="Перезапуск" />
+					</MenuItem>
+				</Menu>
+				<StackPanel Orientation="Horizontal">
+					<Button
+						Width="25"
+						Height="25"
+						Padding="0"
+						Content="{materialDesign:PackIcon Size=20,
+						                                  Kind=Play}"
+						Foreground="#FF3AB73A"
+						IsEnabled="{Binding MyProperty}"
+						Style="{StaticResource MaterialDesignFlatButton}" />
+					<Button
+						Width="25"
+						Height="25"
+						Padding="0"
+						Content="{materialDesign:PackIcon Size=20,
+						                                  Kind=Pause}"
+						Foreground="#FF3A3AB7"
+						Style="{StaticResource MaterialDesignFlatButton}" />
+					<Button
+						Width="25"
+						Height="25"
+						Padding="0"
+						Content="{materialDesign:PackIcon Size=20,
+						                                  Kind=Stop}"
+						Foreground="#FFB93838"
+						Style="{StaticResource MaterialDesignFlatButton}" />
+				</StackPanel>
+			</StackPanel>
+			<Button
+				Width="35"
+				Height="35"
+				Margin="0,0,5,0"
+				Padding="0"
+				HorizontalAlignment="Right"
+				Command="{Binding CloseAppCommand}"
+				Content="{materialDesign:PackIcon Size=25,
+				                                  Kind=Power}"
+				Style="{StaticResource MaterialDesignFlatButton}" />
+
+		</Grid>
+		<Grid Grid.Row="1">
+
+			<Button
+				Width="186"
+				Height="58"
+				Margin="47,130,0,0"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Top"
+				Command="{Binding StartModelingCommand}"
+				Content="Button" />
+			<Button
+				Width="186"
+				Height="58"
+				Margin="265,130,0,0"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Top"
+				Command="{Binding CloseAppCommand}"
+				Content="закрыть это" />
+		</Grid>
+		<StatusBar Grid.Row="2" />
 	</Grid>
 </Window>

@@ -1,13 +1,22 @@
 ﻿using System.Windows;
+
 using System.Windows.Input;
 using DataTransfer.Infrastructure.Commands;
 using DataTransfer.Services.DataManager;
+using DataTransfer.ViewModels.Base;
 
 namespace DataTransfer.ViewModels
 {
-	class MainWindowViewModel
+	class MainWindowViewModel:ViewModel
 	{
 		DataManager _dataManager;
+
+
+
+		private bool myVar = true;
+
+		/// <summary>номер выбранной вкладки</summary>
+		public bool MyProperty { get => myVar; set => Set(ref myVar, value); }
 
 		#region Команды
 
@@ -30,7 +39,9 @@ namespace DataTransfer.ViewModels
 
 		private void OnStartModelingCommandExecuted(object p)
 		{
-			_dataManager.Start();
+			MyProperty = false;
+
+			//_dataManager.Start();
 		}
 		#endregion
 
@@ -41,7 +52,7 @@ namespace DataTransfer.ViewModels
 		{
 			CloseAppCommand = new LambdaCommand(OnCloseAppCommandExecuted, CanCloseAppCommandExecute);
 			StartModelingCommand = new LambdaCommand(OnStartModelingCommandExecuted, CanStartModelingCommandExecute);
-			_dataManager = DataManager.GetInstance();
+			//_dataManager = DataManager.GetInstance();
 		}
 	}
 }
