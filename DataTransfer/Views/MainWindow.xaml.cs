@@ -1,10 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using DataTransfer.Model.Component.BaseComponent;
 using DataTransfer.Services.DataManager;
-using DataTransfer.View;
 
-namespace DataTransfer
+namespace DataTransfer.Views
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -18,7 +16,7 @@ namespace DataTransfer
 			Header f = new Header();
 			f.GetHeadDouble("dynamicModel");
 			DataManager dataManager = DataManager.GetInstance();
-			dataManager.Start();
+			dataManager.StartThread();
 		}
 
 		private void MenuItem_OnClick(object sender, RoutedEventArgs e)

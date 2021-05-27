@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Threading;
 using DataTransfer.Infrastructure.Helpers;
-using DataTransfer.Model.Component.Derived;
 using DataTransfer.Model.Structs;
 using DataTransfer.Services.ControlElements;
 
@@ -10,14 +9,14 @@ namespace DataTransfer.Services.DataManager
 	class DataManager
 	{
 		#region Objects
-		private ReverseObject _channelRadar;
-		private ReverseObject _channelThermalEffect;
-		private ReverseObject _channelTvHeadEffect;
-		private ControlElementStruct _controlElement;
-		private DirectObject _dynamicModel;
-		private DirectObject _simulationManagement;
-		private ReverseObject _specialWindow;
-		private DirectObject _startPosition;
+		private ChannelRadar _channelRadar;
+		private ChannelThermalEffect _channelThermalEffect;
+		private ChannelTvHeadEffect _channelTvHeadEffect;
+		private ControlElement _controlElement;
+		private DynamicModel _dynamicModel;
+		private SimulationManagement _simulationManagement;
+		private SpecialWindow _specialWindow;
+		private StartPosition _startPosition;
 		private DeviceControlElement _deviceControlElement; 
 		#endregion
 
@@ -56,7 +55,9 @@ namespace DataTransfer.Services.DataManager
 			InitObject();
 			InitThread();
 		}
+
 		private static DataManager _instance;
+
 		public static DataManager GetInstance()
 		{
 			if (_instance == null)
@@ -66,9 +67,7 @@ namespace DataTransfer.Services.DataManager
 			return _instance;
 		}
 
-		
-
-		public void Start()
+		public void StartThread()
 		{
 			_receiveThread.Start();
 			_sendThread.Start();
@@ -84,15 +83,31 @@ namespace DataTransfer.Services.DataManager
 
 		private void InitObject()
 		{
-			_channelRadar = new ChannelRadarStruct();
-			_channelThermalEffect = new ChannelThermalEffectStruct();
-			_channelTvHeadEffect = new ChannelTvHeadEffectStruct();
-			_controlElement = new ControlElementStruct();
-			_dynamicModel = new DynamicModelStruct();
-			_simulationManagement = new SimulationManagementStruct();
-			_specialWindow = new SpecialWindowStruct();
-			_startPosition = new StartPositionStruct();
+			_channelRadar = new ChannelRadar();
+			_channelThermalEffect = new ChannelThermalEffect();
+			_channelTvHeadEffect = new ChannelTvHeadEffect();
+			_controlElement = new ControlElement();
+			_dynamicModel = new DynamicModel();
+			_simulationManagement = new SimulationManagement();
+			_specialWindow = new SpecialWindow();
+			_startPosition = new StartPosition();
 		}
+
+		public void Start()
+		{
+			_startPosition.InitPosition();
+			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			_startPosition.StateOfModel(1);
+			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+
+		}
+
+		public void Stop()
+		{
+			_startPosition.StateOfModel(-1);
+			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+		}
+
 
 		private void Poll()
 		{
@@ -144,7 +159,6 @@ namespace DataTransfer.Services.DataManager
 					break;
 			}
 		}
-
 
 		void Send()
 		{

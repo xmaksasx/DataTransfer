@@ -26,7 +26,5 @@ namespace DataTransfer.Model.Component.BaseComponent
 		{
 			return ConvertHelper.ObjectToByte(this);
 		}
-
-
 	}
 }

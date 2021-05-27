@@ -1,11 +1,18 @@
-﻿using System.Runtime.InteropServices;
-using DataTransfer.Model.Component.Derived;
+﻿using System;
+using System.Runtime.InteropServices;
+using DataTransfer.Model.Component.BaseComponent;
 
 namespace DataTransfer.Model.Structs
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	class ChannelRadarStruct: ReverseObject
+	class ChannelRadar: Base
 	{
+		public override void Reverse(ref byte[] dgram)
+		{
+			for (int i = 68; i < dgram.Length; i = i + 8)
+				Array.Reverse(dgram, i, 8);
+		}
+
 		#region Fields
 
 		/// <summary>

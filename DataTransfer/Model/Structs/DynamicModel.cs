@@ -1,11 +1,18 @@
 ﻿using System.Runtime.InteropServices;
-using DataTransfer.Model.Component.Derived;
+using DataTransfer.Infrastructure.Helpers;
+using DataTransfer.Model.Component.BaseComponent;
 
 namespace DataTransfer.Model.Structs
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	class DynamicModelStruct : DirectObject
+	class DynamicModel : Base
 	{
+		public override byte[] GetBytes()
+		{
+			GetHeadDouble("DynamicModel");
+			return ConvertHelper.ObjectToByte(this);
+		}
+
 		#region Fields
 		/// <summary>
 		/// Исходная воздушная скорость полета     км/ч

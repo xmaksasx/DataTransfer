@@ -13,6 +13,8 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -63,28 +65,22 @@
     <Compile Include="Infrastructure\Helpers\ConvertHelper.cs" />
     <Compile Include="Infrastructure\Helpers\UdpHelper.cs" />
     <Compile Include="Model\Component\BaseComponent\Base.cs" />
-    <Compile Include="Model\Component\Derived\DirectObject.cs" />
     <Compile Include="Model\Component\BaseComponent\Header.cs" />
-    <Compile Include="Model\Component\Derived\JoystickObject.cs" />
-    <Compile Include="Model\Component\Derived\ReverseObject.cs" />
-    <Compile Include="Model\IncomingData\IIncomingData.cs" />
-    <Compile Include="Model\IncomingData\IncomingByteArray.cs" />
-    <Compile Include="Model\IncomingData\IncomingJoystick.cs" />
-    <Compile Include="Model\Structs\ControlElementStruct.cs" />
-    <Compile Include="Model\Structs\ChannelRadarStruct.cs" />
-    <Compile Include="Model\Structs\ChannelThermalEffectStruct.cs" />
-    <Compile Include="Model\Structs\ChannelTvHeadEffectStruct.cs" />
-    <Compile Include="Model\Structs\DynamicModelStruct.cs" />
+    <Compile Include="Model\Structs\ControlElement.cs" />
+    <Compile Include="Model\Structs\ChannelRadar.cs" />
+    <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
+    <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
+    <Compile Include="Model\Structs\DynamicModel.cs" />
     <Compile Include="Model\Structs\JoystickStruct.cs" />
-    <Compile Include="Model\Structs\SpecialWindowStruct.cs" />
-    <Compile Include="Model\Structs\SimulationManagementStruct.cs" />
-    <Compile Include="Model\Structs\StartPositionStruct..cs" />
+    <Compile Include="Model\Structs\SpecialWindow.cs" />
+    <Compile Include="Model\Structs\SimulationManagement.cs" />
+    <Compile Include="Model\Structs\StartPosition.cs" />
     <Compile Include="Services\ControlElements\DeviceControlElement.cs" />
-    <Page Include="View\DeviceWindow.xaml">
+    <Page Include="Views\DeviceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -95,10 +91,10 @@
     <Compile Include="Services\DataManager\DataManager.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\DeviceWindowViewModel.cs" />
-    <Compile Include="View\DeviceWindow.xaml.cs">
+    <Compile Include="Views\DeviceWindow.xaml.cs">
       <DependentUpon>DeviceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -130,6 +126,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Infrastructure\Commands\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets'))" />
+  </Target>
 </Project>
