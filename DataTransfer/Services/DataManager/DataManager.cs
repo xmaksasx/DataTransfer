@@ -54,6 +54,7 @@ namespace DataTransfer.Services.DataManager
 			_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 			InitObject();
 			InitThread();
+			StartThread();
 		}
 
 		private static DataManager _instance;
@@ -67,6 +68,9 @@ namespace DataTransfer.Services.DataManager
 			return _instance;
 		}
 
+
+
+		#region Thread control
 		public void StartThread()
 		{
 			_receiveThread.Start();
@@ -80,6 +84,18 @@ namespace DataTransfer.Services.DataManager
 			_sendThread = new Thread(Send);
 			_pollThread = new Thread(Poll);
 		}
+
+		public void StopThread()
+		{
+			_isSend = false;
+			_isReceive = false;
+			_isPoll = false;
+
+		}
+
+
+
+		#endregion
 
 		private void InitObject()
 		{
@@ -97,6 +113,7 @@ namespace DataTransfer.Services.DataManager
 		{
 			_startPosition.InitPosition();
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			//Thread.Sleep(500);
 			_startPosition.StateOfModel(1);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 
@@ -109,6 +126,7 @@ namespace DataTransfer.Services.DataManager
 		}
 
 
+		#region Method for thread
 		private void Poll()
 		{
 			while (_isPoll)
@@ -171,7 +189,7 @@ namespace DataTransfer.Services.DataManager
 
 				//Отправка на модель
 				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20030);
-		
+
 
 				//Отправка на ИУП
 				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
@@ -195,9 +213,10 @@ namespace DataTransfer.Services.DataManager
 				//Отправка на ПУЭ
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
 
-			
+
 				Thread.Sleep(20);
 			}
-		}
+		} 
+		#endregion
 	}
 }

@@ -12,12 +12,8 @@ namespace DataTransfer.Views
 		public MainWindow()
 		{
 			InitializeComponent();
-			
-			Header f = new Header();
-			f.GetHeadDouble("dynamicModel");
-			DataManager dataManager = DataManager.GetInstance();
-			dataManager.StartThread();
 		}
+
 
 		private void MenuItem_OnClick(object sender, RoutedEventArgs e)
 		{

@@ -4,15 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataTransfer"
+        xmlns:vm="clr-namespace:DataTransfer.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+	<Window.DataContext>
+		<vm:MainWindowViewModel/>
+	</Window.DataContext>
+	<Grid>
         <Menu VerticalAlignment="Top">
 	        <MenuItem Header="УСО">
 		        <MenuItem Header="Диспетчер УСО" Click="MenuItem_OnClick"></MenuItem>
 				<MenuItem Header="Перезапуск"></MenuItem>
 			</MenuItem>
         </Menu>
-		<Button Content="Button" HorizontalAlignment="Left" Height="58" Margin="118,154,0,0" VerticalAlignment="Top" Width="186"/>
+		<Button Command="{Binding StartModelingCommand}" Content="Button" HorizontalAlignment="Left" Height="58" Margin="118,154,0,0" VerticalAlignment="Top" Width="186"/>
+		<Button Command="{Binding CloseAppCommand}" Content="закрыть это" HorizontalAlignment="Left" Height="58" Margin="568,23,0,0" VerticalAlignment="Top" Width="186"/>
 	</Grid>
 </Window>
