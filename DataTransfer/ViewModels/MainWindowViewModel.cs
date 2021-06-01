@@ -13,7 +13,7 @@ namespace DataTransfer.ViewModels
 
 
 
-		private bool myVar = true;
+		private bool myVar = false;
 
 		/// <summary>номер выбранной вкладки</summary>
 		public bool MyProperty { get => myVar; set => Set(ref myVar, value); }
@@ -27,7 +27,7 @@ namespace DataTransfer.ViewModels
 
 		private void OnCloseAppCommandExecuted(object p)
 		{
-			_dataManager.StopThread();
+			_dataManager?.StopThread();
 			Application.Current.Shutdown();
 		}
 		#endregion

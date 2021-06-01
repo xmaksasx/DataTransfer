@@ -10,66 +10,61 @@
 	Title="MainWindow"
 	Width="800"
 	Height="450"
+	AllowsTransparency="True"
+	Background="Transparent"
+	MouseLeftButtonDown="Window_MouseLeftButtonDown"
+	MouseMove="Window_MouseMove"
+	Opacity="0.9"
 	ResizeMode="NoResize"
 	WindowStartupLocation="CenterScreen"
 	WindowState="Normal"
 	WindowStyle="None"
-	mc:Ignorable="d" MouseMove="Window_MouseMove" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+	mc:Ignorable="d">
+
+
 	<Window.DataContext>
 		<vm:MainWindowViewModel />
 	</Window.DataContext>
-	<Grid >
+	<Grid Background="#FF2C2C2C">
 		<Grid.RowDefinitions>
+			<RowDefinition Height="35" />
 			<RowDefinition Height="35" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="35" />
 		</Grid.RowDefinitions>
 		<Grid>
-			<StackPanel Orientation="Horizontal" >
-				<materialDesign:PackIcon
+			<StackPanel Orientation="Horizontal">
+				<Image
 					Width="30"
 					Height="30"
-					Margin="10,5,0,5"
-					VerticalAlignment="Center"
-					Kind="AirplaneTakeoff" />
+					Margin="10,0"
+					Source="/DataTransfer;component/Icon(2).ico"
+					Stretch="Fill">
+					<Image.Effect>
+						<DropShadowEffect
+							Direction="0"
+							ShadowDepth="0"
+							Color="#FF2196F3" />
+					</Image.Effect>
+				</Image>
 				<Menu VerticalAlignment="Center">
 					<MenuItem VerticalAlignment="Center" Header="Файл">
-						<MenuItem Header="Перезапуск" />
+						<MenuItem Header="Перезапуск" Icon="{materialDesign:PackIcon Kind=Restart}" />
 						<Separator />
-						<MenuItem Header="Выход" Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
+						<MenuItem
+							Command="{Binding CloseAppCommand}"
+							Header="Выход"
+							Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
 					</MenuItem>
-					<MenuItem VerticalAlignment="Center" Header="УСО">
+					<MenuItem
+						VerticalAlignment="Center"
+						FontSize="12"
+						Header="УСО">
 						<MenuItem Click="MenuItem_OnClick" Header="Диспетчер УСО" />
 						<MenuItem Header="Перезапуск" />
 					</MenuItem>
 				</Menu>
-				<StackPanel Orientation="Horizontal">
-					<Button
-						Width="25"
-						Height="25"
-						Padding="0"
-						Content="{materialDesign:PackIcon Size=20,
-						                                  Kind=Play}"
-						Foreground="#FF3AB73A"
-						IsEnabled="{Binding MyProperty}"
-						Style="{StaticResource MaterialDesignFlatButton}" />
-					<Button
-						Width="25"
-						Height="25"
-						Padding="0"
-						Content="{materialDesign:PackIcon Size=20,
-						                                  Kind=Pause}"
-						Foreground="#FF3A3AB7"
-						Style="{StaticResource MaterialDesignFlatButton}" />
-					<Button
-						Width="25"
-						Height="25"
-						Padding="0"
-						Content="{materialDesign:PackIcon Size=20,
-						                                  Kind=Stop}"
-						Foreground="#FFB93838"
-						Style="{StaticResource MaterialDesignFlatButton}" />
-				</StackPanel>
+
 			</StackPanel>
 			<Button
 				Width="35"
@@ -80,28 +75,94 @@
 				Command="{Binding CloseAppCommand}"
 				Content="{materialDesign:PackIcon Size=25,
 				                                  Kind=Power}"
-				Style="{StaticResource MaterialDesignFlatButton}" />
+				Style="{StaticResource MaterialDesignFlatButton}">
+				<Button.Effect>
+					<DropShadowEffect
+						BlurRadius="10"
+						Direction="0"
+						ShadowDepth="0"
+						Color="#FF03A9F4" />
+				</Button.Effect>
+
+			</Button>
 
 		</Grid>
+
 		<Grid Grid.Row="1">
-
-			<Button
-				Width="186"
-				Height="58"
-				Margin="47,130,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Command="{Binding StartModelingCommand}"
-				Content="Button" />
-			<Button
-				Width="186"
-				Height="58"
-				Margin="265,130,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Command="{Binding CloseAppCommand}"
-				Content="закрыть это" />
+			<ToolBarTray VerticalAlignment="Center">
+				<ToolBar ClipToBounds="False" Style="{DynamicResource MaterialDesignToolBar}">
+					<Button
+						Height="30"
+						Padding="0"
+						Content="{materialDesign:PackIcon Size=30,
+						                                  Kind=Play}"
+						IsEnabled="{Binding MyProperty}"
+						Style="{StaticResource MaterialDesignFlatButton}">
+						<Button.Effect>
+							<DropShadowEffect
+								BlurRadius="10"
+								Direction="0"
+								ShadowDepth="0"
+								Color="#FF03A9F4" />
+						</Button.Effect>
+					</Button>
+					<Button
+						Height="30"
+						Padding="0"
+						Content="{materialDesign:PackIcon Size=30,
+						                                  Kind=Pause}"
+						Style="{StaticResource MaterialDesignFlatButton}">
+						<Button.Effect>
+							<DropShadowEffect
+								BlurRadius="10"
+								Direction="0"
+								ShadowDepth="0"
+								Color="#FF03A9F4" />
+						</Button.Effect>
+					</Button>
+					<Button
+						Height="30"
+						Padding="0"
+						Content="{materialDesign:PackIcon Size=30,
+						                                  Kind=Stop}"
+						Foreground="#FF2196F3"
+						Style="{StaticResource MaterialDesignFlatButton}">
+						<Button.Effect>
+							<DropShadowEffect
+								BlurRadius="10"
+								Direction="0"
+								ShadowDepth="0"
+								Color="#FF03A9F4" />
+						</Button.Effect>
+					</Button>
+					<Separator />
+					<StackPanel Margin="4" Orientation="Horizontal">
+						<RadioButton
+							Margin="4"
+							Content="Динамика"
+							FontSize="12"
+							IsChecked="True"
+							Style="{StaticResource MaterialDesignTabRadioButton}" />
+						<RadioButton
+							Margin="4"
+							Content="УСО"
+							FontSize="12"
+							IsChecked="False"
+							Style="{StaticResource MaterialDesignTabRadioButton}" />
+					</StackPanel>
+					<Separator />
+				</ToolBar>
+			</ToolBarTray>
 		</Grid>
-		<StatusBar Grid.Row="2" />
+		<Grid Grid.Row="2">
+			<DataGrid />
+		</Grid>
+		<StatusBar Grid.Row="3" Background="#FF212121">
+			<StatusBarItem>
+				<TextBlock Foreground="#FFC1C1C1">
+					Готов!
+				</TextBlock>
+			</StatusBarItem>
+		</StatusBar>
 	</Grid>
 </Window>
