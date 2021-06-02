@@ -409,17 +409,19 @@ namespace DataTransfer.Model.Structs
 		///// </summary>
 		//private int btn95;
 
-
 		/// <summary>
 		/// дискретные каналы (разовые команды)
 		/// </summary>
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 96)]
-			public int[] MasIn = new int[96];
+		public int[] MasIn = new int[96];
+
 		/// <summary>
 		/// аналоговые сигналы 0-ТАНГАЖ, 1-КРЕН, 2-ПЕДАЛИ, 3-ОШ
 		/// </summary>
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-		public float[] MasADC = new float[12]; 
+		public float[] MasADC = new float[12];
+
+	
 		#endregion
 	}
 }

@@ -27,10 +27,10 @@ namespace DataTransfer.Model.Structs
 			Joystick.MasADC[1] = joystickState.Y;
 
 			if (joystickState.Y > 22767)
-				Joystick.MasADC[0] = (float) ((1 - joystickState.Y / 42768) * 114.99);
+				Joystick.MasADC[0] = (float) ((1 - joystickState.Y / 42768.0) * 114.99);
 			else
-				Joystick.MasADC[0] = (float) ((1 - joystickState.Y / 22767) * 189.99);
-			Joystick.MasADC[1] = (float) ((1 - joystickState.X / 32767) * 129.99);
+				Joystick.MasADC[0] = (float) ((1 - joystickState.Y / 22767.0) * 189.99);
+			Joystick.MasADC[1] = (float) ((1 - joystickState.X / 32767.0) * 129.99);
 
 			//	Joystick.MasIn[82] : = (lpInfoEx.wButtons and & 00000002) shr 1;
 			//	Joystick.MasIn[81] : = (lpInfoEx.wButtons and & 00000002) shr 1;
@@ -40,12 +40,16 @@ namespace DataTransfer.Model.Structs
 
 		public void UpdatePedals(JoystickState joystickState)
 		{
-			Joystick.MasADC[2]  = (float)(-(1 - joystickState.Z / 32767) * 81.49);
+			Joystick.MasADC[2]  = (float)(-(1 - joystickState.Z / 32767.0) * 81.49);
 		}
 
 		public void UpdateRud(JoystickState joystickState)
 		{
-			Joystick.MasADC[3]  = (float)((65535 - joystickState.RotationZ) / 65535 * 20);
+			var t = ((65535.0 - joystickState.RotationZ) / 65535.0) * 20.0;
+			Joystick.MasADC[3]  = (float)((65535.0 - joystickState.RotationZ) / 65535.0 * 20.0);
+		
+
+
 		}
 	}
 }

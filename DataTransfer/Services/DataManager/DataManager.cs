@@ -188,7 +188,7 @@ namespace DataTransfer.Services.DataManager
 				//_udpHelper.Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 33333);
 
 				//Отправка на модель
-				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20030);
+				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20031);
 
 
 				//Отправка на ИУП
