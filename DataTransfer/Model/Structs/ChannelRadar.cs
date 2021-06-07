@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DataTransfer.Model.Component.BaseComponent;
 
@@ -18,6 +19,7 @@ namespace DataTransfer.Model.Structs
 		/// <summary>
 		/// яркость РЛ изображения, 0..1
 		/// </summary>
+		[Description("яркость РЛ изображения, 0..1")]
 		double Brightness;
 
 		/// <summary>

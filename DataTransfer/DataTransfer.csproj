@@ -78,6 +78,7 @@
     <Compile Include="Infrastructure\Helpers\UdpHelper.cs" />
     <Compile Include="Model\Component\BaseComponent\Base.cs" />
     <Compile Include="Model\Component\BaseComponent\Header.cs" />
+    <Compile Include="Model\Component\CollectionInfo.cs" />
     <Compile Include="Model\Structs\ControlElement.cs" />
     <Compile Include="Model\Structs\ChannelRadar.cs" />
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />

@@ -9,12 +9,11 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:DataTransfer.ViewModels"
 	Title="MainWindow"
-	Width="800"
-	Height="450"
+	Width="1000"
+	Height="650"
 	
 	MouseLeftButtonDown="Window_MouseLeftButtonDown"
-	MouseMove="Window_MouseMove"
-	Opacity="0.5"
+	Opacity="0.8"
 	ResizeMode="NoResize"
 	WindowStartupLocation="CenterScreen"
 	WindowState="Normal"
@@ -97,9 +96,9 @@
 					<Button
 						Height="30"
 						Padding="0"
-						Content="{materialDesign:PackIcon Size=30,
-						                                  Kind=Play}"
-						IsEnabled="{Binding MyProperty}"
+						Command="{Binding StartModelingCommand}"
+						Content="{materialDesign:PackIcon Size=30,  Kind=Play}"
+						IsEnabled="{Binding IsEnableStart}"
 						Style="{StaticResource MaterialDesignFlatButton}">
 						<Button.Effect>
 							<DropShadowEffect
@@ -112,9 +111,12 @@
 					<Button
 						Height="30"
 						Padding="0"
+						Command="{Binding PauseModelingCommand}"
 						Content="{materialDesign:PackIcon Size=30,
 						                                  Kind=Pause}"
+						IsEnabled="{Binding IsEnablePause}"
 						Style="{StaticResource MaterialDesignFlatButton}">
+
 						<Button.Effect>
 							<DropShadowEffect
 								BlurRadius="10"
@@ -126,8 +128,10 @@
 					<Button
 						Height="30"
 						Padding="0"
+						Command="{Binding StopModelingCommand}"
 						Content="{materialDesign:PackIcon Size=30,
 						                                  Kind=Stop}"
+						IsEnabled="{Binding IsEnableStop}"
 						Foreground="#FF2196F3"
 						Style="{StaticResource MaterialDesignFlatButton}">
 						<Button.Effect>
@@ -158,7 +162,14 @@
 			</ToolBarTray>
 		</Grid>
 		<Grid Grid.Row="2">
-			<DataGrid />
+			<DataGrid ItemsSource="{Binding Path=DynamicInfos}"  AutoGenerateColumns="False" IsReadOnly="True">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Параметр" Binding="{Binding Name}"/>
+					<DataGridTextColumn Header="Значение" Binding="{Binding Value}"/>
+					<DataGridTextColumn Header="Описание" Binding="{Binding Description}"/>
+				</DataGrid.Columns>
+			</DataGrid>
+
 		</Grid>
 		<StatusBar Grid.Row="3" Background="#FF212121">
 			<StatusBarItem>

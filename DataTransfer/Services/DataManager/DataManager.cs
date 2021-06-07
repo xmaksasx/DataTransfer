@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Text;
 using System.Threading;
 using DataTransfer.Infrastructure.Helpers;
+using DataTransfer.Model.Component;
 using DataTransfer.Model.Structs;
 using DataTransfer.Services.ControlElements;
 
@@ -21,7 +23,8 @@ namespace DataTransfer.Services.DataManager
 		#endregion
 
 		private UdpHelper _udpHelper;
-		
+		public 	ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
+		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
@@ -119,6 +122,12 @@ namespace DataTransfer.Services.DataManager
 
 		}
 
+		public void Pause()
+		{
+			_startPosition.StateOfModel(2);
+			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+		}
+
 		public void Stop()
 		{
 			_startPosition.StateOfModel(-1);
@@ -182,7 +191,6 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
-
 				//Отправка на СВВО
 				// Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 6100);
 				//_udpHelper.Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 33333);
@@ -212,6 +220,8 @@ namespace DataTransfer.Services.DataManager
 
 				//Отправка на ПУЭ
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
+
+				_dynamicModel.Update(DynamicInfos);
 
 
 				Thread.Sleep(20);
