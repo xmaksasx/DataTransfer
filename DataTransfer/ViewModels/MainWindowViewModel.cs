@@ -113,9 +113,8 @@ namespace DataTransfer.ViewModels
 
 		private void OnChangeCollectionCommandExecuted(object p)
 		{
-			var br = ((RadioButton) p);
-			var tag = br.Tag.ToString();
-			switch (tag)
+
+			switch (p.ToString())
 			{
 				case "Dynamic":
 					DynamicInfos = _dataManager.DynamicInfos;
@@ -127,7 +126,7 @@ namespace DataTransfer.ViewModels
 		}
 		#endregion
 
-		#region ChangeCollection
+		#region OpenDataDescriptionCreator
 		public ICommand OpenDataDescriptionCreatorCommand { get; set; }
 
 		private bool CanOpenDataDescriptionCreatorCommandExecute(object p) => true;

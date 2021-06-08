@@ -45,8 +45,6 @@ namespace DataTransfer.ViewModels
 			CloseAppCommand.Execute(null);
 		}
 
-
-
 		#endregion
 
 		#endregion
@@ -58,14 +56,14 @@ namespace DataTransfer.ViewModels
 			_objectInfos = new ObservableCollection<ObjectInfo>();
 			foreach (var objectInfo in _dataDescriptionCreator.SearchTypes())
 			{
-				_objectInfos.Add(new ObjectInfo() { Guid = objectInfo.AssemblyQualifiedName, Name = objectInfo.Name, ObjectType = objectInfo });
+				_objectInfos.Add(new ObjectInfo() { FullName = objectInfo.FullName, Name = objectInfo.Name, ObjectType = objectInfo });
 			}
 		}
 
 	}
 	class ObjectInfo
 	{
-		public string Guid { get; set; }
+		public string FullName { get; set; }
 		public string Name { get; set; }
 		public bool IsSelected { get; set; }
 		public Type ObjectType { get; set; }

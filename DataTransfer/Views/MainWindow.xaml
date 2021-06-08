@@ -20,9 +20,6 @@
 	WindowState="Normal"
 	WindowStyle="None"
 	mc:Ignorable="d">
-
-
-
 	<Window.DataContext>
 		<vm:MainWindowViewModel />
 	</Window.DataContext>
@@ -39,7 +36,7 @@
 					Width="30"
 					Height="30"
 					Margin="10,0"
-					Source="/DataTransfer;component/Icon(2).ico"
+					Source="/DataTransfer;component/Icon.ico"
 					Stretch="Fill">
 					<Image.Effect>
 						<DropShadowEffect
@@ -51,7 +48,10 @@
 				<Menu VerticalAlignment="Center">
 					<MenuItem VerticalAlignment="Center" Header="Файл">
 						<MenuItem Header="Перезапуск" Icon="{materialDesign:PackIcon Kind=Restart}" />
-						<MenuItem Command="{Binding OpenDataDescriptionCreatorCommand}"  Header="Выгрузка DD" Icon="{materialDesign:PackIcon Kind=LetterDBoxOutline}" />
+						<MenuItem
+							Command="{Binding OpenDataDescriptionCreatorCommand}"
+							Header="Выгрузка DD"
+							Icon="{materialDesign:PackIcon Kind=LetterDBoxOutline}" />
 						<Separator />
 						<MenuItem
 							Command="{Binding CloseAppCommand}"
@@ -87,7 +87,6 @@
 				</Button.Effect>
 
 			</Button>
-
 		</Grid>
 
 		<Grid Grid.Row="1">
@@ -148,20 +147,18 @@
 						<RadioButton
 							Margin="4"
 							Command="{Binding ChangeCollectionCommand}"
-							CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+							CommandParameter="Dynamic"
 							Content="Динамика"
 							FontSize="12"
 							IsChecked="True"
-							Style="{StaticResource MaterialDesignTabRadioButton}"
-							Tag="Dynamic" />
+							Style="{StaticResource MaterialDesignTabRadioButton}" />
 						<RadioButton
 							Margin="4"
 							Command="{Binding ChangeCollectionCommand}"
-							CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+							CommandParameter="ControlElement"
 							Content="УСО"
 							FontSize="12"
 							IsChecked="False"
-							Tag="ControlElement"
 							Style="{StaticResource MaterialDesignTabRadioButton}" />
 					</StackPanel>
 					<Separator />

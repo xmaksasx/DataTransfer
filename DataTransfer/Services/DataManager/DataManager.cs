@@ -17,7 +17,7 @@ namespace DataTransfer.Services.DataManager
 		private ControlElement _controlElement;
 		private DynamicModel _dynamicModel;
 		private StartPosition _startPosition;
-		private readonly DeviceControlElement _deviceControlElement; 
+		private DeviceControlElement _deviceControlElement; 
 		#endregion
 
 		private UdpHelper _udpHelper;
@@ -69,8 +69,6 @@ namespace DataTransfer.Services.DataManager
 			return _instance;
 		}
 
-
-
 		#region Thread control
 		public void StartThread()
 		{
@@ -93,8 +91,6 @@ namespace DataTransfer.Services.DataManager
 			_isPoll = false;
 
 		}
-
-
 
 		#endregion
 
@@ -129,14 +125,21 @@ namespace DataTransfer.Services.DataManager
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 		}
 
+		public void RestartControlElement()
+		{
+			_deviceControlElement = null;
+			_deviceControlElement = DeviceControlElement.GetInstance();
+			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
+			_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
+		}
 
 		#region Method for thread
 		private void Poll()
 		{
 			while (_isPoll)
 			{
-				_controlElement.UpdateRus(_deviceControlElement.ReadData("0402044f-0000-0000-0000-504944564944"));
-				_controlElement.UpdateRud(_deviceControlElement.ReadData("0404044f-0000-0000-0000-504944564944"));
+				_controlElement.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
+				_controlElement.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
 				Thread.Sleep(20);
 			}
 		}
