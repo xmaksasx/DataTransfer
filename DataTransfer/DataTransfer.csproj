@@ -84,11 +84,12 @@
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
     <Compile Include="Model\Structs\DynamicModel.cs" />
-    <Compile Include="Model\Structs\JoystickStruct.cs" />
-    <Compile Include="Model\Structs\SpecialWindow.cs" />
-    <Compile Include="Model\Structs\SimulationManagement.cs" />
     <Compile Include="Model\Structs\StartPosition.cs" />
     <Compile Include="Services\ControlElements\DeviceControlElement.cs" />
+    <Page Include="Views\DataDescriptionCreatorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DeviceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,10 +102,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\DataDescriptionCreator\DataDescriptionCreator.cs" />
     <Compile Include="Services\DataManager\DataManager.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
+    <Compile Include="ViewModels\DataDescriptionCreatorViewModel.cs" />
     <Compile Include="ViewModels\DeviceWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\DataDescriptionCreatorWindow.xaml.cs">
+      <DependentUpon>DataDescriptionCreatorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DeviceWindow.xaml.cs">
       <DependentUpon>DeviceWindow.xaml</DependentUpon>
     </Compile>

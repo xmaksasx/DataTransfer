@@ -3,23 +3,22 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:local="clr-namespace:DataTransfer"
 	xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+	xmlns:local="clr-namespace:DataTransfer"
 	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:DataTransfer.ViewModels"
 	Title="MainWindow"
 	Width="1000"
 	Height="650"
-	
+	fw:AcrylicWindow.AcrylicWindowStyle="None"
+	fw:AcrylicWindow.Enabled="True"
 	MouseLeftButtonDown="Window_MouseLeftButtonDown"
 	Opacity="0.8"
 	ResizeMode="NoResize"
 	WindowStartupLocation="CenterScreen"
 	WindowState="Normal"
 	WindowStyle="None"
-	fw:AcrylicWindow.AcrylicWindowStyle="None"
-	fw:AcrylicWindow.Enabled="True"
 	mc:Ignorable="d">
 
 
@@ -52,6 +51,7 @@
 				<Menu VerticalAlignment="Center">
 					<MenuItem VerticalAlignment="Center" Header="Файл">
 						<MenuItem Header="Перезапуск" Icon="{materialDesign:PackIcon Kind=Restart}" />
+						<MenuItem Command="{Binding OpenDataDescriptionCreatorCommand}"  Header="Выгрузка DD" Icon="{materialDesign:PackIcon Kind=LetterDBoxOutline}" />
 						<Separator />
 						<MenuItem
 							Command="{Binding CloseAppCommand}"
@@ -97,7 +97,8 @@
 						Height="30"
 						Padding="0"
 						Command="{Binding StartModelingCommand}"
-						Content="{materialDesign:PackIcon Size=30,  Kind=Play}"
+						Content="{materialDesign:PackIcon Size=30,
+						                                  Kind=Play}"
 						IsEnabled="{Binding IsEnableStart}"
 						Style="{StaticResource MaterialDesignFlatButton}">
 						<Button.Effect>
@@ -131,8 +132,8 @@
 						Command="{Binding StopModelingCommand}"
 						Content="{materialDesign:PackIcon Size=30,
 						                                  Kind=Stop}"
-						IsEnabled="{Binding IsEnableStop}"
 						Foreground="#FF2196F3"
+						IsEnabled="{Binding IsEnableStop}"
 						Style="{StaticResource MaterialDesignFlatButton}">
 						<Button.Effect>
 							<DropShadowEffect
@@ -146,15 +147,21 @@
 					<StackPanel Margin="4" Orientation="Horizontal">
 						<RadioButton
 							Margin="4"
+							Command="{Binding ChangeCollectionCommand}"
+							CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
 							Content="Динамика"
 							FontSize="12"
 							IsChecked="True"
-							Style="{StaticResource MaterialDesignTabRadioButton}" />
+							Style="{StaticResource MaterialDesignTabRadioButton}"
+							Tag="Dynamic" />
 						<RadioButton
 							Margin="4"
+							Command="{Binding ChangeCollectionCommand}"
+							CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
 							Content="УСО"
 							FontSize="12"
 							IsChecked="False"
+							Tag="ControlElement"
 							Style="{StaticResource MaterialDesignTabRadioButton}" />
 					</StackPanel>
 					<Separator />
@@ -162,11 +169,14 @@
 			</ToolBarTray>
 		</Grid>
 		<Grid Grid.Row="2">
-			<DataGrid ItemsSource="{Binding Path=DynamicInfos}"  AutoGenerateColumns="False" IsReadOnly="True">
+			<DataGrid
+				AutoGenerateColumns="False"
+				IsReadOnly="True"
+				ItemsSource="{Binding Path=DynamicInfos}">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Параметр" Binding="{Binding Name}"/>
-					<DataGridTextColumn Header="Значение" Binding="{Binding Value}"/>
-					<DataGridTextColumn Header="Описание" Binding="{Binding Description}"/>
+					<DataGridTextColumn Binding="{Binding Name}" Header="Параметр" />
+					<DataGridTextColumn Binding="{Binding Value}" Header="Значение" />
+					<DataGridTextColumn Binding="{Binding Description}" Header="Описание" />
 				</DataGrid.Columns>
 			</DataGrid>
 

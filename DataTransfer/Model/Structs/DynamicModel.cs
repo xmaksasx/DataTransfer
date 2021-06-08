@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component.BaseComponent;
@@ -8,12 +9,17 @@ namespace DataTransfer.Model.Structs
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	class DynamicModel : Base
 	{
-		public override byte[] GetBytes()
+		protected override void SetHead()
 		{
 			GetHeadDouble("DynamicModel");
-			return ConvertHelper.ObjectToByte(this);
 		}
-		//$0\r\n/// </summary>\r\n[Description\("$0"\)]
+
+		public override void Reverse(ref byte[] dgram)
+		{
+			for (int i = 68; i < dgram.Length; i = i + 4)
+				Array.Reverse(dgram, i, 4);
+		}
+
 		#region Fields
 
 		/// <summary>
@@ -128,7 +134,7 @@ namespace DataTransfer.Model.Structs
 		/// [19..22] of single;
 		/// </summary>
 		[Description("[19..22] of single;")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-		float[] in_19_22;
+		float[] in_19_22 = new float[4];
 
 		/// <summary>
 		/// Исходная барометрическая высота полёта вертолёта м
@@ -177,7 +183,7 @@ namespace DataTransfer.Model.Structs
 		/// array[30..41] of single
 		/// </summary>
 		[Description("array[30..41] of single")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-		private float[] in_30_41;
+		private float[] in_30_41 = new float[12];
 
 		/// <summary>
 		/// Вертикальная составляющая силы ветра
@@ -189,7 +195,7 @@ namespace DataTransfer.Model.Structs
 		/// array[43..100] of single
 		/// </summary>
 		[Description("array[43..100] of single")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 58)]
-		private float[] in_43_100;
+		private float[] in_43_100 = new float[58];
 
 		// управляющие сигналы
 		/// <summary>
@@ -382,7 +388,7 @@ namespace DataTransfer.Model.Structs
 		/// array[33..100] of integer
 		/// </summary>
 		[Description("array[33..100] of integer")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 68)]
-		private int[] upr_33_100;
+		private int[] upr_33_100 = new int[68];
 
 		// выходные параметры
 		/// <summary>
@@ -760,7 +766,7 @@ namespace DataTransfer.Model.Structs
 		/// array[65..89] of single
 		/// </summary>
 		[Description("array[65..89] of single")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 25)]
-		private float[] out_65_89;
+		private float[] out_65_89 = new float[25];
 
 		/// <summary>
 		/// Vy (синие окошки) воздушная

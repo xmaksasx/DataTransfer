@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using DataTransfer.Infrastructure.Commands;
 using DataTransfer.Model.Component;
 using DataTransfer.Services.DataManager;
 using DataTransfer.ViewModels.Base;
+using DataTransfer.Views;
+using MaterialDesignThemes.Wpf;
 
 namespace DataTransfer.ViewModels
 {
@@ -103,6 +106,39 @@ namespace DataTransfer.ViewModels
 		}
 		#endregion
 
+		#region ChangeCollection
+		public ICommand ChangeCollectionCommand { get; set; }
+
+		private bool CanChangeCollectionCommandExecute(object p) => true;
+
+		private void OnChangeCollectionCommandExecuted(object p)
+		{
+			var br = ((RadioButton) p);
+			var tag = br.Tag.ToString();
+			switch (tag)
+			{
+				case "Dynamic":
+					DynamicInfos = _dataManager.DynamicInfos;
+					break;
+				case "ControlElement":
+					DynamicInfos = _dataManager.ControlElementInfos;
+					break;
+			}
+		}
+		#endregion
+
+		#region ChangeCollection
+		public ICommand OpenDataDescriptionCreatorCommand { get; set; }
+
+		private bool CanOpenDataDescriptionCreatorCommandExecute(object p) => true;
+
+		private void OnOpenDataDescriptionCreatorCommandExecuted(object p)
+		{
+			DataDescriptionCreatorWindow creatorWindow = new DataDescriptionCreatorWindow();
+			creatorWindow.ShowDialog();
+		}
+		#endregion
+
 		#endregion
 
 		public MainWindowViewModel()
@@ -111,6 +147,8 @@ namespace DataTransfer.ViewModels
 			StartModelingCommand = new LambdaCommand(OnStartModelingCommandExecuted, CanStartModelingCommandExecute);
 			PauseModelingCommand = new LambdaCommand(OnPauseModelingCommandExecuted, CanPauseModelingCommandExecute);
 			StopModelingCommand = new LambdaCommand(OnStopModelingCommandExecuted, CanStopModelingCommandExecute);
+			ChangeCollectionCommand = new LambdaCommand(OnChangeCollectionCommandExecuted, CanChangeCollectionCommandExecute);
+			OpenDataDescriptionCreatorCommand = new LambdaCommand(OnOpenDataDescriptionCreatorCommandExecuted, CanOpenDataDescriptionCreatorCommandExecute);
 			_dataManager = DataManager.GetInstance();
 			DynamicInfos = _dataManager.DynamicInfos;
 			ControlElementInfos = _dataManager.ControlElementInfos;

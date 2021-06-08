@@ -4,6 +4,7 @@ using System.Windows;
 using DataTransfer.Model.Component;
 using DataTransfer.Model.Component.BaseComponent;
 using DataTransfer.Model.Structs;
+using DataTransfer.Services.DataDescriptionCreator;
 using DataTransfer.Services.DataManager;
 
 namespace DataTransfer.Views
@@ -16,6 +17,10 @@ namespace DataTransfer.Views
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			
+
+
      	}
 
 		private void MenuItem_OnClick(object sender, RoutedEventArgs e)

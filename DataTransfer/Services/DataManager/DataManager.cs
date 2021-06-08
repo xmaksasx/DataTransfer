@@ -16,15 +16,13 @@ namespace DataTransfer.Services.DataManager
 		private ChannelTvHeadEffect _channelTvHeadEffect;
 		private ControlElement _controlElement;
 		private DynamicModel _dynamicModel;
-		private SimulationManagement _simulationManagement;
-		private SpecialWindow _specialWindow;
 		private StartPosition _startPosition;
 		private readonly DeviceControlElement _deviceControlElement; 
 		#endregion
 
 		private UdpHelper _udpHelper;
 		public 	ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
-		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
+		public  ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
@@ -107,30 +105,27 @@ namespace DataTransfer.Services.DataManager
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
 			_controlElement = new ControlElement();
 			_dynamicModel = new DynamicModel();
-			_simulationManagement = new SimulationManagement();
-			_specialWindow = new SpecialWindow();
 			_startPosition = new StartPosition();
 		}
 
 		public void Start()
 		{
-			_startPosition.InitPosition();
+			_startPosition.InitPosition(0);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
-			//Thread.Sleep(500);
-			_startPosition.StateOfModel(1);
+			_startPosition.InitPosition(1);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 
 		}
 
 		public void Pause()
 		{
-			_startPosition.StateOfModel(2);
+			_startPosition.InitPosition(2);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 		}
 
 		public void Stop()
 		{
-			_startPosition.StateOfModel(-1);
+			_startPosition.InitPosition(-1);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 		}
 
@@ -162,24 +157,22 @@ namespace DataTransfer.Services.DataManager
 			switch (header)
 			{
 				case "ChannelRadar":
-					_channelRadar.UpdateData(receivedBytes);
+					_channelRadar.Assign(receivedBytes);
 					break;
 
 				case "ChannelThermalEffect":
-					_channelThermalEffect.UpdateData(receivedBytes);
+					_channelThermalEffect.Assign(receivedBytes);
 					break;
 
 				case "ChannelTvHeadEffect":
-					_channelTvHeadEffect.UpdateData(receivedBytes);
+					_channelTvHeadEffect.Assign(receivedBytes);
 					break;
 
 				case "DynamicModel":
-					_dynamicModel.UpdateData(receivedBytes);
+					_dynamicModel.Assign(receivedBytes);
 					break;
 
-				case "SpecialWindow":
-					_specialWindow.UpdateData(receivedBytes);
-					break;
+				
 
 
 				default:
@@ -203,13 +196,13 @@ namespace DataTransfer.Services.DataManager
 				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
 				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
 				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
-				_udpHelper.Send(_specialWindow.GetBytes(), _ipIup, 20046);
+
 
 				//Отправка на спец изображение
 				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
 				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
 				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
-				_udpHelper.Send(_specialWindow.GetBytes(), _ipIup, 20046);
+
 
 
 				//Отправка на УСО
@@ -222,7 +215,7 @@ namespace DataTransfer.Services.DataManager
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
 
 				_dynamicModel.Update(DynamicInfos);
-
+				_controlElement.Update(ControlElementInfos);
 
 				Thread.Sleep(20);
 			}
