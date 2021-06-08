@@ -176,6 +176,9 @@ namespace DataTransfer.Services.DataManager
 
 
 				default:
+					if (receivedBytes.Length < 1000) return;
+					TacticalEditorRoute te = new TacticalEditorRoute();
+					ConvertHelper.ByteToObject(receivedBytes, te);
 					break;
 			}
 		}

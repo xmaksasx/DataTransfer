@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Documents;
 
 namespace DataTransfer.Services.DataDescriptionCreator
 {
@@ -22,31 +23,30 @@ namespace DataTransfer.Services.DataDescriptionCreator
 
 		private DataDescriptionCreator()
 		{
-			object Obj;
-			string @namespace = "DataTransfer.Model.Structs";
-			var types = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && t.Namespace == @namespace)
-				.ToList();
-			foreach (var item in types)
-			{
-
-				//Obj = Activator.CreateInstance(item);
-				//ObjectToByte(Obj);
-			}
+			
 		}
 
 
 		public List<Type> SearchTypes()
 		{
-			return Assembly.GetExecutingAssembly().GetTypes()
-				.Where(t => t.IsClass && t.Namespace == "DataTransfer.Model.Structs")
-				.ToList();
+			List<Type> types = new List<Type>();
+			types.AddRange( Assembly.GetExecutingAssembly().GetTypes()
+				.Where(t =>  t.Namespace == "DataTransfer.Model.Structs")
+				.ToList());
+			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
+				.Where(t =>  t.Namespace == "DataTransfer.Model.Structs.Route")
+				.ToList());
+
+		
+			return types;
 		}
 
 		public void CreateDataDescription(Type typeObject)
 		{
 			string ddFile = "";
 			var obj = Activator.CreateInstance(typeObject);
-			var fields = obj.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+			var fields = obj.GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Instance| BindingFlags.Public);
+
 			foreach (var field in fields)
 			{
 				int length = 1;
@@ -109,7 +109,7 @@ namespace DataTransfer.Services.DataDescriptionCreator
 				type = "float";
 			if (field.FieldType == typeof(int[])|| field.FieldType == typeof(Int32))
 				type = "int";
-			if (field.FieldType == typeof(double[]))
+			if (field.FieldType == typeof(double[]) || field.FieldType == typeof(Double))
 				type = "double";
 			if (field.FieldType == typeof(char[]))
 				type = "char";

@@ -42,6 +42,7 @@ namespace DataTransfer.ViewModels
 			foreach (var objectInfo in _objectInfos)
 				if (objectInfo.IsSelected)
 					_dataDescriptionCreator.CreateDataDescription(objectInfo.ObjectType);
+			CloseAppCommand.Execute(null);
 		}
 
 
@@ -54,8 +55,6 @@ namespace DataTransfer.ViewModels
 		{
 			CloseAppCommand = new LambdaCommand(OnCloseAppCommandExecuted, CanCloseAppCommandExecute);
 			UploadDataDescriptionCommand = new LambdaCommand(OnUploadDataDescriptionCommandExecuted, CanUploadDataDescriptionCommandExecute);
-
-	
 			_objectInfos = new ObservableCollection<ObjectInfo>();
 			foreach (var objectInfo in _dataDescriptionCreator.SearchTypes())
 			{
