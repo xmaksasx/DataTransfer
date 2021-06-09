@@ -183,7 +183,7 @@ namespace DataTransfer.Model.Structs
 		/// array[30..41] of single
 		/// </summary>
 		[Description("array[30..41] of single")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-		private float[] in_30_41 = new float[12];
+		private float[] in_30_41;
 
 		/// <summary>
 		/// Вертикальная составляющая силы ветра
@@ -195,7 +195,7 @@ namespace DataTransfer.Model.Structs
 		/// array[43..100] of single
 		/// </summary>
 		[Description("array[43..100] of single")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 58)]
-		private float[] in_43_100 = new float[58];
+		private float[] in_43_100;
 
 		// управляющие сигналы
 		/// <summary>
@@ -388,7 +388,7 @@ namespace DataTransfer.Model.Structs
 		/// array[33..100] of integer
 		/// </summary>
 		[Description("array[33..100] of integer")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 68)]
-		private int[] upr_33_100 = new int[68];
+		private int[] upr_33_100;
 
 		// выходные параметры
 		/// <summary>
@@ -766,7 +766,7 @@ namespace DataTransfer.Model.Structs
 		/// array[65..89] of single
 		/// </summary>
 		[Description("array[65..89] of single")] [MarshalAs(UnmanagedType.ByValArray, SizeConst = 25)]
-		private float[] out_65_89 = new float[25];
+		private float[] out_65_89;
 
 		/// <summary>
 		/// Vy (синие окошки) воздушная

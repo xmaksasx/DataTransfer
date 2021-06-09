@@ -45,6 +45,11 @@ namespace DataTransfer.Model.Component.BaseComponent
 
 		}
 
+		protected virtual void ReverseName()
+		{
+
+		}
+
 
 		public virtual byte[] GetBytes()
 		{
@@ -55,6 +60,7 @@ namespace DataTransfer.Model.Component.BaseComponent
 		public virtual byte[] GetReverseBytes()
 		{
 			SetHead();
+			ReverseName();
 			var bytes = ConvertHelper.ObjectToByte(this);
 			Reverse(ref bytes);
 			return bytes;

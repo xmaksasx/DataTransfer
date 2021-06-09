@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.Route
+namespace DataTransfer.Model.Structs.NavigationPointStruct
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct NavigationPoint

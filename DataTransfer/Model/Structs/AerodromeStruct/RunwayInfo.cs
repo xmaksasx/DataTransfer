@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
+using DataTransfer.Model.Structs.NavigationPointStruct;
 
-namespace DataTransfer.Model.Structs.Route
+namespace DataTransfer.Model.Structs.AerodromeStruct
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct RunwayInfo

@@ -19,13 +19,14 @@ namespace DataTransfer.Model.Component.BaseComponent
 			return head;
 		}
 
-		public byte[] GetHeadDouble(string caption)
+		public void GetHeadDouble(string caption)
 		{
 			byte[] bytesCap = Encoding.UTF8.GetBytes(caption);
 			byte[] head = new byte[68];
 			Array.Copy(bytesCap, 0, head, 0, bytesCap.Length);
 			Array.Copy(bytesCap, 0, head, 32, bytesCap.Length);
-			return head;
+			head[67] = 16;
+			Head= head;
 		}
 	}
 }

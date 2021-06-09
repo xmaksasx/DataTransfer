@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Documents;
+using System.Runtime.InteropServices;
 
 namespace DataTransfer.Services.DataDescriptionCreator
 {
@@ -30,14 +30,15 @@ namespace DataTransfer.Services.DataDescriptionCreator
 		public List<Type> SearchTypes()
 		{
 			List<Type> types = new List<Type>();
-			types.AddRange( Assembly.GetExecutingAssembly().GetTypes()
-				.Where(t =>  t.Namespace == "DataTransfer.Model.Structs")
+			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs")
 				.ToList());
 			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
-				.Where(t =>  t.Namespace == "DataTransfer.Model.Structs.Route")
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.AerodromeStruct")
 				.ToList());
-
-		
+			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.NavigationPointStruct")
+				.ToList());
 			return types;
 		}
 
@@ -54,8 +55,10 @@ namespace DataTransfer.Services.DataDescriptionCreator
 				if (field.GetCustomAttribute<DescriptionAttribute>() != null &&
 				    field.GetCustomAttribute<DescriptionAttribute>().Description != null)
 					description = field.GetCustomAttribute<DescriptionAttribute>().Description;
+
+				
 				if (field.FieldType.IsArray)
-					length = GetLengthArray(obj, field);
+					length = GetLengthArray(field);
 				var name = GetName(field);
 				var type = GetType(field);
 				var curType = field.FieldType.Name;
@@ -86,25 +89,18 @@ namespace DataTransfer.Services.DataDescriptionCreator
 			sw.Close();
 		}
 
-		private int GetLengthArray<T>(T obj, FieldInfo field)
+		private int GetLengthArray(FieldInfo field)
 		{
 			var length = 0;
-			
-			if (field.FieldType == typeof(Single[]))
-				length = ((Single[]) field.GetValue(obj)).Length;
-			if (field.FieldType == typeof(int[]))
-				length = ((int[])field.GetValue(obj)).Length;
-			if (field.FieldType == typeof(double[]))
-				length = ((double[])field.GetValue(obj)).Length;
-			if (field.FieldType == typeof(char[]))
-				length = ((char[])field.GetValue(obj)).Length;
-
+			if (field.GetCustomAttribute<MarshalAsAttribute>() != null)
+				length = field.GetCustomAttribute<MarshalAsAttribute>().SizeConst;
 			return length;
 		}
 
 		private string GetType(FieldInfo field)
 		{
 			string type = field.FieldType.Name;
+			
 			if (field.FieldType == typeof(Single[]) || field.FieldType == typeof(Single))
 				type = "float";
 			if (field.FieldType == typeof(int[])|| field.FieldType == typeof(Int32))
@@ -113,7 +109,8 @@ namespace DataTransfer.Services.DataDescriptionCreator
 				type = "double";
 			if (field.FieldType == typeof(char[]))
 				type = "char";
-			return type;
+			
+			return type.Replace("[]","");
 		}
 
 		private string GetName(FieldInfo field)

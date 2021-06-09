@@ -1,11 +1,23 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
+using DataTransfer.Model.Component.BaseComponent;
 
 namespace DataTransfer.Model.Structs
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public class TacticalEditorRouteLanding
+    public class Landing : Base
     {
+	    protected override void SetHead()
+	    {
+		    GetHeadDouble("Landing");
+	    }
+
+	    public override void Reverse(ref byte[] dgram)
+	    {
+		    for (int i = 68; i < dgram.Length; i = i + 8)
+			    Array.Reverse(dgram, i, 8);
+	    }
         /// <summary>
         /// Удаление от торца ВПП
         /// </summary>

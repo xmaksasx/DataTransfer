@@ -17,7 +17,9 @@ namespace DataTransfer.Services.DataManager
 		private ControlElement _controlElement;
 		private DynamicModel _dynamicModel;
 		private StartPosition _startPosition;
-		private DeviceControlElement _deviceControlElement; 
+		private DeviceControlElement _deviceControlElement;
+		private Landing _landing;
+		private Route _route;
 		#endregion
 
 		private UdpHelper _udpHelper;
@@ -102,6 +104,8 @@ namespace DataTransfer.Services.DataManager
 			_controlElement = new ControlElement();
 			_dynamicModel = new DynamicModel();
 			_startPosition = new StartPosition();
+			_landing = new Landing();
+			_route = new Route();
 		}
 
 		public void Start()
@@ -175,14 +179,16 @@ namespace DataTransfer.Services.DataManager
 					_dynamicModel.Assign(receivedBytes);
 					break;
 
-				
+				case "Route":
+					_route.Assign(receivedBytes);
+					break;
 
+				case "Landing":
+					_landing.Assign(receivedBytes);
+					break;
 
 				default:
-					if (receivedBytes.Length < 1000) return;
-					TacticalEditorRoute te = new TacticalEditorRoute();
-					ConvertHelper.ByteToObject(receivedBytes, te);
-					break;
+				break;
 			}
 		}
 
@@ -197,19 +203,18 @@ namespace DataTransfer.Services.DataManager
 				//Отправка на модель
 				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20030);
 
-
 				//Отправка на ИУП
 				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
 				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
 				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
-
+				_udpHelper.Send(_route.GetReverseBytes(), _ipIup, 20044);
 
 				//Отправка на спец изображение
 				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
 				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
 				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
-
-
+			
+				
 
 				//Отправка на УСО
 				_udpHelper.Send(_controlElement.GetBytes(), _broadcast, 20050);
