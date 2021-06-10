@@ -94,6 +94,8 @@ namespace DataTransfer.Services.DataDescriptionCreator
 			var length = 0;
 			if (field.GetCustomAttribute<MarshalAsAttribute>() != null)
 				length = field.GetCustomAttribute<MarshalAsAttribute>().SizeConst;
+			if (field.FieldType == typeof(char[]))
+				length = length / 2;
 			return length;
 		}
 
@@ -108,7 +110,7 @@ namespace DataTransfer.Services.DataDescriptionCreator
 			if (field.FieldType == typeof(double[]) || field.FieldType == typeof(Double))
 				type = "double";
 			if (field.FieldType == typeof(char[]))
-				type = "char";
+				type = "utf16string";
 			
 			return type.Replace("[]","");
 		}

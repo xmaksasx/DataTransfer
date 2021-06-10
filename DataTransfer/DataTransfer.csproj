@@ -75,6 +75,7 @@
     <Compile Include="Infrastructure\Commands\Base\Command.cs" />
     <Compile Include="Infrastructure\Commands\LambdaCommand.cs" />
     <Compile Include="Infrastructure\Helpers\ConvertHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\ExtensionMethods.cs" />
     <Compile Include="Infrastructure\Helpers\UdpHelper.cs" />
     <Compile Include="Model\Component\BaseComponent\Base.cs" />
     <Compile Include="Model\Component\BaseComponent\Header.cs" />
@@ -84,6 +85,17 @@
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
     <Compile Include="Model\Structs\DynamicModel.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\AngleTriplet.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\ContactEnvironment.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\DGeoPosition.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\XVECTOR3.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Eng.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\GearRes.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\GearState.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\KinematicsState.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\VehicleCtrl.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\VhclInp.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\VhclOutp.cs" />
     <Compile Include="Model\Structs\Landing.cs" />
     <Compile Include="Model\Structs\AerodromeStruct\Aerodrome.cs" />
     <Compile Include="Model\Structs\NavigationPointStruct\GeoCoordinate.cs" />
@@ -92,6 +104,7 @@
     <Compile Include="Model\Structs\AerodromeStruct\RunwayInfo.cs" />
     <Compile Include="Model\Structs\Route.cs" />
     <Compile Include="Model\Structs\StartPosition.cs" />
+    <Compile Include="Model\Structs\SvvoStruct\Class1.cs" />
     <Compile Include="Services\ControlElements\DeviceControlElement.cs" />
     <Page Include="Views\DataDescriptionCreatorWindow.xaml">
       <SubType>Designer</SubType>
@@ -111,6 +124,7 @@
     </Compile>
     <Compile Include="Services\DataDescriptionCreator\DataDescriptionCreator.cs" />
     <Compile Include="Services\DataManager\DataManager.cs" />
+    <Compile Include="Services\FdmManager\FdmManager.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\DataDescriptionCreatorViewModel.cs" />
     <Compile Include="ViewModels\DeviceWindowViewModel.cs" />
@@ -156,6 +170,7 @@
   <ItemGroup>
     <Resource Include="Icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -25,7 +25,7 @@ namespace DataTransfer.Model.Component.BaseComponent
 			byte[] head = new byte[68];
 			Array.Copy(bytesCap, 0, head, 0, bytesCap.Length);
 			Array.Copy(bytesCap, 0, head, 32, bytesCap.Length);
-			head[67] = 16;
+			head[67] = 0x02;
 			Head= head;
 		}
 	}

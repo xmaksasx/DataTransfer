@@ -22,6 +22,7 @@ namespace DataTransfer.Services.DataManager
 		private Route _route;
 		#endregion
 
+		private FdmManager.FdmManager _fdmManager;
 		private UdpHelper _udpHelper;
 		public 	ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
 		public  ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
@@ -51,6 +52,8 @@ namespace DataTransfer.Services.DataManager
 
 		private DataManager()
 		{
+			var _fdmManager = new FdmManager.FdmManager();
+		
 			_udpHelper = new UdpHelper();
 			_deviceControlElement =  DeviceControlElement.GetInstance();
 			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
@@ -61,6 +64,7 @@ namespace DataTransfer.Services.DataManager
 		}
 
 		private static DataManager _instance;
+
 
 		public static DataManager GetInstance()
 		{
@@ -98,6 +102,10 @@ namespace DataTransfer.Services.DataManager
 
 		private void InitObject()
 		{
+			_fdmManager= new FdmManager.FdmManager();
+
+			_fdmManager.Init();
+
 			_channelRadar = new ChannelRadar();
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
@@ -196,39 +204,48 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
+				_fdmManager.Step();
 				//Отправка на СВВО
 				// Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 6100);
 				//_udpHelper.Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 33333);
 
 				//Отправка на модель
-				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20030);
+				//_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20030);
 
 				//Отправка на ИУП
-				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
-				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
-				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
+				//_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
+				//_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
+				//_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
 				_udpHelper.Send(_route.GetReverseBytes(), _ipIup, 20044);
 
 				//Отправка на спец изображение
-				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
-				_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
-				_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
-			
-				
+				//_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
+				//_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
+				//_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
+
+
 
 				//Отправка на УСО
-				_udpHelper.Send(_controlElement.GetBytes(), _broadcast, 20050);
+				//_udpHelper.Send(_controlElement.GetBytes(), _broadcast, 20050);
 
 				//Отправка на редактор
 				//_udpHelper.Send(_sendTacticalEditor.GetByte(_receiveModel), _ipTacticalEditor, 20060);
 
 				//Отправка на ПУЭ
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
-
+			
 				_dynamicModel.Update(DynamicInfos);
 				_controlElement.Update(ControlElementInfos);
 
 				Thread.Sleep(20);
+
+
+
+
+
+
+
+
 			}
 		} 
 		#endregion

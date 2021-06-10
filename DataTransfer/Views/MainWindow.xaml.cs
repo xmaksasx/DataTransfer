@@ -10,6 +10,7 @@ using DataTransfer.Model.Component.BaseComponent;
 using DataTransfer.Model.Structs;
 using DataTransfer.Services.DataDescriptionCreator;
 using DataTransfer.Services.DataManager;
+using DataTransfer.Services.FdmManager;
 
 namespace DataTransfer.Views
 {
@@ -18,18 +19,13 @@ namespace DataTransfer.Views
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+
+		
 		public MainWindow()
 		{
 			InitializeComponent();
 
-		    Route _routeToIup = new Route();
-			int s = Marshal.SizeOf(_routeToIup);
-			_routeToIup.DepartureAerodrome.Name = new char[40];
-
-			var name = "АААААААААААААААААААААААААААААААААААААААП".ToCharArray();
-			name.CopyTo(_routeToIup.DepartureAerodrome.Name, 0);
-	        ToBigEndian(_routeToIup.DepartureAerodrome.Name);
-	        ToLittleEndian(_routeToIup.DepartureAerodrome.Name);
+	
 
 
 		}
