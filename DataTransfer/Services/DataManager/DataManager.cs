@@ -102,10 +102,6 @@ namespace DataTransfer.Services.DataManager
 
 		private void InitObject()
 		{
-			_fdmManager= new FdmManager.FdmManager();
-
-			_fdmManager.Init();
-
 			_channelRadar = new ChannelRadar();
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
@@ -118,10 +114,12 @@ namespace DataTransfer.Services.DataManager
 
 		public void Start()
 		{
-			_startPosition.InitPosition(0);
-			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
-			_startPosition.InitPosition(1);
-			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			var response = _fdmManager.Start();
+			if (response.IsReady)
+				_udpHelper.Send(response.Dgram, _ipModel, 20030);
+			//_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			//_startPosition.InitPosition(1);
+			//_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 
 		}
 
