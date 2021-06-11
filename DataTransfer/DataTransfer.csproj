@@ -80,10 +80,15 @@
     <Compile Include="Model\Component\BaseComponent\Base.cs" />
     <Compile Include="Model\Component\BaseComponent\Header.cs" />
     <Compile Include="Model\Component\CollectionInfo.cs" />
-    <Compile Include="Model\Structs\ControlElement.cs" />
+    <Compile Include="Model\Structs\CockpitKa50.cs" />
+    <Compile Include="Model\Structs\CockpitKa52.cs" />
     <Compile Include="Model\Structs\ChannelRadar.cs" />
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
+    <Compile Include="Model\Structs\ControlElements\ControlElement.cs" />
+    <Compile Include="Model\Structs\ControlElements\CyclicStepHandle.cs" />
+    <Compile Include="Model\Structs\ControlElements\GeneralStepHandle.cs" />
+    <Compile Include="Model\Structs\ControlElements\Pedals.cs" />
     <Compile Include="Model\Structs\DynamicModel.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\AngleTriplet.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\ContactEnvironment.cs" />
@@ -105,7 +110,10 @@
     <Compile Include="Model\Structs\ResponseModel.cs" />
     <Compile Include="Model\Structs\Route.cs" />
     <Compile Include="Model\Structs\StartPosition.cs" />
-    <Compile Include="Model\Structs\SvvoStruct\Class1.cs" />
+    <Compile Include="Model\Structs\SvvoStruct\CameraPosition.cs" />
+    <Compile Include="Model\Structs\SvvoStruct\HeaderSvvo.cs" />
+    <Compile Include="Model\Structs\SvvoStruct\Preamble.cs" />
+    <Compile Include="Model\Structs\SvvoStruct\Svvo.cs" />
     <Compile Include="Services\ControlElements\DeviceControlElement.cs" />
     <Page Include="Views\DataDescriptionCreatorWindow.xaml">
       <SubType>Designer</SubType>
@@ -125,10 +133,6 @@
     </Compile>
     <Compile Include="Services\DataDescriptionCreator\DataDescriptionCreator.cs" />
     <Compile Include="Services\DataManager\DataManager.cs" />
-    <Compile Include="Services\FdmManager\FdmManager.cs" />
-    <Compile Include="Services\FdmManager\Fdms\Base\BaseFdm.cs" />
-    <Compile Include="Services\FdmManager\Fdms\Ka50.cs" />
-    <Compile Include="Services\FdmManager\Fdms\Ka52.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\DataDescriptionCreatorViewModel.cs" />
     <Compile Include="ViewModels\DeviceWindowViewModel.cs" />

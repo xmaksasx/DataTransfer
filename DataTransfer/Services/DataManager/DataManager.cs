@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using DataTransfer.Infrastructure.Helpers;
@@ -10,22 +12,30 @@ namespace DataTransfer.Services.DataManager
 {
 	class DataManager
 	{
+		[DllImport("Kernel32.dll")]
+		public static extern bool QueryPerformanceCounter(out Int64 lpPerformanceCount);
+
+		[DllImport("Kernel32.dll")]
+		public static extern bool QueryPerformanceFrequency(out Int64 lpFrequency);
+
 		#region Objects
+
 		private ChannelRadar _channelRadar;
 		private ChannelThermalEffect _channelThermalEffect;
 		private ChannelTvHeadEffect _channelTvHeadEffect;
-		private ControlElement _controlElement;
+		private CockpitKa52 _cockpitKa52;
+		private CockpitKa50 _cockpitKa50;
 		private DynamicModel _dynamicModel;
 		private StartPosition _startPosition;
 		private DeviceControlElement _deviceControlElement;
 		private Landing _landing;
 		private Route _route;
-		#endregion
 
-		private FdmManager.FdmManager _fdmManager;
+		#endregion
+		
 		private UdpHelper _udpHelper;
-		public 	ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
-		public  ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
+		public ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
+		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
@@ -52,10 +62,10 @@ namespace DataTransfer.Services.DataManager
 
 		private DataManager()
 		{
-			var _fdmManager = new FdmManager.FdmManager();
-		
+	
+
 			_udpHelper = new UdpHelper();
-			_deviceControlElement =  DeviceControlElement.GetInstance();
+			_deviceControlElement = DeviceControlElement.GetInstance();
 			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
 			_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 			InitObject();
@@ -72,10 +82,12 @@ namespace DataTransfer.Services.DataManager
 			{
 				_instance = new DataManager();
 			}
+
 			return _instance;
 		}
 
 		#region Thread control
+
 		public void StartThread()
 		{
 			_receiveThread.Start();
@@ -105,7 +117,8 @@ namespace DataTransfer.Services.DataManager
 			_channelRadar = new ChannelRadar();
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
-			_controlElement = new ControlElement();
+			_cockpitKa52 = new CockpitKa52();
+			_cockpitKa50 = new CockpitKa50();
 			_dynamicModel = new DynamicModel();
 			_startPosition = new StartPosition();
 			_landing = new Landing();
@@ -114,13 +127,10 @@ namespace DataTransfer.Services.DataManager
 
 		public void Start()
 		{
-			var response = _fdmManager.Start();
-			if (response.IsReady)
-				_udpHelper.Send(response.Dgram, _ipModel, 20030);
-			//_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
-			//_startPosition.InitPosition(1);
-			//_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
-
+			_startPosition.InitPosition(0);
+			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			_startPosition.InitPosition(1);
+			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 		}
 
 		public void Pause()
@@ -144,12 +154,15 @@ namespace DataTransfer.Services.DataManager
 		}
 
 		#region Method for thread
+
 		private void Poll()
 		{
 			while (_isPoll)
 			{
-				_controlElement.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
-				_controlElement.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
+				_cockpitKa52.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
+				_cockpitKa52.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
+				_cockpitKa50.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
+				_cockpitKa50.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
 				Thread.Sleep(20);
 			}
 		}
@@ -194,7 +207,7 @@ namespace DataTransfer.Services.DataManager
 					break;
 
 				default:
-				break;
+					break;
 			}
 		}
 
@@ -202,16 +215,17 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
-				_fdmManager.Step();
+				//_fdmManager.Step();
 				//Отправка на СВВО
 				// Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 6100);
 				//_udpHelper.Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 33333);
 
 				//Отправка на модель
-				//_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20030);
+				_udpHelper.Send(_cockpitKa52.GetBytes(), _ipModel, 20031);
+				_udpHelper.Send(_cockpitKa50.GetBytes(), _ipModel, 20030);
 
 				//Отправка на ИУП
-				//_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
+				_udpHelper.Send(_dynamicModel.GetReverseBytes(), _ipIup, 20040);
 				//_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
 				//_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
 				_udpHelper.Send(_route.GetReverseBytes(), _ipIup, 20044);
@@ -224,16 +238,16 @@ namespace DataTransfer.Services.DataManager
 
 
 				//Отправка на УСО
-				//_udpHelper.Send(_controlElement.GetBytes(), _broadcast, 20050);
+				//_udpHelper.Send(_cockpit.GetBytes(), _broadcast, 20050);
 
 				//Отправка на редактор
 				//_udpHelper.Send(_sendTacticalEditor.GetByte(_receiveModel), _ipTacticalEditor, 20060);
 
 				//Отправка на ПУЭ
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
-			
+
 				_dynamicModel.Update(DynamicInfos);
-				_controlElement.Update(ControlElementInfos);
+				_cockpitKa52.Update(ControlElementInfos);
 
 				Thread.Sleep(20);
 
@@ -245,7 +259,75 @@ namespace DataTransfer.Services.DataManager
 
 
 			}
-		} 
+		}
+
 		#endregion
+
+
+
+		//static void Cik_Step()
+		//{
+		//	Int64 QW, ET;
+		//	double ClockRate, StartTime;
+		//	double DeltaT;
+		//	Single dt_din, dt_din2;
+		//	Int64 intval100 = 0;
+		//	Int64 intval50 = 0;
+		//	QueryPerformanceFrequency(out QW);
+		//	ClockRate = (QW);
+		//	QueryPerformanceCounter(out QW);
+		//	StartTime = (QW);
+		//	while (ims_bool)
+		//	{
+		//		if (snw.Count != 0)
+		//		{
+		//			string switch_on;
+		//			if (snw.TryDequeue(out switch_on))
+		//			{
+		//				switch (switch_on)
+		//				{
+		//					case "init":
+
+		//						break;
+
+		//					case "PrepareAndStart":
+
+		//						break;
+
+
+		//					case "Start":
+
+		//						break;
+		//					case "Pause":
+
+		//					case "Stop":
+
+		//						break;
+
+
+		//					default:
+		//						break;
+
+		//				}
+		//			}
+		//		}
+
+		//		QueryPerformanceCounter(out ET);
+		//		DeltaT = (1000.0 * ((ET) - StartTime) / ClockRate); // миллисекунды
+		//		dt_din = Convert.ToSingle(DeltaT / 10); // 100 Гц
+		//		dt_din2 = Convert.ToSingle(DeltaT / 20); //  50 Гц
+
+		//		if (Convert.ToSingle((Math.Truncate(dt_din))) > intval100)
+		//		{
+		//			intval100++;
+
+		//		}
+
+		//		if (Convert.ToSingle((Math.Truncate(dt_din2))) > intval50)
+		//		{
+		//			intval50++;
+		//		}
+		//	}
+		//}
 	}
 }

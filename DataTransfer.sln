@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransfer", "DataTransfe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoystickExample", "JoystickExample\JoystickExample.csproj", "{1F553482-96A9-4271-9881-510383266728}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ka50Model", "Ka50Model\Ka50Model.csproj", "{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1F553482-96A9-4271-9881-510383266728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F553482-96A9-4271-9881-510383266728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F553482-96A9-4271-9881-510383266728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

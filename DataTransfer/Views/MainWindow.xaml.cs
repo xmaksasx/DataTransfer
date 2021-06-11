@@ -1,16 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
-using DataTransfer.Model.Component;
-using DataTransfer.Model.Component.BaseComponent;
-using DataTransfer.Model.Structs;
-using DataTransfer.Services.DataDescriptionCreator;
-using DataTransfer.Services.DataManager;
-using DataTransfer.Services.FdmManager;
+
+
 
 namespace DataTransfer.Views
 {
@@ -24,10 +16,6 @@ namespace DataTransfer.Views
 		public MainWindow()
 		{
 			InitializeComponent();
-
-	
-
-
 		}
 
 		private char[] ToBigEndian(char[] str)

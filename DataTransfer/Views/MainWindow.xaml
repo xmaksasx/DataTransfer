@@ -60,10 +60,24 @@
 					</MenuItem>
 					<MenuItem
 						VerticalAlignment="Center"
-						FontSize="12"
-						Header="УСО">
+						Header="Органы управления">
 						<MenuItem Click="MenuItem_OnClick" Header="Диспетчер УСО" />
 						<MenuItem Header="Перезапуск" />
+					</MenuItem>
+					<MenuItem
+						VerticalAlignment="Center"
+				
+						Header="Модель">
+						<MenuItem
+							>
+							<MenuItem.Header>
+								<RadioButton/>
+							</MenuItem.Header>
+							</MenuItem>
+								<MenuItem
+							Header="одель Ка50"
+							IsCheckable="True"/>
+					
 					</MenuItem>
 				</Menu>
 
@@ -156,7 +170,7 @@
 							Margin="4"
 							Command="{Binding ChangeCollectionCommand}"
 							CommandParameter="ControlElement"
-							Content="УСО"
+							Content="Органы управления"
 							FontSize="12"
 							IsChecked="False"
 							Style="{StaticResource MaterialDesignTabRadioButton}" />

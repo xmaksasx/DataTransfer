@@ -7,7 +7,7 @@ using SharpDX.DirectInput;
 namespace DataTransfer.Model.Structs
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	class ControlElement : Base
+	class CockpitKa52 : Base
 	{
 		protected override void SetHead()
 		{
@@ -22,11 +22,19 @@ namespace DataTransfer.Model.Structs
 
 		public void UpdateRus(JoystickState joystickState)
 		{
-
+			var tang_gamma = 0; //1 - 5;
 			if (joystickState.Y > 22767)
+			{
 				Elevator = (float) ((1 - joystickState.Y / 42768.0) * 114.99);
+				Elevator = (float) (189.99 * Math.Pow(Elevator / 189.99, tang_gamma));
+			}
 			else
+			{
 				Elevator = (float) ((1 - joystickState.Y / 22767.0) * 189.99);
+				Elevator = (float) (189.99 * Math.Pow(Elevator / 189.99, tang_gamma));
+			}
+
+			Elevator = (float) (189.99 * Math.Pow(Elevator / 189.99, tang_gamma));
 			Aileron = (float) ((1 - joystickState.X / 32767.0) * 129.99);
 
 			//	Joystick.MasIn[82] : = (lpInfoEx.wButtons and & 00000002) shr 1;
@@ -46,7 +54,7 @@ namespace DataTransfer.Model.Structs
 		}
 
 		#region Fields
-		// <summary>
+		/// <summary>
 		/// контрольная сумма (значений всех байт)
 		/// </summary>
 		[Description("контрольная сумма (значений всех байт)")]

@@ -26,7 +26,6 @@ namespace DataTransfer.Services.DataDescriptionCreator
 			
 		}
 
-
 		public List<Type> SearchTypes()
 		{
 			List<Type> types = new List<Type>();
@@ -37,7 +36,7 @@ namespace DataTransfer.Services.DataDescriptionCreator
 				.Where(t => t.Namespace == "DataTransfer.Model.Structs.AerodromeStruct")
 				.ToList());
 			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
-				.Where(t => t.Namespace == "DataTransfer.Model.Structs.NavigationPointStruct")
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.ControlElements")
 				.ToList());
 			return types;
 		}
