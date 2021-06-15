@@ -4,8 +4,8 @@ using System.Runtime.CompilerServices;
 
 namespace DataTransfer.Model.Component
 {
-	public class CollectionInfo
-	{//: INotifyPropertyChanged
+	public class CollectionInfo : INotifyPropertyChanged
+	{
 		private string _name = String.Empty;
 		private string _value = String.Empty;
 		private string _description = String.Empty;
@@ -20,7 +20,7 @@ namespace DataTransfer.Model.Component
 				if (value != this._name)
 				{
 					this._name = value;
-					//NotifyPropertyChanged();
+					NotifyPropertyChanged();
 				}
 			}
 		}
@@ -34,7 +34,7 @@ namespace DataTransfer.Model.Component
 				if (value != this._value)
 				{
 					this._value = value;
-					//NotifyPropertyChanged();
+					NotifyPropertyChanged();
 				}
 			}
 		}
@@ -48,17 +48,17 @@ namespace DataTransfer.Model.Component
 				if (value != this._description)
 				{
 					this._description = value;
-					//NotifyPropertyChanged();
+					NotifyPropertyChanged();
 				}
 			}
 		}
 
-		//public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler PropertyChanged;
 
-		//private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-		//{
-		//	if (PropertyChanged != null)
-		//		PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		//}
+		private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+		{
+			if (PropertyChanged != null)
+				PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 }

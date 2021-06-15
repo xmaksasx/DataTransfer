@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {  
@@ -31,11 +32,13 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 		/// <summary>
 		/// обороты несущей системы, % от номинального
 		/// </summary>
+		[Description("обороты несущей системы, % от номинального")]
 		private double RotorRPM;
 
 		/// <summary>
 		/// результирующий общий шаг несущей системы, град
 		/// </summary>
+		[Description("результирующий общий шаг несущей системы, градо")]
 		private double CollectivePitch;
 	}
 }

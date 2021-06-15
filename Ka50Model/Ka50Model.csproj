@@ -51,6 +51,7 @@
     <Compile Include="Models\ContactEnvironment.cs" />
     <Compile Include="Models\ControlElement.cs" />
     <Compile Include="Models\CyclicStepHandle.cs" />
+    <Compile Include="Models\DataOut.cs" />
     <Compile Include="Models\DGeoPosition.cs" />
     <Compile Include="Models\Eng.cs" />
     <Compile Include="Models\GearRes.cs" />

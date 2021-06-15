@@ -13,6 +13,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 		/// <summary>
 		/// компоненты текущей скорости ветра, в локальной с.к. (м/c)
 		/// </summary>
+		
 		public XVECTOR3 WindSpeed;
 
 		/// <summary>

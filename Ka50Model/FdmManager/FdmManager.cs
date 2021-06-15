@@ -67,6 +67,7 @@ namespace Ka50Model.FdmManager
 		private StartPosition _startPosition;
 		private ControlElement _controlElement;
 		private Svvo _svvo;
+		private DataOut _dataOut;
 
 		public FdmManager()
 		{
@@ -74,6 +75,7 @@ namespace Ka50Model.FdmManager
 			_startPosition = new StartPosition();
 			_controlElement = new ControlElement();
 			_svvo = new Svvo();
+			_dataOut = new DataOut();
 			InitThread();
 			StartThread();
 		}
@@ -127,7 +129,11 @@ namespace Ka50Model.FdmManager
 
 			ResState = (KinematicsState)Marshal.PtrToStructure(ptrRs, typeof(KinematicsState));
 			ResHel = (VhclOutp)Marshal.PtrToStructure(ptrRh, typeof(VhclOutp));
+			_dataOut.KinematicsState = ResState;
+			_dataOut.VhclOutp = ResHel;
+
 			_udpHelper.Send(GetByte(ResState), "127.0.0.1", 6100);
+			_udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
 			Marshal.FreeHGlobal(ptrHel);
 			Marshal.FreeHGlobal(ptrCe);
 			Marshal.FreeHGlobal(ptrRs);
@@ -164,6 +170,11 @@ namespace Ka50Model.FdmManager
 			_svvo.Packetcam.flag = 1;
 
 			return ConvertHelper.ObjectToByte(_svvo);
+		}
+
+		public byte[] GetByte(DataOut dataOut)
+		{
+			return ConvertHelper.ObjectToByte(dataOut);
 		}
 
 		#region Method for thread
