@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.ControlElements
+namespace Ka50Model.Models
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	class CyclicStepHandle

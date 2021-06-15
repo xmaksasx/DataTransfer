@@ -1,12 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
 	/// <summary>
 	/// Входное состояние ЛА
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct VhclInp
+	class VhclInp
 	{
 		public VehicleCtrl vehicleCtrl;
 

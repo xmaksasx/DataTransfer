@@ -1,12 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
 	/// <summary>
 	/// Параметры окружаюих контактных объектов
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct ContactEnvironment
+	class ContactEnvironment
 	{
 		// параметры основной контактной плоскости:
 

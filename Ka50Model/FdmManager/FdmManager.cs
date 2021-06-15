@@ -112,10 +112,10 @@ namespace Ka50Model.FdmManager
 			Hel.Mass = 10800.0;
 			Hel.InertialMoments = _inertialMoments;
 			Hel.PosCG = _posCg;
-			Hel.vehicleCtrl.CyclicPitch = controlElement.Elevator;
-			Hel.vehicleCtrl.CyclicRoll = controlElement.Aileron;
+			Hel.vehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleLeft.Elevator;
+			Hel.vehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleLeft.Aileron;
 			Hel.vehicleCtrl.Direction = 0.5;
-			Hel.vehicleCtrl.Collective = controlElement.Throttle;
+			Hel.vehicleCtrl.Collective = controlElement._generalStepHandleLeft.GeneralStep;
 
 
 			IntPtr ptrHel = GetIntPtr(Hel);

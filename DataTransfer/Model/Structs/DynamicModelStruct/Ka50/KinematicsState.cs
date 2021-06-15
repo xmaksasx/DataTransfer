@@ -1,13 +1,17 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
 	/// <summary>
 	/// Кинематические параметры движения
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct KinematicsState
+	class KinematicsState
 	{
+		public KinematicsState()
+		{
+			
+		}
 		/// <summary>
 		/// углы ориентации связной ск. относительно локальной с.к., град
 		/// </summary>

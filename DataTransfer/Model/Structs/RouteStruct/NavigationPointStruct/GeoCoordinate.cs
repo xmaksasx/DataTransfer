@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.NavigationPointStruct
+namespace DataTransfer.Model.Structs.RouteStruct.NavigationPointStruct
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct GeoCoordinate

@@ -6,25 +6,25 @@ using System.Threading;
 using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component;
 using DataTransfer.Model.Structs;
+using DataTransfer.Model.Structs.ControlElements;
+using DataTransfer.Model.Structs.DynamicModelStruct;
+using DataTransfer.Model.Structs.DynamicModelStruct.Ka50;
+using DataTransfer.Model.Structs.DynamicModelStruct.Ka52;
+using DataTransfer.Model.Structs.RouteStruct;
 using DataTransfer.Services.ControlElements;
 
 namespace DataTransfer.Services.DataManager
 {
 	class DataManager
 	{
-		[DllImport("Kernel32.dll")]
-		public static extern bool QueryPerformanceCounter(out Int64 lpPerformanceCount);
 
-		[DllImport("Kernel32.dll")]
-		public static extern bool QueryPerformanceFrequency(out Int64 lpFrequency);
 
 		#region Objects
 
 		private ChannelRadar _channelRadar;
 		private ChannelThermalEffect _channelThermalEffect;
 		private ChannelTvHeadEffect _channelTvHeadEffect;
-		private CockpitKa52 _cockpitKa52;
-		private CockpitKa50 _cockpitKa50;
+		private ControlElement _controlElement;
 		private DynamicModel _dynamicModel;
 		private StartPosition _startPosition;
 		private DeviceControlElement _deviceControlElement;
@@ -42,7 +42,9 @@ namespace DataTransfer.Services.DataManager
 		private string _ipIup = "127.0.0.1";
 		private string _ipModel = "127.0.0.1";
 		private string _broadcast = "127.0.0.1";
+		private int _typeModel = 0;
 
+		private int _countPoints;
 		private bool _isSend = true;
 		private bool _isPoll = true;
 		private bool _isReceive = true;
@@ -62,8 +64,6 @@ namespace DataTransfer.Services.DataManager
 
 		private DataManager()
 		{
-	
-
 			_udpHelper = new UdpHelper();
 			_deviceControlElement = DeviceControlElement.GetInstance();
 			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
@@ -75,7 +75,6 @@ namespace DataTransfer.Services.DataManager
 
 		private static DataManager _instance;
 
-
 		public static DataManager GetInstance()
 		{
 			if (_instance == null)
@@ -86,15 +85,7 @@ namespace DataTransfer.Services.DataManager
 			return _instance;
 		}
 
-		#region Thread control
-
-		public void StartThread()
-		{
-			_receiveThread.Start();
-			_sendThread.Start();
-			_pollThread.Start();
-		}
-
+		#region Init Thread
 		private void InitThread()
 		{
 			_receiveThread = new Thread(Receive);
@@ -102,6 +93,13 @@ namespace DataTransfer.Services.DataManager
 			_pollThread = new Thread(Poll);
 		}
 
+		public void StartThread()
+		{
+			_receiveThread.Start();
+			_sendThread.Start();
+			_pollThread.Start();
+		}
+		
 		public void StopThread()
 		{
 			_isSend = false;
@@ -112,18 +110,24 @@ namespace DataTransfer.Services.DataManager
 
 		#endregion
 
+		#region Init Object
+
 		private void InitObject()
 		{
 			_channelRadar = new ChannelRadar();
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
-			_cockpitKa52 = new CockpitKa52();
-			_cockpitKa50 = new CockpitKa50();
-			_dynamicModel = new DynamicModel();
+			if(_typeModel==0)
+			{ 
+				_controlElement = new ControlElementKa52();
+				_dynamicModel = new ModelKa52();
+			}
 			_startPosition = new StartPosition();
 			_landing = new Landing();
 			_route = new Route();
 		}
+
+		#endregion
 
 		public void Start()
 		{
@@ -145,6 +149,23 @@ namespace DataTransfer.Services.DataManager
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
 		}
 
+		public void ChangeModel(string nameModel)
+		{
+			if (nameModel == "Ka52")
+			{
+				_dynamicModel = new ModelKa52();
+				_controlElement = new ControlElementKa52();
+				DynamicInfos.Clear();
+			}
+
+			if (nameModel == "Ka50")
+			{
+				_controlElement = new ControlElementKa50();
+				_dynamicModel = new ModelKa50();
+				DynamicInfos.Clear();
+			}
+		}
+
 		public void RestartControlElement()
 		{
 			_deviceControlElement = null;
@@ -159,10 +180,8 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isPoll)
 			{
-				_cockpitKa52.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
-				_cockpitKa52.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
-				_cockpitKa50.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
-				_cockpitKa50.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
+				_controlElement.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
+				_controlElement.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
 				Thread.Sleep(20);
 			}
 		}
@@ -194,7 +213,11 @@ namespace DataTransfer.Services.DataManager
 					_channelTvHeadEffect.Assign(receivedBytes);
 					break;
 
-				case "DynamicModel":
+				case "DynamicModelKa52":
+					_dynamicModel.Assign(receivedBytes);
+					break;
+
+				case "DynamicModelKa50":
 					_dynamicModel.Assign(receivedBytes);
 					break;
 
@@ -215,14 +238,19 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
+
 				//_fdmManager.Step();
 				//Отправка на СВВО
 				// Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 6100);
-				//_udpHelper.Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 33333);
+				if (_countPoints != _route.CountPoints)
+				{
+					_countPoints = (int)_route.CountPoints;
+					_udpHelper.Send(_route.GetBytes(), _broadcast, 20555);
+				}
 
 				//Отправка на модель
-				_udpHelper.Send(_cockpitKa52.GetBytes(), _ipModel, 20031);
-				_udpHelper.Send(_cockpitKa50.GetBytes(), _ipModel, 20030);
+				//_udpHelper.Send(_cockpitKa52.GetBytes(), _ipModel, 20031);
+				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20031);
 
 				//Отправка на ИУП
 				_udpHelper.Send(_dynamicModel.GetReverseBytes(), _ipIup, 20040);
@@ -231,7 +259,7 @@ namespace DataTransfer.Services.DataManager
 				_udpHelper.Send(_route.GetReverseBytes(), _ipIup, 20044);
 
 				//Отправка на спец изображение
-				//_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20040);
+				//_udpHelper.Send(_dynamicModelKa52.GetBytes(), _ipIup, 20040);
 				//_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
 				//_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
 
@@ -246,24 +274,19 @@ namespace DataTransfer.Services.DataManager
 				//Отправка на ПУЭ
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
 
-				_dynamicModel.Update(DynamicInfos);
-				_cockpitKa52.Update(ControlElementInfos);
+				App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+				{
+					_dynamicModel.Update(DynamicInfos);
+				});
+		
+				
 
 				Thread.Sleep(20);
-
-
-
-
-
-
-
 
 			}
 		}
 
 		#endregion
-
-
 
 		//static void Cik_Step()
 		//{

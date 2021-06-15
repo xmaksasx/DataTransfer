@@ -1,17 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component.BaseComponent;
 
-namespace DataTransfer.Model.Structs
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	class DynamicModel : Base
+	class ModelKa52: DynamicModel
 	{
 		protected override void SetHead()
 		{
-			GetHeadDouble("DynamicModel");
+			GetHeadDouble("DynamicModelKa52");
 		}
 
 		public override void Reverse(ref byte[] dgram)
@@ -19,6 +18,8 @@ namespace DataTransfer.Model.Structs
 			for (int i = 68; i < dgram.Length; i = i + 4)
 				Array.Reverse(dgram, i, 4);
 		}
+
+	
 
 		#region Fields
 

@@ -50,12 +50,15 @@
     <Compile Include="Models\AngleTriplet.cs" />
     <Compile Include="Models\ContactEnvironment.cs" />
     <Compile Include="Models\ControlElement.cs" />
+    <Compile Include="Models\CyclicStepHandle.cs" />
     <Compile Include="Models\DGeoPosition.cs" />
     <Compile Include="Models\Eng.cs" />
     <Compile Include="Models\GearRes.cs" />
     <Compile Include="Models\GearState.cs" />
+    <Compile Include="Models\GeneralStepHandle.cs" />
     <Compile Include="Models\Header.cs" />
     <Compile Include="Models\KinematicsState.cs" />
+    <Compile Include="Models\Pedals.cs" />
     <Compile Include="Models\StartPosition.cs" />
     <Compile Include="Models\VehicleCtrl.cs" />
     <Compile Include="Models\VhclInp.cs" />

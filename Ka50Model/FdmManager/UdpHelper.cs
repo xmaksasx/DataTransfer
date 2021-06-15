@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -9,33 +10,40 @@ namespace Ka50Model.FdmManager
 	class UdpHelper
 	{
 
-		private UdpClient _receiveClient;
+		private List<UdpClient> UdpReceivers = new List<UdpClient>();
+		//private UdpClient _receiveClient;
 		private UdpClient _sendClient;
-
+		IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
 		public UdpHelper(int receivePort )
 		{
-			_receiveClient = new UdpClient(receivePort);
+			UdpReceivers.Add(new UdpClient(receivePort));
+			UdpReceivers.Add(new UdpClient(20031));
 			_sendClient = new UdpClient();
 		}
 
 		public byte[] Receive()
 		{
-			if (IsAvailable) return new byte[0];
+			var id = IsAvailable;
+			if (id == -1) return new byte[0];
 			IPEndPoint ipendpoint = null;
-			return _receiveClient.Receive(ref ipendpoint);
+			return UdpReceivers[id].Receive(ref RemoteIpEndPoint);
 		}
 
-		private bool IsAvailable
+
+
+		private int IsAvailable
 		{
 			get
 			{
-				if (_receiveClient.Available == 0)
+				int recvId = -1;
+				for (int i = 0; i < UdpReceivers.Count; i++)
 				{
-					Thread.Sleep(10);
-					return true;
+					if (UdpReceivers[i].Available > 0)
+			
+						return  i;
 				}
 
-				return false;
+				return recvId;
 			}
 		}
 

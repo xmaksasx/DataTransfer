@@ -1,12 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
 	/// <summary>
 	/// Параметры состояния для единичной стойки шасси
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct GearState
+	class GearState
 	{
 		/// <summary>
 		/// относительная величина степени торможения колеса  стойки, 0-1,

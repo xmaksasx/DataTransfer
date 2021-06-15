@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using DataTransfer.Model.Component.BaseComponent;
 
-namespace DataTransfer.Model.Structs
+namespace DataTransfer.Model.Structs.RouteStruct
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class Landing : Base

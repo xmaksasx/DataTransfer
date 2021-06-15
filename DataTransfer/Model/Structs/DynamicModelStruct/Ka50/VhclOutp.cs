@@ -1,13 +1,17 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {  
 	/// <summary>
 	/// Рассчитанное результирующее состояние ЛА
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct VhclOutp
+	class VhclOutp
 	{
+		public VhclOutp()
+		{
+			
+		}
 
 		#region Рассчитанные параметры стоек шасси
 

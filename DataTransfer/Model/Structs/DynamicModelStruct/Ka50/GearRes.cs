@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
 
 
@@ -8,7 +8,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct
 	/// Результирующие параметры единичной стойки шасси
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct GearRes
+	class GearRes
 	{
 		/// <summary>
 		/// относительной перемещение амортизатора стойки, 0-1,

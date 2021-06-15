@@ -23,6 +23,11 @@
 	<Window.DataContext>
 		<vm:MainWindowViewModel />
 	</Window.DataContext>
+	<Window.Resources>
+		<ResourceDictionary>
+			<vm:ModelSwitchConverter x:Key="ModelSwitchConverter" />
+		</ResourceDictionary>
+	</Window.Resources>
 	<Grid Background="#FF2C2C2C">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="35" />
@@ -58,26 +63,27 @@
 							Header="Выход"
 							Icon="{materialDesign:PackIcon Kind=ExitToApp}" />
 					</MenuItem>
-					<MenuItem
-						VerticalAlignment="Center"
-						Header="Органы управления">
+					<MenuItem VerticalAlignment="Center" Header="Органы управления">
 						<MenuItem Click="MenuItem_OnClick" Header="Диспетчер УСО" />
 						<MenuItem Header="Перезапуск" />
 					</MenuItem>
-					<MenuItem
-						VerticalAlignment="Center"
-				
-						Header="Модель">
-						<MenuItem
-							>
-							<MenuItem.Header>
-								<RadioButton/>
-							</MenuItem.Header>
-							</MenuItem>
-								<MenuItem
-							Header="одель Ка50"
-							IsCheckable="True"/>
-					
+					<MenuItem VerticalAlignment="Center" Header="Модель">
+						<MenuItem Header="Модель Ка52">
+							<MenuItem.Icon>
+								<RadioButton
+									Margin="-2"
+									GroupName="models"
+									IsChecked="{Binding ModelSelect, Converter={StaticResource ResourceKey=ModelSwitchConverter}, ConverterParameter=Ka52}" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Модель Ка50">
+							<MenuItem.Icon>
+								<RadioButton
+									Margin="-2"
+									GroupName="models"
+									IsChecked="{Binding ModelSelect, Converter={StaticResource ResourceKey=ModelSwitchConverter}, ConverterParameter=Ka50}" />
+							</MenuItem.Icon>
+						</MenuItem>
 					</MenuItem>
 				</Menu>
 

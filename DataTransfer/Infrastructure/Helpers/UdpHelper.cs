@@ -21,6 +21,7 @@ namespace DataTransfer.Infrastructure.Helpers
 		public byte[] Receive()
 		{
 			if (IsAvailable) return new byte[0];
+	
 			IPEndPoint ipendpoint = null;
 			return _receiveClient.Receive(ref ipendpoint);
 		}

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component.BaseComponent;
-using DataTransfer.Model.Structs.AerodromeStruct;
-using DataTransfer.Model.Structs.NavigationPointStruct;
+using DataTransfer.Model.Structs.RouteStruct.AerodromeStruct;
+using DataTransfer.Model.Structs.RouteStruct.NavigationPointStruct;
 
-namespace DataTransfer.Model.Structs
+namespace DataTransfer.Model.Structs.RouteStruct
 {
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]

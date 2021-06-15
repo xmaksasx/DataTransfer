@@ -50,7 +50,6 @@ namespace DataTransfer.Model.Component.BaseComponent
 
 		}
 
-
 		public virtual byte[] GetBytes()
 		{
 			SetHead();
@@ -69,7 +68,7 @@ namespace DataTransfer.Model.Component.BaseComponent
 		#endregion
 
 
-		public void Update(ObservableCollection<CollectionInfo> lst)
+		public virtual void Update(ObservableCollection<CollectionInfo> lst)
 		{
 			if (lst.Count == 0)
 				FillCollection(lst);
@@ -86,7 +85,7 @@ namespace DataTransfer.Model.Component.BaseComponent
 			}
 		}
 
-		private void FillCollection(ObservableCollection<CollectionInfo> lst)
+		public virtual void FillCollection(ObservableCollection<CollectionInfo> lst)
 		{
 			string ddFile = "";
 

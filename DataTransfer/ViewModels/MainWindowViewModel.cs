@@ -1,6 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using DataTransfer.Infrastructure.Commands;
 using DataTransfer.Model.Component;
@@ -49,6 +52,27 @@ namespace DataTransfer.ViewModels
 		/// <summary>активность кнопки стоп</summary>
 		public bool IsEnableStop {get =>_isEnableStop; set =>Set(ref _isEnableStop, value);}
 		#endregion		
+
+		#region MenuSelection: int - description
+		/// <summary>description</summary>
+		private int _menuSelection;
+		/// <summary>description</summary>
+		public int MenuSelection { get =>_menuSelection; set =>Set(ref _menuSelection, value);}
+		#endregion
+
+		#region ModelSelect: string - Выбранная модель
+		/// <summary>Выбранная модель</summary>
+		private string _modelSelect = "Ka52";
+		/// <summary>Выбранная модель</summary>
+		public string ModelSelect { get =>_modelSelect;
+			set
+			{
+				Set(ref _modelSelect, value);
+				_dataManager.ChangeModel(value);
+			}
+		}
+		#endregion		
+
 
 		#region Команды
 
@@ -153,4 +177,20 @@ namespace DataTransfer.ViewModels
 			ControlElementInfos = _dataManager.ControlElementInfos;
 		}
 	}
+
+	public class ModelSwitchConverter : IValueConverter
+	{
+	
+			public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+			{
+				return ((string)parameter == (string)value);
+			}
+
+			public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+			{
+				return (bool)value ? parameter : null;
+			}
+		
+	}
+
 }

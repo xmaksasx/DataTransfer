@@ -1,12 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 
+using DataTransfer.Model.Component.BaseComponent;
+
 namespace DataTransfer.Model.Structs.DynamicModelStruct
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct AngleTriplet
+	abstract class DynamicModel : Base
 	{
-		public double Fi;
-		public double Psi;
-		public double Gam;
+	
 	}
 }

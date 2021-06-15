@@ -1,12 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
 	/// <summary>
 	/// Параметры двигателя
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct Eng
+	class Eng
 	{
 		/// <summary>
 		/// обороты вентилятора, (% от номинальной величины)) 

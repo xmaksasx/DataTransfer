@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.AerodromeStruct
+namespace DataTransfer.Model.Structs.RouteStruct.AerodromeStruct
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Aerodrome

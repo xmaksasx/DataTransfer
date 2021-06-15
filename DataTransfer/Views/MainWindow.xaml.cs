@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
-
+using DataTransfer.Model.Structs.ControlElements;
 
 
 namespace DataTransfer.Views
@@ -11,11 +12,10 @@ namespace DataTransfer.Views
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-
-		
 		public MainWindow()
 		{
 			InitializeComponent();
+
 		}
 
 		private char[] ToBigEndian(char[] str)

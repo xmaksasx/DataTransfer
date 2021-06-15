@@ -1,12 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace DataTransfer.Model.Structs.DynamicModelStruct
+namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
 	/// <summary>
 	/// Параметры органов управления аппаратом
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct VehicleCtrl
+	class VehicleCtrl
 	{
 		/// <summary>
 		/// нормированное положение органа управления в продольном канале, б/р, 0 – 1,
