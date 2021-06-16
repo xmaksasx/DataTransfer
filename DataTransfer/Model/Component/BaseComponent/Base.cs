@@ -68,123 +68,83 @@ namespace DataTransfer.Model.Component.BaseComponent
 		#endregion
 
 
-		//public virtual void Update(ObservableCollection<CollectionInfo> lst)
-		//{
-		//	if (lst.Count == 0)
-		//		FillCollection(lst);
-
-		//	foreach (var field in this.GetType()
-		//		.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
-		//	{
-		//		var found = lst.FirstOrDefault(x => x.Name == field.Name);
-		//		if (found != null)
-		//		{
-		//			var value = field.GetValue(this)?.ToString();
-		//			found.Value = value?.Substring(0, Math.Min(value.Length, 7));
-		//		}
-		//	}
-		//}
-
-		//public virtual void FillCollection(ObservableCollection<CollectionInfo> lst)
-		//{
-		//	string ddFile = "";
-
-		//	var fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-		//	foreach (var field in fields)
-		//	{
-		//		string description = "";
-		//		if (field.GetCustomAttribute<DescriptionAttribute>() != null &&
-		//		    field.GetCustomAttribute<DescriptionAttribute>().Description != null)
-		//			description = field.GetCustomAttribute<DescriptionAttribute>().Description;
-		//		var value = field.GetValue(this)?.ToString();
-		//		lst.Add(new CollectionInfo()
-		//			{Name = field.Name, Value = value, Description = description});
-
-		//	}
-		//}
-
 		public void Update(ObservableCollection<CollectionInfo> lst)
 		{
-			
+
 			if (lst.Count == 0)
-				SearchFields(this, this.GetType(), true, lst, "" );
-			UpdateCollection(this, this.GetType(), true, lst );
+					SearchFields(this.GetType(), lst, "", "BaseModel");
+				UpdateCollection(this, "BaseModel",  lst);
 		}
 
-		public void SearchFields(object obj, Type pType, bool isFirst, ObservableCollection<CollectionInfo> lst, string description)
+		public void SearchFields(Type type, ObservableCollection<CollectionInfo> lst, string description, string parentName)
 		{
-			FieldInfo[] myFields = pType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
-			for (int i = 0; i < myFields.Length; i++)
+			FieldInfo[] Fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+			foreach (FieldInfo field in Fields)
 			{
-				if (myFields[i].FieldType.IsPrimitive || myFields[i].FieldType == typeof(String))
+				if (field.FieldType.IsPrimitive || field.FieldType == typeof(string))
 				{
-					//if (!isFirst)
-					{
-						//object temp = Activator.CreateInstance(pType);
-						//obj = temp;
-						AddToCollection(myFields[i],obj, lst, description);
-					}
+					AddToCollection(field, lst, description, parentName);
 				}
-				else if (myFields[i].FieldType.IsClass)
+				else if (field.FieldType.IsClass && !field.FieldType.IsArray)
 				{
-					string curdescription = "";
-					if (myFields[i].GetCustomAttribute<DescriptionAttribute>() != null &&
-						myFields[i].GetCustomAttribute<DescriptionAttribute>().Description != null)
-						curdescription = myFields[i].GetCustomAttribute<DescriptionAttribute>().Description;
-					Type tType = myFields[i].FieldType;
-					SearchFields(myFields[i], tType, false, lst, curdescription);
+					var curdescription = GetDescription(field);
+					SearchFields(field.FieldType, lst, curdescription, field.Name);
 				}
 			}
 
+
 		}
-		private void AddToCollection(FieldInfo fieldInfo,object obj, ObservableCollection<CollectionInfo> lst, string description)
+		private string GetDescription(FieldInfo fieldInfo)
 		{
 			string curdescription = "";
 			if (fieldInfo.GetCustomAttribute<DescriptionAttribute>() != null &&
 				fieldInfo.GetCustomAttribute<DescriptionAttribute>().Description != null)
 				curdescription = fieldInfo.GetCustomAttribute<DescriptionAttribute>().Description;
+			return curdescription;
+		}
+
+		private void AddToCollection(FieldInfo fieldInfo, ObservableCollection<CollectionInfo> lst, string description, string Parentname)
+		{
+			string curdescription = GetDescription(fieldInfo);
 			if (string.IsNullOrEmpty(curdescription))
 				curdescription = description;
-			var guid = obj.ToString();	
-
-			 lst.Add(new CollectionInfo()
-			{ Name = fieldInfo.Name, Value = "0", Description = curdescription, GuidName = guid });
-		
+			lst.Add(new CollectionInfo()
+			{
+				Name = Parentname + "." + fieldInfo.Name,
+				Description = curdescription,
+				Value = "0"
+			});
 		}
 
 
 
-		void UpdateCollection( object obj, Type pType, bool isFirst, ObservableCollection<CollectionInfo> lst)
+
+		void UpdateCollection(object obj, string paretnName,  ObservableCollection<CollectionInfo> lst)
 		{
-			FieldInfo[] myFields = pType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
-			for (int i = 0; i < myFields.Length; i++)
+			if (obj == null)
+				return;
+			FieldInfo[] Fields = obj.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+			foreach (FieldInfo field in Fields)
 			{
-				if (myFields[i].FieldType.IsPrimitive || myFields[i].FieldType == typeof(String))
+				object fieldValue = field.GetValue(obj);
+				if (field.FieldType.IsPrimitive || field.FieldType == typeof(String))
 				{
-					//if (!isFirst)
+					var name = paretnName + "." + field.Name;
+					var found = lst.FirstOrDefault(x => x.Name == name);
+					if (found != null)
 					{
-						if (obj != null)
-						{
-							var found = lst.FirstOrDefault(x => x.GuidName == "");
-							if (found != null)
-							{
-
-								var value = myFields[i].GetValue(obj)?.ToString();
-								found.Value = value?.Substring(0, Math.Min(value.Length, 8));
-								
-
-							}
-						}
-
+						var value = fieldValue.ToString();
+						found.Value = value?.Substring(0, Math.Min(value.Length, 8));
 					}
 				}
-				else if (myFields[i].FieldType.IsClass)
+				else
 				{
-					Type tType = myFields[i].FieldType;
-					UpdateCollection(myFields[i].GetValue(obj), tType, false, lst);
+					UpdateCollection(fieldValue, field.Name, lst);
 				}
-
 			}
+
+
+			
 		}
 	}
 }

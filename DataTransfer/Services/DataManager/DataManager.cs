@@ -250,7 +250,7 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
-
+				var begin = DateTime.Now;
 				//_fdmManager.Step();
 				//Отправка на СВВО
 				// Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 6100);
@@ -287,14 +287,16 @@ namespace DataTransfer.Services.DataManager
 				//Отправка на ПУЭ
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
 
+		
 				App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
 				{
 					_dynamicModel.Update(DynamicInfos);
 				});
-		
-				
 
+			
 				Thread.Sleep(20);
+				var end = DateTime.Now;
+				Console.WriteLine((end - begin).Milliseconds);
 
 			}
 		}
