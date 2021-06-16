@@ -5,13 +5,15 @@ namespace DataTransfer.Infrastructure.Helpers
 {
 	class ConvertHelper
 	{
-		public static void ByteToObject<T>(byte[] receiveBytes, T obj)
+		public static bool ByteToObject<T>(byte[] receiveBytes, T obj)
 		{
 			int len = Marshal.SizeOf(obj);
+			if (len != receiveBytes.Length) return false;
 			IntPtr i = Marshal.AllocHGlobal(len);
 			Marshal.Copy(receiveBytes, 0, i, len);
 			Marshal.PtrToStructure(i, obj);
 			Marshal.FreeHGlobal(i);
+			return true;
 		}
 
 

@@ -9,6 +9,7 @@ namespace DataTransfer.Model.Component
 		private string _name = String.Empty;
 		private string _value = String.Empty;
 		private string _description = String.Empty;
+		private string _guidName = String.Empty;
 
 
 		public string Name
@@ -48,6 +49,20 @@ namespace DataTransfer.Model.Component
 				if (value != this._description)
 				{
 					this._description = value;
+					NotifyPropertyChanged();
+				}
+			}
+		}
+
+		public string GuidName
+		{
+			get { return this._guidName; }
+
+			set
+			{
+				if (value != this._guidName)
+				{
+					this._guidName = value;
 					NotifyPropertyChanged();
 				}
 			}

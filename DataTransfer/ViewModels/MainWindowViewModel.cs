@@ -10,13 +10,22 @@ using DataTransfer.Model.Component;
 using DataTransfer.Services.DataManager;
 using DataTransfer.ViewModels.Base;
 using DataTransfer.Views;
-using MaterialDesignThemes.Wpf;
 
 namespace DataTransfer.ViewModels
 {
 	class MainWindowViewModel:ViewModel
 	{
 		readonly DataManager _dataManager;
+
+		#region ModelState: string - Статус модели
+
+		/// <summary>Статус модели</summary>
+		private string _modelState;
+
+		/// <summary>Статус модели</summary>
+		public string ModelState {get =>_dataManager.IsCorrectModel; set =>Set(ref _modelState, value);}
+
+		#endregion		
 
 		#region DynamicInfos: ObservableCollection<CollectionInfo> - Параметры динамики полета
 		/// <summary>Параметры динамики полета</summary>
@@ -53,13 +62,6 @@ namespace DataTransfer.ViewModels
 		public bool IsEnableStop {get =>_isEnableStop; set =>Set(ref _isEnableStop, value);}
 		#endregion		
 
-		#region MenuSelection: int - description
-		/// <summary>description</summary>
-		private int _menuSelection;
-		/// <summary>description</summary>
-		public int MenuSelection { get =>_menuSelection; set =>Set(ref _menuSelection, value);}
-		#endregion
-
 		#region ModelSelect: string - Выбранная модель
 		/// <summary>Выбранная модель</summary>
 		private string _modelSelect = "Ka52";
@@ -72,7 +74,6 @@ namespace DataTransfer.ViewModels
 			}
 		}
 		#endregion		
-
 
 		#region Команды
 
@@ -175,7 +176,15 @@ namespace DataTransfer.ViewModels
 			_dataManager = DataManager.GetInstance();
 			DynamicInfos = _dataManager.DynamicInfos;
 			ControlElementInfos = _dataManager.ControlElementInfos;
+			_dataManager.SomethingHappened += DataManagerOnSomethingHappened; 
 		}
+
+		private void DataManagerOnSomethingHappened(string str)
+		{
+			ModelState = str;
+		}
+
+		
 	}
 
 	public class ModelSwitchConverter : IValueConverter

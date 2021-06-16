@@ -200,9 +200,7 @@
 		</Grid>
 		<StatusBar Grid.Row="3" Background="#FF212121">
 			<StatusBarItem>
-				<TextBlock Foreground="#FFC1C1C1">
-					Готов!
-				</TextBlock>
+				<TextBlock Foreground="#FFC1C1C1" Text="{Binding ModelState}" />
 			</StatusBarItem>
 		</StatusBar>
 	</Grid>

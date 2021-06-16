@@ -36,6 +36,8 @@ namespace DataTransfer.Services.DataManager
 		private UdpHelper _udpHelper;
 		public ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
 		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
+		public delegate void Mydelegate(string str);
+		public event Mydelegate SomethingHappened; 
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
@@ -48,6 +50,7 @@ namespace DataTransfer.Services.DataManager
 		private bool _isSend = true;
 		private bool _isPoll = true;
 		private bool _isReceive = true;
+		public string IsCorrectModel { get; set; }
 
 
 		//_ipModel
@@ -214,11 +217,20 @@ namespace DataTransfer.Services.DataManager
 					break;
 
 				case "DynamicModelKa52":
-					_dynamicModel.Assign(receivedBytes);
+					if (_dynamicModel.Assign(receivedBytes))
+						IsCorrectModel = "OOO good!";
+					else
+						IsCorrectModel = "OOO shit!";
+
+					OnSomethingHappened(IsCorrectModel);
 					break;
 
 				case "DynamicModelKa50":
-					_dynamicModel.Assign(receivedBytes);
+					if (_dynamicModel.Assign(receivedBytes))
+						IsCorrectModel = "OOO good!";
+					else
+						IsCorrectModel = "OOO shit!";
+					OnSomethingHappened(IsCorrectModel);
 					break;
 
 				case "Route":
@@ -257,6 +269,7 @@ namespace DataTransfer.Services.DataManager
 				//_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
 				//_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
 				_udpHelper.Send(_route.GetReverseBytes(), _ipIup, 20044);
+				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20044);
 
 				//Отправка на спец изображение
 				//_udpHelper.Send(_dynamicModelKa52.GetBytes(), _ipIup, 20040);
@@ -352,5 +365,9 @@ namespace DataTransfer.Services.DataManager
 		//		}
 		//	}
 		//}
+		protected void OnSomethingHappened(string str)
+		{
+			SomethingHappened?.Invoke(str);
+		}
 	}
 }

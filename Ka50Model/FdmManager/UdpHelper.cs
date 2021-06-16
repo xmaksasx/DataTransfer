@@ -14,10 +14,11 @@ namespace Ka50Model.FdmManager
 		//private UdpClient _receiveClient;
 		private UdpClient _sendClient;
 		IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-		public UdpHelper(int receivePort )
+		public UdpHelper()
 		{
-			UdpReceivers.Add(new UdpClient(receivePort));
+			UdpReceivers.Add(new UdpClient(20030));
 			UdpReceivers.Add(new UdpClient(20031));
+			UdpReceivers.Add(new UdpClient(21222));
 			_sendClient = new UdpClient();
 		}
 

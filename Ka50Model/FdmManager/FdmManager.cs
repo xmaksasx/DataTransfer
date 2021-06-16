@@ -68,10 +68,10 @@ namespace Ka50Model.FdmManager
 		private ControlElement _controlElement;
 		private Svvo _svvo;
 		private DataOut _dataOut;
-
+		private float _gmTerrainH;
 		public FdmManager()
 		{
-			_udpHelper = new UdpHelper(20030);
+			_udpHelper = new UdpHelper();
 			_startPosition = new StartPosition();
 			_controlElement = new ControlElement();
 			_svvo = new Svvo();
@@ -108,7 +108,7 @@ namespace Ka50Model.FdmManager
 
 		public void Step(ControlElement controlElement)
 		{
-			ContactEnv.Elevation = 170;
+			ContactEnv.Elevation = _gmTerrainH;
 			ContactEnv.Normal = _normal;
 			Hel.WindSpeed = _windSpeed;
 			Hel.Mass = 10800.0;
@@ -125,7 +125,7 @@ namespace Ka50Model.FdmManager
 			IntPtr ptrRs = GetIntPtr(ResState);
 			IntPtr ptrRh = GetIntPtr(ResHel);
 
-			Step(0.01, ptrHel, IntPtr.Zero, ptrRs, ptrRh);
+			Step(0.02, ptrHel, ptrCe, ptrRs, ptrRh);
 
 			ResState = (KinematicsState)Marshal.PtrToStructure(ptrRs, typeof(KinematicsState));
 			ResHel = (VhclOutp)Marshal.PtrToStructure(ptrRh, typeof(VhclOutp));
@@ -185,7 +185,9 @@ namespace Ka50Model.FdmManager
 			{
 				var receivedBytes = _udpHelper.Receive();
 				if (receivedBytes.Length == 0) continue;
-				string header = Encoding.UTF8.GetString(receivedBytes, 0, 30).Trim('\0');
+				string header = "";
+				if (receivedBytes.Length > 30)
+					header = Encoding.UTF8.GetString(receivedBytes, 0, 30).Trim('\0');
 				ProcessingPackage(header, receivedBytes);
 			}
 		}
@@ -230,6 +232,10 @@ namespace Ka50Model.FdmManager
 					break;
 
 				default:
+					if (receivedBytes.Length==4)
+					{
+						_gmTerrainH = BitConverter.ToSingle(receivedBytes, 0);
+					}
 					break;
 			}
 		}
