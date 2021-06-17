@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Default>
+		<!--Ka50-->
+		<DefaultDynamicModel Value="Ka52"/>
+		<!--Network-->
+		<DefaultControlElement Value="Usb">
+			<Rus Guid="0402044f-0000-0000-0000-504944564944"/>
+			<Rud Guid="0404044f-0000-0000-0000-504944564944"/>
+		</DefaultControlElement>
+	</Default>
+	<NetworkSettings>
+		<Model>
+			<Command Port="20030" Ip="127.0.0.1"/>
+			<ControlElement Port="20031" Ip="127.0.0.1"/>
+		</Model>
+		<IupVaps>
+			<ControlElement Port="20040" Ip="127.0.0.1"/>
+			<DynamicModel Port="20041" Ip="127.0.0.1"/>
+			<Route Port="20044" Ip="127.0.0.1"/>
+			<Landing Port="20045" Ip="127.0.0.1"/>
+		</IupVaps>
+		<Iup>
+			<DynamicModel Port="20050" Ip="127.0.0.1"/>
+		</Iup>
+		<TacticalEditor>
+			<DynamicModel Port="20060" Ip="127.0.0.1"/>
+		</TacticalEditor>
+		<Svvo>
+			<Route Port="20070" Ip="127.0.0.1"/>
+		</Svvo>
+	</NetworkSettings>
+</Config>

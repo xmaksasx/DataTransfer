@@ -86,7 +86,7 @@
 						</MenuItem>
 					</MenuItem>
 				</Menu>
-
+				<Button Click="Button_Click"></Button>
 			</StackPanel>
 			<Button
 				Width="35"
@@ -198,6 +198,12 @@
 			</DataGrid>
 
 		</Grid>
+		<materialDesign:Snackbar
+			Grid.Row="2"
+			Background="{DynamicResource MaterialDesignPaper}"
+			Foreground="AliceBlue"
+  x:Name="SnackbarSeven"
+  MessageQueue="{materialDesign:MessageQueue}" />
 		<StatusBar Grid.Row="3" Background="#FF212121">
 			<StatusBarItem>
 				<StackPanel Orientation="Horizontal">

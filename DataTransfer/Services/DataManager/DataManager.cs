@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Xml.Serialization;
 using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component;
 using DataTransfer.Model.Structs;
+using DataTransfer.Model.Structs.Config.Base;
 using DataTransfer.Model.Structs.ControlElements;
 using DataTransfer.Model.Structs.DynamicModelStruct;
 using DataTransfer.Model.Structs.DynamicModelStruct.Ka50;
@@ -17,6 +21,11 @@ namespace DataTransfer.Services.DataManager
 {
 	class DataManager
 	{
+		[DllImport("Kernel32.dll")]
+		private static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
+
+		[DllImport("Kernel32.dll")]
+		private static extern bool QueryPerformanceFrequency(out long lpFrequency);
 
 
 		#region Objects
@@ -30,6 +39,7 @@ namespace DataTransfer.Services.DataManager
 		private DeviceControlElement _deviceControlElement;
 		private Landing _landing;
 		private Route _route;
+		private Config _config;
 
 		#endregion
 
@@ -42,9 +52,6 @@ namespace DataTransfer.Services.DataManager
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
-		private string _ipIup = "127.0.0.1";
-		private string _ipModel = "127.0.0.1";
-		private string _broadcast = "127.0.0.1";
 		private int _typeModel = 0;
 
 		private int _stateModel =-1;
@@ -135,40 +142,32 @@ namespace DataTransfer.Services.DataManager
 			_startPosition = new StartPosition();
 			_landing = new Landing();
 			_route = new Route();
-
+			_config = LoadConfig();
 		}
 
 		#endregion
 
-		public void Start()
+		private Config LoadConfig()
 		{
-			if (_stateModel==-1)
+			Config config = null;
+			if (File.Exists("Config.xml"))
 			{
-				_startPosition.InitPosition(0);
-				_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+				XmlSerializer serializer = new XmlSerializer(typeof(Config));
+				using (StreamReader reader = new StreamReader("Config.xml"))
+					config = (Config)serializer.Deserialize(reader);
 			}
-			
-			_startPosition.InitPosition(1);
-			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
-			OnStatusModelEvent("Идет моделирование!");
-			_stateModel = 1;
-		}
-
-
-		public void Pause()
-		{
-			_startPosition.InitPosition(2);
-			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
-			OnStatusModelEvent("Пауза!");
-			_stateModel = 2;
-		}
-
-		public void Stop()
-		{
-			_startPosition.InitPosition(-1);
-			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
-			OnStatusModelEvent("Моделирование остановлено!"); 
-			_stateModel = -1;
+			else
+			{
+				var assembly = Assembly.GetExecutingAssembly();
+				var resourceName = "DataTransfer.Infrastructure.Resource.Config.xml";
+				using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+				{
+					XmlSerializer serializer = new XmlSerializer(typeof(Config));
+					using (StreamReader reader = new StreamReader(stream))
+						config = (Config)serializer.Deserialize(reader);
+				}
+			}
+			return config;
 		}
 
 		public void ChangeModel(string nameModel)
@@ -195,6 +194,44 @@ namespace DataTransfer.Services.DataManager
 			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
 			_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 		}
+
+		#region Simulation control
+
+		public void Start()
+		{
+			if (_stateModel==-1)
+			{
+				_startPosition.InitPosition(0);
+				_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip, 
+					_config.NetworkSettings.Model.Command.Port);
+			}
+			
+			_startPosition.InitPosition(1);
+			_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip,
+								_config.NetworkSettings.Model.Command.Port);
+			OnStatusModelEvent("Идет моделирование!");
+			_stateModel = 1;
+		}
+
+		public void Pause()
+		{
+			_startPosition.InitPosition(2);
+			_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip,
+								_config.NetworkSettings.Model.Command.Port);
+			OnStatusModelEvent("Пауза!");
+			_stateModel = 2;
+		}
+
+		public void Stop()
+		{
+			_startPosition.InitPosition(-1);
+			_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip,
+								_config.NetworkSettings.Model.Command.Port);
+			OnStatusModelEvent("Моделирование остановлено!"); 
+			_stateModel = -1;
+		}
+
+		#endregion
 
 		#region Method for thread
 
@@ -269,31 +306,55 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
-				//Отправка на модель
-				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20031);
+				#region Отправка на модель
 
-				//Отправка на ИУП
-				_udpHelper.Send(_controlElement.GetReverseBytes(), _ipModel, 20040);
-				_udpHelper.Send(_dynamicModel.GetReverseBytes(), _ipIup, 20041);
-				_udpHelper.Send(_route.GetReverseBytes(), _ipIup, 20044);
+				_udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
+					_config.NetworkSettings.Model.ControlElement.Port);
 
-				//отправка на отдельные индикаторы
-				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20050);
+				#endregion
 
-				//Отправка на редактор
-				_udpHelper.Send(_dynamicModel.GetPosition(), _ipIup, 20060);
+				#region Отправка на ИУП
 
-				//Отправка на СВВО
-				_udpHelper.Send(_route.GetBytes(), _broadcast, 20070);
+				_udpHelper.Send(_controlElement.GetReverseBytes(), _config.NetworkSettings.IupVaps.ControlElement.Ip,
+					_config.NetworkSettings.IupVaps.ControlElement.Port);
 
-				//Отправка на ПУЭ
-				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
+				_udpHelper.Send(_dynamicModel.GetReverseBytes(), _config.NetworkSettings.IupVaps.DynamicModel.Ip,
+					_config.NetworkSettings.IupVaps.DynamicModel.Port);
 
+				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Route.Ip,
+					_config.NetworkSettings.IupVaps.Route.Port);
 
-				App.Current.Dispatcher.Invoke((Action) delegate // <--- HERE
-				{
-					_dynamicModel.Update(DynamicInfos);
-				});
+				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
+				_config.NetworkSettings.IupVaps.Landing.Port);
+
+				#endregion
+
+				#region Отправка на отдельные индикаторы
+
+				_udpHelper.Send(_dynamicModel.GetBytes(), _config.NetworkSettings.Iup.DynamicModel.Ip,
+					_config.NetworkSettings.Iup.DynamicModel.Port);
+
+				#endregion
+
+				#region Отправка на тактический редактор
+
+				_udpHelper.Send(_dynamicModel.GetPosition(), _config.NetworkSettings.TacticalEditor.DynamicModel.Ip,
+					_config.NetworkSettings.TacticalEditor.DynamicModel.Port);
+
+				#endregion
+
+				#region Отправка на СВВО
+
+				_udpHelper.Send(_route.GetBytes(), _config.NetworkSettings.Svvo.Route.Ip, 
+					_config.NetworkSettings.Svvo.Route.Port);
+
+				#endregion
+
+				#region Обновление коллекций
+
+				App.Current.Dispatcher.Invoke(()=>_dynamicModel.Update(DynamicInfos));
+
+				#endregion
 
 				Thread.Sleep(20);
 			}
@@ -301,78 +362,44 @@ namespace DataTransfer.Services.DataManager
 
 		#endregion
 
-		//static void Cik_Step()
-		//{
-		//	Int64 QW, ET;
-		//	double ClockRate, StartTime;
-		//	double DeltaT;
-		//	Single dt_din, dt_din2;
-		//	Int64 intval100 = 0;
-		//	Int64 intval50 = 0;
-		//	QueryPerformanceFrequency(out QW);
-		//	ClockRate = (QW);
-		//	QueryPerformanceCounter(out QW);
-		//	StartTime = (QW);
-		//	while (ims_bool)
-		//	{
-		//		if (snw.Count != 0)
-		//		{
-		//			string switch_on;
-		//			if (snw.TryDequeue(out switch_on))
-		//			{
-		//				switch (switch_on)
-		//				{
-		//					case "init":
+		#region Call events
 
-		//						break;
-
-		//					case "PrepareAndStart":
-
-		//						break;
-
-
-		//					case "Start":
-
-		//						break;
-		//					case "Pause":
-
-		//					case "Stop":
-
-		//						break;
-
-
-		//					default:
-		//						break;
-
-		//				}
-		//			}
-		//		}
-
-		//		QueryPerformanceCounter(out ET);
-		//		DeltaT = (1000.0 * ((ET) - StartTime) / ClockRate); // миллисекунды
-		//		dt_din = Convert.ToSingle(DeltaT / 10); // 100 Гц
-		//		dt_din2 = Convert.ToSingle(DeltaT / 20); //  50 Гц
-
-		//		if (Convert.ToSingle((Math.Truncate(dt_din))) > intval100)
-		//		{
-		//			intval100++;
-
-		//		}
-
-		//		if (Convert.ToSingle((Math.Truncate(dt_din2))) > intval50)
-		//		{
-		//			intval50++;
-		//		}
-		//	}
-		//}
-		protected void OnStatusModelEvent(string str)
+		private void OnStatusModelEvent(string str)
 		{
 			StatusModelEvent?.Invoke(str);
 		}
 
-		protected  void OnStatusPacketEvent(string str)
+		private void OnStatusPacketEvent(string str)
 		{
 			StatusPacketEvent?.Invoke(str);
+		}
+
+		#endregion
+
+		private void Cik_Step()
+		{
+			double ClockRate, StartTime;
+			double DeltaT;
+			float dt_din, dt_din2;
+			long intval100 = 0;
+			long intval50 = 0;
+			QueryPerformanceFrequency(out long QW);
+			ClockRate = (QW);
+			QueryPerformanceCounter(out QW);
+			StartTime = (QW);
+			while (true)
+			{
+				QueryPerformanceCounter(out long ET);
+				DeltaT = (1000.0 * ((ET) - StartTime) / ClockRate); // миллисекунды
+				dt_din = Convert.ToSingle(DeltaT / 10); // 100 Гц
+				dt_din2 = Convert.ToSingle(DeltaT / 20); //  50 Гц
+
+				if (Convert.ToSingle((Math.Truncate(dt_din))) > intval100)
+				{ intval100++; }
+
+				if (Convert.ToSingle((Math.Truncate(dt_din2))) > intval50)
+				{ intval50++; }
+			}
 		}
 	}
 }
