@@ -67,69 +67,66 @@ namespace DataTransfer.Model.Component.BaseComponent
 
 		#endregion
 
+		#region Обновление данных
 
 		public void Update(ObservableCollection<CollectionInfo> lst)
 		{
 
 			if (lst.Count == 0)
-					SearchFields(this.GetType(), lst, "", "BaseModel");
-				UpdateCollection(this, "BaseModel",  lst);
+				SearchFields(this.GetType(), this.GetType().Name, "",lst);
+			UpdateCollection(this, "BaseModel", lst);
 		}
 
-		public void SearchFields(Type type, ObservableCollection<CollectionInfo> lst, string description, string parentName)
+		private void SearchFields(Type type, string parentName, string parentDescription,
+			ObservableCollection<CollectionInfo> lst)
 		{
-			FieldInfo[] Fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
-			foreach (FieldInfo field in Fields)
+			FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+			foreach (FieldInfo field in fields)
 			{
 				if (field.FieldType.IsPrimitive || field.FieldType == typeof(string))
 				{
-					AddToCollection(field, lst, description, parentName);
+					AddToCollection(field, parentName, parentDescription, lst);
 				}
 				else if (field.FieldType.IsClass && !field.FieldType.IsArray)
 				{
-					var curdescription = GetDescription(field);
-					SearchFields(field.FieldType, lst, curdescription, field.Name);
+					var curDescription = GetDescription(field);
+					SearchFields(field.FieldType, field.Name, curDescription, lst);
 				}
 			}
-
-
 		}
+
 		private string GetDescription(FieldInfo fieldInfo)
 		{
-			string curdescription = "";
+			string curDescription = "";
 			if (fieldInfo.GetCustomAttribute<DescriptionAttribute>() != null &&
-				fieldInfo.GetCustomAttribute<DescriptionAttribute>().Description != null)
-				curdescription = fieldInfo.GetCustomAttribute<DescriptionAttribute>().Description;
-			return curdescription;
+			    fieldInfo.GetCustomAttribute<DescriptionAttribute>().Description != null)
+				curDescription = fieldInfo.GetCustomAttribute<DescriptionAttribute>().Description;
+			return curDescription;
 		}
 
-		private void AddToCollection(FieldInfo fieldInfo, ObservableCollection<CollectionInfo> lst, string description, string Parentname)
+		private void AddToCollection(FieldInfo fieldInfo, string parentName, string parentDescription, ObservableCollection<CollectionInfo> lst)
 		{
-			string curdescription = GetDescription(fieldInfo);
-			if (string.IsNullOrEmpty(curdescription))
-				curdescription = description;
+			string curDescription = GetDescription(fieldInfo);
+			if (string.IsNullOrEmpty(curDescription))
+				curDescription = parentDescription;
 			lst.Add(new CollectionInfo()
 			{
-				Name = Parentname + "." + fieldInfo.Name,
-				Description = curdescription,
+				Name = parentName + "." + fieldInfo.Name,
+				Description = curDescription,
 				Value = "0"
 			});
 		}
 
-
-
-
-		void UpdateCollection(object obj, string paretnName,  ObservableCollection<CollectionInfo> lst)
+		private void UpdateCollection(object obj, string parentName,  ObservableCollection<CollectionInfo> lst)
 		{
-			if (obj == null)
-				return;
+			if (obj == null) return;
 			FieldInfo[] Fields = obj.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
 			foreach (FieldInfo field in Fields)
 			{
 				object fieldValue = field.GetValue(obj);
 				if (field.FieldType.IsPrimitive || field.FieldType == typeof(String))
 				{
-					var name = paretnName + "." + field.Name;
+					var name = parentName + "." + field.Name;
 					var found = lst.FirstOrDefault(x => x.Name == name);
 					if (found != null)
 					{
@@ -142,9 +139,8 @@ namespace DataTransfer.Model.Component.BaseComponent
 					UpdateCollection(fieldValue, field.Name, lst);
 				}
 			}
-
-
-			
 		}
+
+		#endregion
 	}
 }
