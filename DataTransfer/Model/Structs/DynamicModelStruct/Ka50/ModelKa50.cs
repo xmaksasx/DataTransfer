@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component;
 using DataTransfer.Model.Component.BaseComponent;
 
@@ -25,7 +26,19 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 		}
 
 
-	
+		public override byte[] GetPosition()
+		{
+			List<byte> lst = new List<byte>();
+			lst.AddRange(BitConverter.GetBytes(KinematicsState.Angs.Fi));
+			lst.AddRange(BitConverter.GetBytes(KinematicsState.Angs.Gam));
+			lst.AddRange(BitConverter.GetBytes(KinematicsState.Angs.Psi));
+			lst.AddRange(BitConverter.GetBytes(KinematicsState.Pos.Latitude));
+			lst.AddRange(BitConverter.GetBytes(KinematicsState.Pos.Longitude));
+			lst.AddRange(BitConverter.GetBytes(KinematicsState.Pos.Elevation));
+			lst.AddRange(BitConverter.GetBytes(0));
+			lst.AddRange(BitConverter.GetBytes(0));
+			return lst.ToArray();
+		}
 
 
 		public ModelKa50()
@@ -34,7 +47,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 			VhclOutp = new VhclOutp();
 		}
 
-		private KinematicsState KinematicsState;
-		private VhclOutp VhclOutp;
+		public KinematicsState KinematicsState;
+		public VhclOutp VhclOutp;
 	}
 }

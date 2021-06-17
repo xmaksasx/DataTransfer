@@ -95,6 +95,8 @@ namespace DataTransfer.Model.Structs.ControlElements
 			_generalStepHandleLeft.GeneralStep = (float)((65535.0 - joystickState.Z) / 65535.0 * 1);
 			_generalStepHandleLeft.Throttle1 = 0;
 			_generalStepHandleLeft.Throttle2 = 0;
+
+			_pedalsLeft.Pedal = (float)((65535.0 - joystickState.Sliders[0]) / 65535.0 * 1);
 		}
 
 		public  void Update(byte[] bytes)

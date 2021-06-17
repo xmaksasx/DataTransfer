@@ -32,12 +32,13 @@ namespace DataTransfer.Services.DataManager
 		private Route _route;
 
 		#endregion
-		
+
 		private UdpHelper _udpHelper;
 		public ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
 		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
-		public delegate void Mydelegate(string str);
-		public event Mydelegate SomethingHappened; 
+		public delegate void Status(string str);
+		public event Status StatusModelEvent;
+		public event Status StatusPacketEvent;
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
@@ -46,24 +47,30 @@ namespace DataTransfer.Services.DataManager
 		private string _broadcast = "127.0.0.1";
 		private int _typeModel = 0;
 
-		private int _countPoints;
+		private int _stateModel =-1;
 		private bool _isSend = true;
 		private bool _isPoll = true;
 		private bool _isReceive = true;
-		public string IsCorrectModel { get; set; }
+		private string _isCorrectModel;
 
 
 		//_ipModel
 		//_ipIup
 
-		//_portModel			20030	Димамическая модель
-		//_portSvvo				6001	Система внекабинной обстановки
+		//_portModel			20030	Димамическая модель(команды)
+		//						20031	Димамическая модель(ОУ)
+
 		//_portIup				20040	Информационно-упраляющая система(ОУ) 
 		//						20041	Информационно-упраляющая система(ДМ) 
 		//						20042	Информационно-упраляющая система(ПУЭ)
 		//						20043	Информационно-упраляющая система(СИВО)
 		//						20044	Информационно-упраляющая система(РТО)
+
+		//						20050	Индикаторы(ДМ)
+
 		//_portTacticalEditor	20060	Редактор тактической обстановки
+
+		//_portSvvo				20070	Система внекабинной обстановки(РТО)
 
 		private DataManager()
 		{
@@ -128,28 +135,40 @@ namespace DataTransfer.Services.DataManager
 			_startPosition = new StartPosition();
 			_landing = new Landing();
 			_route = new Route();
+
 		}
 
 		#endregion
 
 		public void Start()
 		{
-			_startPosition.InitPosition(0);
-			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			if (_stateModel==-1)
+			{
+				_startPosition.InitPosition(0);
+				_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			}
+			
 			_startPosition.InitPosition(1);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			OnStatusModelEvent("Идет моделирование!");
+			_stateModel = 1;
 		}
+
 
 		public void Pause()
 		{
 			_startPosition.InitPosition(2);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			OnStatusModelEvent("Пауза!");
+			_stateModel = 2;
 		}
 
 		public void Stop()
 		{
 			_startPosition.InitPosition(-1);
 			_udpHelper.Send(_startPosition.GetBytes(), _ipModel, 20030);
+			OnStatusModelEvent("Моделирование остановлено!"); 
+			_stateModel = -1;
 		}
 
 		public void ChangeModel(string nameModel)
@@ -218,19 +237,19 @@ namespace DataTransfer.Services.DataManager
 
 				case "DynamicModelKa52":
 					if (_dynamicModel.Assign(receivedBytes))
-						IsCorrectModel = "OOO good!";
+						_isCorrectModel = "Корректные данные!";
 					else
-						IsCorrectModel = "OOO shit!";
+						_isCorrectModel = "Некорректные данные!";
 
-					OnSomethingHappened(IsCorrectModel);
+					OnStatusPacketEvent(_isCorrectModel);
 					break;
 
 				case "DynamicModelKa50":
 					if (_dynamicModel.Assign(receivedBytes))
-						IsCorrectModel = "OOO good!";
+						_isCorrectModel = "Корректные данные!";
 					else
-						IsCorrectModel = "OOO shit!";
-					OnSomethingHappened(IsCorrectModel);
+						_isCorrectModel = "Некорректные данные!";
+					OnStatusPacketEvent(_isCorrectModel);
 					break;
 
 				case "Route":
@@ -250,54 +269,33 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
-				var begin = DateTime.Now;
-				//_fdmManager.Step();
-				//Отправка на СВВО
-				// Send(_sendSvvo.GetByte(_receiveModel), _broadcast, 6100);
-				if (_countPoints != _route.CountPoints)
-				{
-					_countPoints = (int)_route.CountPoints;
-					_udpHelper.Send(_route.GetBytes(), _broadcast, 20555);
-				}
-
 				//Отправка на модель
-				//_udpHelper.Send(_cockpitKa52.GetBytes(), _ipModel, 20031);
 				_udpHelper.Send(_controlElement.GetBytes(), _ipModel, 20031);
 
 				//Отправка на ИУП
-				_udpHelper.Send(_dynamicModel.GetReverseBytes(), _ipIup, 20040);
-				//_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
-				//_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
+				_udpHelper.Send(_controlElement.GetReverseBytes(), _ipModel, 20040);
+				_udpHelper.Send(_dynamicModel.GetReverseBytes(), _ipIup, 20041);
 				_udpHelper.Send(_route.GetReverseBytes(), _ipIup, 20044);
-				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20044);
 
-				//Отправка на спец изображение
-				//_udpHelper.Send(_dynamicModelKa52.GetBytes(), _ipIup, 20040);
-				//_udpHelper.Send(_channelThermalEffect.GetBytes(), _ipIup, 20041);
-				//_udpHelper.Send(_channelTvHeadEffect.GetBytes(), _ipIup, 20042);
-
-
-
-				//Отправка на УСО
-				//_udpHelper.Send(_cockpit.GetBytes(), _broadcast, 20050);
+				//отправка на отдельные индикаторы
+				_udpHelper.Send(_dynamicModel.GetBytes(), _ipIup, 20050);
 
 				//Отправка на редактор
-				//_udpHelper.Send(_sendTacticalEditor.GetByte(_receiveModel), _ipTacticalEditor, 20060);
+				_udpHelper.Send(_dynamicModel.GetPosition(), _ipIup, 20060);
+
+				//Отправка на СВВО
+				_udpHelper.Send(_route.GetBytes(), _broadcast, 20070);
 
 				//Отправка на ПУЭ
 				//_udpHelper.Send(_sendPostExperiment.GetByte(_receiveUso, _receiveModel), _broadcast, 20070);
 
-		
-				App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+
+				App.Current.Dispatcher.Invoke((Action) delegate // <--- HERE
 				{
 					_dynamicModel.Update(DynamicInfos);
 				});
 
-			
 				Thread.Sleep(20);
-				var end = DateTime.Now;
-				Console.WriteLine((end - begin).Milliseconds);
-
 			}
 		}
 
@@ -367,9 +365,14 @@ namespace DataTransfer.Services.DataManager
 		//		}
 		//	}
 		//}
-		protected void OnSomethingHappened(string str)
+		protected void OnStatusModelEvent(string str)
 		{
-			SomethingHappened?.Invoke(str);
+			StatusModelEvent?.Invoke(str);
+		}
+
+		protected  void OnStatusPacketEvent(string str)
+		{
+			StatusPacketEvent?.Invoke(str);
 		}
 	}
 }

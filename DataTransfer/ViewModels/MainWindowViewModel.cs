@@ -23,9 +23,16 @@ namespace DataTransfer.ViewModels
 		private string _modelState;
 
 		/// <summary>Статус модели</summary>
-		public string ModelState {get =>_dataManager.IsCorrectModel; set =>Set(ref _modelState, value);}
+		public string ModelState {get => _modelState; set =>Set(ref _modelState, value);}
 
+		#endregion	
+		#region PacketState: string - Статус пакетов
+		/// <summary>Статус пакетов</summary>
+		private string _packetState;
+		/// <summary>Статус пакетов</summary>
+		public string PacketState {get =>_packetState; set =>Set(ref _packetState, value);}
 		#endregion		
+
 
 		#region DynamicInfos: ObservableCollection<CollectionInfo> - Параметры динамики полета
 		/// <summary>Параметры динамики полета</summary>
@@ -176,14 +183,19 @@ namespace DataTransfer.ViewModels
 			_dataManager = DataManager.GetInstance();
 			DynamicInfos = _dataManager.DynamicInfos;
 			ControlElementInfos = _dataManager.ControlElementInfos;
-			_dataManager.SomethingHappened += DataManagerOnSomethingHappened; 
+			_dataManager.StatusModelEvent +=OnStatusModelEvent; 
+			_dataManager.StatusPacketEvent += OnStatusPacketEvent;
 		}
 
-		private void DataManagerOnSomethingHappened(string str)
+		private void OnStatusPacketEvent(string str)
+		{
+			PacketState = str;
+		}
+
+		private void OnStatusModelEvent(string str)
 		{
 			ModelState = str;
 		}
-
 		
 	}
 

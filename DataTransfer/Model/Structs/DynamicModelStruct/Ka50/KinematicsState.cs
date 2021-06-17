@@ -17,13 +17,13 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 		/// углы ориентации связной ск. относительно локальной с.к., град
 		/// </summary>
 		[Description("углы ориентации связной ск. относительно локальной с.к., град")]
-		public AngleTriplet Angs;
+		public AngleTriplet Angs = new AngleTriplet();
 
 		/// <summary>
 		/// положение начала связной ск. относительно геоцентрической с.к., м
 		/// </summary>
 		[Description("положение начала связной ск. относительно геоцентрической с.к., м")]
-		public DGeoPosition Pos;
+		public DGeoPosition Pos = new DGeoPosition();
 
 		/// <summary>
 		/// абсолютная скорость перемещения начала связной ск. относительно локальной с.к., м/с

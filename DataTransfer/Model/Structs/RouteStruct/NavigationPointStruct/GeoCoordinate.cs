@@ -10,31 +10,31 @@ namespace DataTransfer.Model.Structs.RouteStruct.NavigationPointStruct
         /// широта [град]
         /// </summary>
         [Description("широта [град]")]
-	    private double Latitude;
+        public double Latitude;
 
         /// <summary>
         /// долгота [град]
         /// </summary>
         [Description("долгота [град]")]
-        private double Longitude;
+        public double Longitude;
 
         /// <summary>
         /// координата X от ЛА [км]
         /// </summary>
         [Description("координата X от ЛА [км]")]
-        private double X;
+        public double X;
 
         /// <summary>
         /// координата Z от ЛА [км]
         /// </summary>
         [Description("координата Z от ЛА [км]")]
-        private double Z;
+        public double Z;
 
         /// <summary>
         /// высота навигационной точки над уровнем моря [м]
         /// </summary>
         [Description("высота навигационной точки над уровнем моря [м]")]
-        private double H;
+        public double H;
 
 
     }

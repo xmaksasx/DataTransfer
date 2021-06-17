@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using DataTransfer.Model.Component.BaseComponent;
+using DataTransfer.Infrastructure.Helpers;
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 {
@@ -18,8 +19,21 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 			for (int i = 68; i < dgram.Length; i = i + 4)
 				Array.Reverse(dgram, i, 4);
 		}
+		
+		public override byte[] GetPosition()
+		{
+			List<byte> lst = new List<byte>(); 
+			lst.AddRange(BitConverter.GetBytes(out_Tang));
+			lst.AddRange(BitConverter.GetBytes(out_Kren));
+			lst.AddRange(BitConverter.GetBytes(out_Kurs));
+			lst.AddRange(BitConverter.GetBytes(0.0));
+			lst.AddRange(BitConverter.GetBytes(0.0));
+			lst.AddRange(BitConverter.GetBytes(out_Hotn));
+			lst.AddRange(BitConverter.GetBytes(out_Xg));
+			lst.AddRange(BitConverter.GetBytes(out_Zg));
+			return lst.ToArray();
 
-	
+		}
 
 		#region Fields
 
@@ -402,12 +416,12 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 		/// Текущий тангаж град. 2
 		/// </summary>
 		[Description("Текущий тангаж град. 2")]
-		float out_Tang;
+		public float out_Tang;
 
 		/// <summary>
 		/// Текущий крен град 2
 		/// </summary>
-		[Description("Текущий крен град 2")] float out_Kren;
+		[Description("Текущий крен град 2")] public float out_Kren;
 
 		/// <summary>
 		/// Вертикальная скорость в земной системе координат м/с 2
@@ -449,7 +463,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 		/// </summary>
 		[Description(
 			"Текущая относительная высота полёта (относительно исходной точки) м 2 Текущий результат интегрирования Vyg с нулевыми начальными условиями")]
-		float out_Hotn;
+		public float out_Hotn;
 
 		/// <summary>
 		/// Текущие обороты несущего винта % 2
@@ -461,18 +475,18 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 		/// Xg м 2 Текущие координаты в земной системе
 		/// </summary>
 		[Description("Xg м 2 Текущие координаты в земной системе")]
-		float out_Xg; // 12 
+		public float out_Xg; // 12 
 
 		/// <summary>
 		/// 13 Zg м 2
 		/// </summary>
-		[Description("13 Zg м 2")] float out_Zg;
+		[Description("13 Zg м 2")] public float out_Zg;
 
 		/// <summary>
 		/// Текущий угол курса град. 2 Навигационный (+ вправо)
 		/// </summary>
 		[Description("Текущий угол курса град. 2 Навигационный (+ вправо)")]
-		float out_Kurs;
+		public float out_Kurs;
 
 		/// <summary>
 		/// Исходный балансировочный тангаж град 1

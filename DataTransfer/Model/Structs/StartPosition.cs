@@ -18,8 +18,8 @@ namespace DataTransfer.Model.Structs
 		{
 			flag = state;
 			LAND = 0;
-			StartX = 85554.36;
-			StartY = 77255.45;
+			StartX = 0;//85554.36;
+			StartY = 0;//77255.45;
 			in_V = 0;
 			in_Hgeom = 14;
 			in_t = 0;

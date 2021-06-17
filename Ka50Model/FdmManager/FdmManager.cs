@@ -116,7 +116,7 @@ namespace Ka50Model.FdmManager
 			Hel.PosCG = _posCg;
 			Hel.vehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleLeft.Elevator;
 			Hel.vehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleLeft.Aileron;
-			Hel.vehicleCtrl.Direction = 0.5;
+			Hel.vehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
 			Hel.vehicleCtrl.Collective = controlElement._generalStepHandleLeft.GeneralStep;
 
 
@@ -166,7 +166,7 @@ namespace Ka50Model.FdmManager
 			_svvo.Packetcam.ht = (float)state.Pos.Elevation;
 			_svvo.Packetcam.tet = (float)(state.Angs.Fi * Math.PI / 180D);
 			_svvo.Packetcam.gam = (float)(state.Angs.Gam * Math.PI / 180D);
-			_svvo.Packetcam.psi = (float)(-state.Angs.Psi * Math.PI / 180D);
+			_svvo.Packetcam.psi =- (float)(-state.Angs.Psi * Math.PI / 180D);
 			_svvo.Packetcam.flag = 1;
 
 			return ConvertHelper.ObjectToByte(_svvo);

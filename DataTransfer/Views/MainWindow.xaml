@@ -200,7 +200,17 @@
 		</Grid>
 		<StatusBar Grid.Row="3" Background="#FF212121">
 			<StatusBarItem>
-				<TextBlock Foreground="#FFC1C1C1" Text="{Binding ModelState}" />
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Foreground="#FFC1C1C1" Text="Статус модели:" />
+					<TextBlock Foreground="#FFC1C1C1" Text="{Binding ModelState}" Margin="3 0"/>
+				</StackPanel>
+			</StatusBarItem>
+			<Separator />
+			<StatusBarItem>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Foreground="#FFC1C1C1" Text="Статус пакетов:" />
+					<TextBlock Foreground="#FFC1C1C1" Text="{Binding PacketState}" Margin="3 0"/>
+				</StackPanel>
 			</StatusBarItem>
 		</StatusBar>
 	</Grid>
