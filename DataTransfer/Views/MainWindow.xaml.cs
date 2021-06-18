@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using DataTransfer.Model.Structs.ControlElements;
+using MaterialDesignThemes.Wpf;
 
 
 namespace DataTransfer.Views
@@ -48,17 +49,5 @@ namespace DataTransfer.Views
 			DragMove();
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-
-			SnackbarSeven.MessageQueue.Enqueue(
-				$"какое-то говно",
-				null,
-				null,
-				null,
-				false,
-				true,
-				TimeSpan.FromSeconds(2));
-		}
 	}
 }

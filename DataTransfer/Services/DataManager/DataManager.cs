@@ -46,9 +46,10 @@ namespace DataTransfer.Services.DataManager
 		private UdpHelper _udpHelper;
 		public ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
 		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
-		public delegate void Status(string str);
-		public event Status StatusModelEvent;
-		public event Status StatusPacketEvent;
+		public delegate void Message(string str);
+		public event Message StatusModelEvent;
+		public event Message StatusPacketEvent;
+		public event Message MessageEvent;
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
@@ -80,6 +81,11 @@ namespace DataTransfer.Services.DataManager
 		//_portSvvo				20070	Система внекабинной обстановки(РТО)
 
 		private DataManager()
+		{
+	
+		}
+
+		public void Init()
 		{
 			_udpHelper = new UdpHelper();
 			_deviceControlElement = DeviceControlElement.GetInstance();
@@ -150,14 +156,16 @@ namespace DataTransfer.Services.DataManager
 		private Config LoadConfig()
 		{
 			Config config = null;
-			if (File.Exists("Config.xml"))
+			try
 			{
 				XmlSerializer serializer = new XmlSerializer(typeof(Config));
 				using (StreamReader reader = new StreamReader("Config.xml"))
 					config = (Config)serializer.Deserialize(reader);
+
 			}
-			else
+			catch (Exception e)
 			{
+				OnMessageEvent("Не найден \"Config.xml\" загружен внутренний конфигурационный файл!");
 				var assembly = Assembly.GetExecutingAssembly();
 				var resourceName = "DataTransfer.Infrastructure.Resource.Config.xml";
 				using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -167,6 +175,7 @@ namespace DataTransfer.Services.DataManager
 						config = (Config)serializer.Deserialize(reader);
 				}
 			}
+		
 			return config;
 		}
 
@@ -374,6 +383,11 @@ namespace DataTransfer.Services.DataManager
 			StatusPacketEvent?.Invoke(str);
 		}
 
+		protected void OnMessageEvent(string str)
+		{
+			MessageEvent?.Invoke(str);
+		}
+
 		#endregion
 
 		private void Cik_Step()
@@ -401,5 +415,7 @@ namespace DataTransfer.Services.DataManager
 				{ intval50++; }
 			}
 		}
+
+	
 	}
 }

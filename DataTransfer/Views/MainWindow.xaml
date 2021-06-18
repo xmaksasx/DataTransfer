@@ -55,8 +55,13 @@
 						<MenuItem Header="Перезапуск" Icon="{materialDesign:PackIcon Kind=Restart}" />
 						<MenuItem
 							Command="{Binding OpenDataDescriptionCreatorCommand}"
-							Header="Выгрузка DD"
+							Header="Выгрузить DD"
 							Icon="{materialDesign:PackIcon Kind=LetterDBoxOutline}" />
+						<Separator />
+						<MenuItem
+							Command="{Binding UploadConfigCommand}"
+							Header="Выгрузить Config"
+							Icon="{materialDesign:PackIcon Kind=LetterCBoxOutline}" />
 						<Separator />
 						<MenuItem
 							Command="{Binding CloseAppCommand}"
@@ -86,7 +91,6 @@
 						</MenuItem>
 					</MenuItem>
 				</Menu>
-				<Button Click="Button_Click"></Button>
 			</StackPanel>
 			<Button
 				Width="35"
@@ -200,22 +204,29 @@
 		</Grid>
 		<materialDesign:Snackbar
 			Grid.Row="2"
-			Background="{DynamicResource MaterialDesignPaper}"
-			Foreground="AliceBlue"
-  x:Name="SnackbarSeven"
-  MessageQueue="{materialDesign:MessageQueue}" />
+			Background="#B2636363"
+			Foreground="White"
+			MessageQueue="{Binding MessageQueue}" HorizontalAlignment="Stretch">
+
+		</materialDesign:Snackbar>
 		<StatusBar Grid.Row="3" Background="#FF212121">
 			<StatusBarItem>
 				<StackPanel Orientation="Horizontal">
 					<TextBlock Foreground="#FFC1C1C1" Text="Статус модели:" />
-					<TextBlock Foreground="#FFC1C1C1" Text="{Binding ModelState}" Margin="3 0"/>
+					<TextBlock
+						Margin="3,0"
+						Foreground="#FFC1C1C1"
+						Text="{Binding ModelState}" />
 				</StackPanel>
 			</StatusBarItem>
 			<Separator />
 			<StatusBarItem>
 				<StackPanel Orientation="Horizontal">
 					<TextBlock Foreground="#FFC1C1C1" Text="Статус пакетов:" />
-					<TextBlock Foreground="#FFC1C1C1" Text="{Binding PacketState}" Margin="3 0"/>
+					<TextBlock
+						Margin="3,0"
+						Foreground="#FFC1C1C1"
+						Text="{Binding PacketState}" />
 				</StackPanel>
 			</StatusBarItem>
 		</StatusBar>

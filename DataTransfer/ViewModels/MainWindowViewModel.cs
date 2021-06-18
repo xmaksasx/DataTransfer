@@ -1,21 +1,34 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using DataTransfer.Infrastructure.Commands;
 using DataTransfer.Model.Component;
+using DataTransfer.Model.Structs.Config.Base;
 using DataTransfer.Services.DataManager;
 using DataTransfer.ViewModels.Base;
 using DataTransfer.Views;
+using MaterialDesignThemes.Wpf;
 
 namespace DataTransfer.ViewModels
 {
 	class MainWindowViewModel:ViewModel
 	{
 		readonly DataManager _dataManager;
+
+		#region MessageQueue: SnackbarMessageQueue - Сообщение для пользователя
+		
+		/// <summary>Сообщение для пользователя</summary>
+		private SnackbarMessageQueue _messageQueue = new SnackbarMessageQueue();
+		/// <summary>Сообщение для пользователя</summary>
+		public SnackbarMessageQueue MessageQueue {get =>_messageQueue; set =>Set(ref _messageQueue, value);}
+	
+		#endregion		
 
 		#region ModelState: string - Статус модели
 
@@ -26,14 +39,14 @@ namespace DataTransfer.ViewModels
 		public string ModelState {get => _modelState; set =>Set(ref _modelState, value);}
 
 		#endregion	
+
 		#region PacketState: string - Статус пакетов
 		/// <summary>Статус пакетов</summary>
 		private string _packetState;
 		/// <summary>Статус пакетов</summary>
 		public string PacketState {get =>_packetState; set =>Set(ref _packetState, value);}
 		#endregion		
-
-
+		
 		#region DynamicInfos: ObservableCollection<CollectionInfo> - Параметры динамики полета
 		/// <summary>Параметры динамики полета</summary>
 		private ObservableCollection<CollectionInfo> _dynamicInfos;
@@ -138,6 +151,34 @@ namespace DataTransfer.ViewModels
 		}
 		#endregion
 
+		#region Upload config
+		public ICommand UploadConfigCommand { get; set; }
+
+		private bool CanUploadConfigCommandExecute(object p) => true;
+
+		private void OnUploadConfigCommandExecuted(object p)
+		{
+			Config config = null;
+			var assembly = Assembly.GetExecutingAssembly();
+			var resourceName = "DataTransfer.Infrastructure.Resource.Config.xml";
+			using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+			{
+				XmlSerializer serializer = new XmlSerializer(typeof(Config));
+				using (StreamReader reader = new StreamReader(stream))
+					config = (Config) serializer.Deserialize(reader);
+			}
+			using (var writer = new StreamWriter("Config.xml"))
+			{
+				XmlSerializer serializer = new XmlSerializer(typeof(Config));
+				serializer.Serialize(writer, config);
+				writer.Flush();
+			}
+
+			OnMessageEvent("Создан файл \"Config.xml\" в корневом каталоге!");
+		}
+
+		#endregion
+
 		#region ChangeCollection
 		public ICommand ChangeCollectionCommand { get; set; }
 
@@ -167,6 +208,7 @@ namespace DataTransfer.ViewModels
 		{
 			DataDescriptionCreatorWindow creatorWindow = new DataDescriptionCreatorWindow();
 			creatorWindow.ShowDialog();
+			OnMessageEvent("Выгрузка \"DataDescription\" закончена!");
 		}
 		#endregion
 
@@ -180,11 +222,26 @@ namespace DataTransfer.ViewModels
 			StopModelingCommand = new LambdaCommand(OnStopModelingCommandExecuted, CanStopModelingCommandExecute);
 			ChangeCollectionCommand = new LambdaCommand(OnChangeCollectionCommandExecuted, CanChangeCollectionCommandExecute);
 			OpenDataDescriptionCreatorCommand = new LambdaCommand(OnOpenDataDescriptionCreatorCommandExecuted, CanOpenDataDescriptionCreatorCommandExecute);
+			UploadConfigCommand = new LambdaCommand(OnUploadConfigCommandExecuted, CanUploadConfigCommandExecute);
 			_dataManager = DataManager.GetInstance();
 			DynamicInfos = _dataManager.DynamicInfos;
 			ControlElementInfos = _dataManager.ControlElementInfos;
-			_dataManager.StatusModelEvent +=OnStatusModelEvent; 
+			_dataManager.StatusModelEvent += OnStatusModelEvent; 
 			_dataManager.StatusPacketEvent += OnStatusPacketEvent;
+			_dataManager.MessageEvent += OnMessageEvent;
+			_dataManager.Init();
+		}
+
+		private void OnMessageEvent(string str)
+		{
+			MessageQueue.Enqueue(
+			str,
+			null,
+			null,
+			null,
+			false,
+			true,
+			TimeSpan.FromSeconds(2));
 		}
 
 		private void OnStatusPacketEvent(string str)

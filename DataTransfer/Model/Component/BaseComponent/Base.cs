@@ -72,7 +72,7 @@ namespace DataTransfer.Model.Component.BaseComponent
 
 			if (lst.Count == 0)
 				SearchFields(this.GetType(), this.GetType().Name, "",lst);
-			UpdateCollection(this, "BaseModel", lst);
+			UpdateCollection(this, this.GetType().Name, lst);
 		}
 
 		private void SearchFields(Type type, string parentName, string parentDescription,
