@@ -134,6 +134,7 @@ namespace Ka50Model.FdmManager
 
 			_udpHelper.Send(GetByte(ResState), "127.0.0.1", 6100);
 			_udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
+			_udpHelper.Send(GetByte(ResState), "127.0.0.1", 6105);
 			Marshal.FreeHGlobal(ptrHel);
 			Marshal.FreeHGlobal(ptrCe);
 			Marshal.FreeHGlobal(ptrRs);

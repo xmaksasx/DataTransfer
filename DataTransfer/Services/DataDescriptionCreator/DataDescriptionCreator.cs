@@ -38,6 +38,12 @@ namespace DataTransfer.Services.DataDescriptionCreator
 			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
 				.Where(t => t.Namespace == "DataTransfer.Model.Structs.ControlElements")
 				.ToList());
+			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.DynamicModelStruct.Ka50")
+				.ToList());
+			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.DynamicModelStruct.Ka52")
+				.ToList());
 			return types;
 		}
 
