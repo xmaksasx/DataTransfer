@@ -151,7 +151,6 @@ namespace Ka50Model.FdmManager
 			return ptr;
 		}
 
-
 		public byte[] GetByte(KinematicsState state)
 		{
 			_svvo.Preamble.wSync = 0xCDEF;
@@ -167,7 +166,7 @@ namespace Ka50Model.FdmManager
 			_svvo.Packetcam.ht = (float)state.Pos.Elevation;
 			_svvo.Packetcam.tet = (float)(state.Angs.Fi * Math.PI / 180D);
 			_svvo.Packetcam.gam = (float)(state.Angs.Gam * Math.PI / 180D);
-			_svvo.Packetcam.psi =- (float)(-state.Angs.Psi * Math.PI / 180D);
+			_svvo.Packetcam.psi = (float)(-state.Angs.Psi * Math.PI / 180D);
 			_svvo.Packetcam.flag = 1;
 
 			return ConvertHelper.ObjectToByte(_svvo);
@@ -257,8 +256,5 @@ namespace Ka50Model.FdmManager
 
 
 		#endregion
-
-
-
 	}
 }

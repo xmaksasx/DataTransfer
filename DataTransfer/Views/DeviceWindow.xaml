@@ -78,7 +78,6 @@
 				ItemsSource="{Binding Devices}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-
 						<Border x:Name="Border" Padding="8">
 							<Grid>
 								<Grid.ColumnDefinitions>

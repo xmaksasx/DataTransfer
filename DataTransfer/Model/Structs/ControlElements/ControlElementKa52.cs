@@ -142,6 +142,21 @@ namespace DataTransfer.Model.Structs.ControlElements
 		{
 			_generalStepHandleLeft.BtnGh = Convert.ToInt32(joystickState.Buttons[1]);
 
+			if (joystickState.Buttons[2])
+				_generalStepHandleLeft.BtnGhPosition = 1;
+			else
+			if (joystickState.Buttons[3])
+				_generalStepHandleLeft.BtnGhPosition = 2;
+			else
+			if (joystickState.Buttons[4])
+				_generalStepHandleLeft.BtnGhPosition = 3;
+			else
+			if (joystickState.Buttons[5])
+				_generalStepHandleLeft.BtnGhPosition = 4;
+			else
+				_generalStepHandleLeft.BtnGhPosition = 0;
+
+
 			if (joystickState.Buttons[18])
 				_generalStepHandleLeft.BtnMode1 = 0;
 			else
@@ -177,13 +192,13 @@ namespace DataTransfer.Model.Structs.ControlElements
 			if (rud1_in_v >= rud1_in_dead)
 			{
 				out_v = rud1_v_min + (rud1_in_v - rud1_in_dead) / (rud1_in_max - rud1_in_dead) *
-				        (rud1_v_max - rud1_v_min);
+						(rud1_v_max - rud1_v_min);
 			}
 
-			_generalStepHandleLeft.GeneralStep = (float) out_v;
+			_generalStepHandleLeft.GeneralStep = (float)out_v;
 			//_generalStepHandleLeft.GeneralStep = (float)((65535.0 - joystickState.RotationZ) / 65535.0 * 20);
 		}
-
+		
 		#endregion
 	}
 }

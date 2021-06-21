@@ -87,10 +87,6 @@ namespace DataTransfer.Services.DataManager
 
 		public void Init()
 		{
-			_udpHelper = new UdpHelper();
-			_deviceControlElement = DeviceControlElement.GetInstance();
-			_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
-			_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 			InitObject();
 			InitThread();
 			StartThread();
@@ -137,18 +133,24 @@ namespace DataTransfer.Services.DataManager
 
 		private void InitObject()
 		{
+			_config = LoadConfig();
+			_udpHelper = new UdpHelper();
+			_deviceControlElement = DeviceControlElement.GetInstance();
+			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rus.Guid);
+			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rud.Guid);
+			//	_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
+			//	_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 			_channelRadar = new ChannelRadar();
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
-			if(_typeModel==0)
-			{ 
+			if (_typeModel == 0)
+			{
 				_controlElement = new ControlElementKa52();
 				_dynamicModel = new ModelKa52();
 			}
 			_startPosition = new StartPosition();
 			_landing = new Landing();
 			_route = new Route();
-			_config = LoadConfig();
 		}
 
 		#endregion
@@ -248,8 +250,10 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isPoll)
 			{
-				_controlElement.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
-				_controlElement.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
+				_controlElement.UpdateRud(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rud.Guid));
+				_controlElement.UpdateRus(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rus.Guid));
+				//_controlElement.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
+				//_controlElement.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
 				Thread.Sleep(20);
 			}
 		}
@@ -335,6 +339,11 @@ namespace DataTransfer.Services.DataManager
 
 				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
 				_config.NetworkSettings.IupVaps.Landing.Port);
+
+				_udpHelper.Send(_channelThermalEffect.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
+						60000);
+				_udpHelper.Send(_channelTvHeadEffect.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
+										60000);
 
 				#endregion
 

@@ -72,6 +72,20 @@ namespace DataTransfer.Model.Structs.ControlElements
 
 			_generalStepHandleLeft.BtnGh = Convert.ToInt32(joystickState.Buttons[1]);
 
+			if (joystickState.Buttons[2])
+				_generalStepHandleLeft.BtnGhPosition = 1;
+			else
+			if (joystickState.Buttons[3])
+				_generalStepHandleLeft.BtnGhPosition = 2;
+			else
+			if (joystickState.Buttons[4])
+				_generalStepHandleLeft.BtnGhPosition = 3;
+			else
+			if (joystickState.Buttons[5])
+				_generalStepHandleLeft.BtnGhPosition = 4;
+			else
+				_generalStepHandleLeft.BtnGhPosition = 0;
+
 			if (joystickState.Buttons[18])
 				_generalStepHandleLeft.BtnMode1 = 0;
 			else

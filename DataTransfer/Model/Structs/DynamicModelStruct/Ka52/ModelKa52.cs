@@ -11,7 +11,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 	{
 		protected override void SetHead()
 		{
-			GetHeadDouble("DynamicModelKa52");
+			GetHeadDouble("ModelKa52");
 		}
 
 		public override void Reverse(ref byte[] dgram)
