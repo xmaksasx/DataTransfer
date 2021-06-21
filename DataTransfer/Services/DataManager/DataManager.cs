@@ -340,11 +340,6 @@ namespace DataTransfer.Services.DataManager
 				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
 				_config.NetworkSettings.IupVaps.Landing.Port);
 
-				_udpHelper.Send(_channelThermalEffect.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
-						60000);
-				_udpHelper.Send(_channelTvHeadEffect.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
-										60000);
-
 				#endregion
 
 				#region Отправка на отдельные индикаторы
