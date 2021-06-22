@@ -365,7 +365,10 @@ namespace DataTransfer.Services.DataManager
 
 				#region Обновление коллекций
 
-				App.Current.Dispatcher.Invoke(()=>_dynamicModel.Update(DynamicInfos));
+				App.Current.Dispatcher.Invoke(() => { 
+					_dynamicModel.Update(DynamicInfos);
+					_controlElement.Update(ControlElementInfos);
+				});
 
 				#endregion
 

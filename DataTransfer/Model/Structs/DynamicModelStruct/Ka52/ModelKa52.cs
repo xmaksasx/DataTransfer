@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using DataTransfer.Infrastructure.Helpers;
+
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 {

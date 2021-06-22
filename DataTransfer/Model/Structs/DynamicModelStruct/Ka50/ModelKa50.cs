@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using DataTransfer.Infrastructure.Helpers;
-using DataTransfer.Model.Component;
-using DataTransfer.Model.Component.BaseComponent;
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
@@ -16,7 +9,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 	{
 		protected override void SetHead()
 		{
-			GetHeadDouble("ModelKa52");
+			GetHeadDouble("ModelKa50");
 		}
 
 		public override void Reverse(ref byte[] dgram)
