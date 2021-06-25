@@ -422,7 +422,5 @@ namespace DataTransfer.Services.DataManager
 				{ intval50++; }
 			}
 		}
-
-	
 	}
 }

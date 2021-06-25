@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoystickExample", "Joystick
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ka50Model", "Ka50Model\Ka50Model.csproj", "{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HxModel", "HxModel\HxModel.csproj", "{1F0E1B3C-AA0E-4751-9B1F-B3CFD77DBA5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CC1D75B-0BDE-465B-9D68-DC97477BEE05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F0E1B3C-AA0E-4751-9B1F-B3CFD77DBA5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F0E1B3C-AA0E-4751-9B1F-B3CFD77DBA5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F0E1B3C-AA0E-4751-9B1F-B3CFD77DBA5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F0E1B3C-AA0E-4751-9B1F-B3CFD77DBA5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
