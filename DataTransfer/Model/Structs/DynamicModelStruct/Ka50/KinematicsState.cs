@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using DataTransfer.Model.Structs.DynamicModelStruct.Hx;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 {
+
+
 	/// <summary>
 	/// Кинематические параметры движения
 	/// </summary>
@@ -11,7 +14,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 	{
 		public KinematicsState()
 		{
-			
+
 		}
 		/// <summary>
 		/// углы ориентации связной ск. относительно локальной с.к., град

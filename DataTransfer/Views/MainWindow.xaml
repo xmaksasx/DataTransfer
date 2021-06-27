@@ -89,6 +89,14 @@
 									IsChecked="{Binding ModelSelect, Converter={StaticResource ResourceKey=ModelSwitchConverter}, ConverterParameter=Ka50}" />
 							</MenuItem.Icon>
 						</MenuItem>
+						<MenuItem Header="Модель Hx">
+							<MenuItem.Icon>
+								<RadioButton
+									Margin="-2"
+									GroupName="models"
+									IsChecked="{Binding ModelSelect, Converter={StaticResource ResourceKey=ModelSwitchConverter}, ConverterParameter=Hx}" />
+							</MenuItem.Icon>
+						</MenuItem>
 					</MenuItem>
 				</Menu>
 			</StackPanel>

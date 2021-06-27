@@ -12,6 +12,7 @@ using DataTransfer.Model.Structs;
 using DataTransfer.Model.Structs.Config.Base;
 using DataTransfer.Model.Structs.ControlElements;
 using DataTransfer.Model.Structs.DynamicModelStruct;
+using DataTransfer.Model.Structs.DynamicModelStruct.Hx;
 using DataTransfer.Model.Structs.DynamicModelStruct.Ka50;
 using DataTransfer.Model.Structs.DynamicModelStruct.Ka52;
 using DataTransfer.Model.Structs.RouteStruct;
@@ -196,6 +197,13 @@ namespace DataTransfer.Services.DataManager
 				_dynamicModel = new ModelKa50();
 				DynamicInfos.Clear();
 			}
+
+			if (nameModel == "Hx")
+			{
+				_controlElement = new ControlElementKa50();
+				_dynamicModel = new ModelHx();
+				DynamicInfos.Clear();
+			}
 		}
 
 		public void RestartControlElement()
@@ -295,6 +303,14 @@ namespace DataTransfer.Services.DataManager
 					break;
 
 				case "DynamicModelKa50":
+					if (_dynamicModel.Assign(receivedBytes))
+						_isCorrectModel = "Корректные данные!";
+					else
+						_isCorrectModel = "Некорректные данные!";
+					OnStatusPacketEvent(_isCorrectModel);
+					break;
+
+				case "DynamicModelHx":
 					if (_dynamicModel.Assign(receivedBytes))
 						_isCorrectModel = "Корректные данные!";
 					else

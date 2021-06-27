@@ -107,11 +107,21 @@
     <Compile Include="Model\Structs\ControlElements\GeneralStepHandle.cs" />
     <Compile Include="Model\Structs\ControlElements\Pedals.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\DynamicModel.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\AirPars.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\AngleTriplet.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\Eng.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\GearRes.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\InstrumentsState.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\KinematicsState.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\ModelHx.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\VhclOutp.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\XVECTOR3.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Ka50\AngleTriplet.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Ka50\DGeoPosition.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\ModelKa50.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka52\ModelKa52.cs" />
-    <Compile Include="Model\Structs\DynamicModelStruct\Ka50\AngleTriplet.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\ContactEnvironment.cs" />
-    <Compile Include="Model\Structs\DynamicModelStruct\Ka50\DGeoPosition.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\DGeoPosition.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\XVECTOR3.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\Eng.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\GearRes.cs" />
@@ -120,6 +130,9 @@
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\VehicleCtrl.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\VhclInp.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\VhclOutp.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Vaps\Eng.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Vaps\Overload.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Vaps\ModelVaps.cs" />
     <Compile Include="Model\Structs\RouteStruct\Landing.cs" />
     <Compile Include="Model\Structs\RouteStruct\AerodromeStruct\Aerodrome.cs" />
     <Compile Include="Model\Structs\RouteStruct\NavigationPointStruct\GeoCoordinate.cs" />
@@ -198,6 +211,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Infrastructure\Resource\Config.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
