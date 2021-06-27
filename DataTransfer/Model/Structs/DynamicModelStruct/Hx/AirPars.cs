@@ -5,7 +5,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 {
 	// текущие воздушные параметры 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct AirPars
+	class AirPars
 	{
 		/// <summary>
 		/// температруа окружающего воздуха, С

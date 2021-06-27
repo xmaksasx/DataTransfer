@@ -7,10 +7,10 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 	class Overload
 	{
 		[Description("Перегрузка")]
-		double Value;
+		public double Value;
 		[Description("Минимальная перегрузка")]
-		double Min;
+		public double Min;
 		[Description("Максимальная перегрузка")]
-		double Max;
+		public double Max;
 	}
 }

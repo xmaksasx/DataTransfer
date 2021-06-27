@@ -15,6 +15,7 @@ using DataTransfer.Model.Structs.DynamicModelStruct;
 using DataTransfer.Model.Structs.DynamicModelStruct.Hx;
 using DataTransfer.Model.Structs.DynamicModelStruct.Ka50;
 using DataTransfer.Model.Structs.DynamicModelStruct.Ka52;
+using DataTransfer.Model.Structs.DynamicModelStruct.Vaps;
 using DataTransfer.Model.Structs.RouteStruct;
 using DataTransfer.Services.ControlElements;
 
@@ -36,6 +37,8 @@ namespace DataTransfer.Services.DataManager
 		private ChannelTvHeadEffect _channelTvHeadEffect;
 		private ControlElement _controlElement;
 		private DynamicModel _dynamicModel;
+		private DynamicModelToVaps _dynamicModelToVaps;
+
 		private StartPosition _startPosition;
 		private DeviceControlElement _deviceControlElement;
 		private Landing _landing;
@@ -139,6 +142,8 @@ namespace DataTransfer.Services.DataManager
 			_deviceControlElement = DeviceControlElement.GetInstance();
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rus.Guid);
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rud.Guid);
+
+			_dynamicModelToVaps = new DynamicModelToVaps();
 			//	_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
 			//	_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 			_channelRadar = new ChannelRadar();
@@ -347,7 +352,7 @@ namespace DataTransfer.Services.DataManager
 				_udpHelper.Send(_controlElement.GetReverseBytes(), _config.NetworkSettings.IupVaps.ControlElement.Ip,
 					_config.NetworkSettings.IupVaps.ControlElement.Port);
 
-				_udpHelper.Send(_dynamicModel.GetReverseBytes(), _config.NetworkSettings.IupVaps.DynamicModel.Ip,
+				_udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps), _config.NetworkSettings.IupVaps.DynamicModel.Ip,
 					_config.NetworkSettings.IupVaps.DynamicModel.Port);
 
 				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Route.Ip,

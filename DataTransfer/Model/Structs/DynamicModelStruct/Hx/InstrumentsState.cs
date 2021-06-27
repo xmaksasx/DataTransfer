@@ -5,7 +5,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 {
 	// общая сводка параметров, пригодных для отображения на средствах индикации 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	struct InstrumentsState
+	class InstrumentsState
 	{
 		/// <summary>
 		/// текущие воздушные параметры 
@@ -53,31 +53,31 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 		/// <summary>
 		/// продольная составляющая путевой скорости, м/с
 		/// </summary>
-		[Description("")]
+		[Description("продольная составляющая путевой скорости, м/с")]
 		double VsurfX;
 
 		/// <summary>
 		/// боковая составляющая путевой скорости, м/с
 		/// </summary>
-		[Description("")]
+		[Description("оковая составляющая путевой скорости, м/с")]
 		double VsurfZ;
 
 		/// <summary>
 		/// текущая масса топлива, кг
 		/// </summary>
-		[Description("")]
+		[Description("екущая масса топлива, кг")]
 		double FuelMass;
 
 		/// <summary>
 		/// обороты несущей системы, % от номинального
 		/// </summary>
-		[Description("")]
+		[Description("обороты несущей системы, % от номинального")]
 		double RotorRPM;
 
 		/// <summary>
 		/// результирующий общий шаг несущей системы, град
 		/// </summary>
-		[Description("")]
+		[Description("результирующий общий шаг несущей системы, град")]
 		double CollectivePitch; 
 	}
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataTransfer.Infrastructure.Helpers;
+using DataTransfer.Model.Structs.DynamicModelStruct.Vaps;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -18,6 +20,8 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 				Array.Reverse(dgram, i, 8);
 		}
 
+	
+
 
 		public override byte[] GetPosition()
 		{
@@ -33,6 +37,19 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 			return lst.ToArray();
 		}
 
+
+		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)
+		{
+
+			//todo: тут нужно заполнить модель
+			modelToVaps.BarometricHeight = KinematicsState.Pos.Elevation;
+			modelToVaps.HeadingCurrent = KinematicsState.Angs.Psi;
+
+			var dgram = ConvertHelper.ObjectToByte(modelToVaps);
+			for (int i = 68; i < dgram.Length; i = i + 4)
+				Array.Reverse(dgram, i, 4);
+			return dgram;
+		}
 
 		public ModelKa50()
 		{

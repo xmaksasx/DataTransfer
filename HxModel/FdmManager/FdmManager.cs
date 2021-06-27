@@ -128,10 +128,10 @@ namespace HxModel.FdmManager
 			Hel.Mass = 10800.0;
 			Hel.InertialMoments = _inertialMoments;
 			Hel.PosCG = _posCg;
-			Hel.VehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleLeft.Elevator;
-			Hel.VehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleLeft.Aileron;
-			Hel.VehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
-			Hel.VehicleCtrl.Collective = controlElement._generalStepHandleLeft.GeneralStep;
+			Hel.VehicleCtrl.CyclicPitch =  controlElement._cyclicStepHandleLeft.Elevator;
+			Hel.VehicleCtrl.CyclicRoll =  controlElement._cyclicStepHandleLeft.Aileron;
+			Hel.VehicleCtrl.Direction =  controlElement._pedalsLeft.Pedal;
+			Hel.VehicleCtrl.Collective =  controlElement._generalStepHandleLeft.GeneralStep;
 			Hel.AirState.AirHumidityGround = 60;
 			Hel.AirState.AirPressureGround = 750;
 			Hel.AirState.AirTemperatureGround = 20;

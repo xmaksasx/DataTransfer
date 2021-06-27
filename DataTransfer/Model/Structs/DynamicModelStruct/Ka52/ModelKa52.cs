@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataTransfer.Infrastructure.Helpers;
+using DataTransfer.Model.Structs.DynamicModelStruct.Vaps;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -35,6 +37,18 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 
 		}
 
+		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)
+		{
+
+			//todo: тут нужно заполнить модель
+			modelToVaps.BarometricHeight = in_Hbar;
+			modelToVaps.HeadingCurrent = out_dPsi;
+
+			var dgram = ConvertHelper.ObjectToByte(modelToVaps);
+			for (int i = 68; i < dgram.Length; i = i + 4)
+				Array.Reverse(dgram, i, 4);
+			return dgram;
+		}
 		#region Fields
 
 		/// <summary>

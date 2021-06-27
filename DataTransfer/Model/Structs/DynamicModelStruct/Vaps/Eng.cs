@@ -11,32 +11,32 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 		/// обороты вентилятора двигателя 1, (% от номинальной величины)
 		/// </summary>
 		[Description("обороты вентилятора двигателя 1, (% от номинальной величины)")]
-		private double N;
+		public double N;
 
 		/// <summary>
 		/// обороты турбокомпрессора, (% от номинальной величины)
 		/// </summary>
 		[Description("режим работы двигателя 1, (% от номинальной величины)")]
-		private double Mode;
+		public double Mode;
 
 		/// <summary>
 		/// температура газов за турбиной, (град С)
 		/// </summary>
 		[Description("температура газов за турбиной, (град С)")]
-		private double Egt;
+		public double Egt;
 
 
 		/// <summary>
 		/// МАКСИМАНОЕ ДОПУСТИМОЕ ЗНАЧЕНИЕ температуры газов двигателя 1, (град С)
 		/// </summary>
 		[Description("МАКСИМАНОЕ ДОПУСТИМОЕ ЗНАЧЕНИЕ температуры газов двигателя 1, (град С)")]
-		private double MaxAllowedEgt;
+		public double MaxAllowedEgt;
 
 		/// <summary>
 		/// АВАРИЙНОЕ ЗНАЧЕНИЕ температуры газов двигателя 1, (град С)
 		/// </summary>
 		[Description("АВАРИЙНОЕ ЗНАЧЕНИЕ температуры газов двигателя 1, (град С)")]
-		private double EmergencyEgt;
+		public double EmergencyEgt;
 
 
 
@@ -44,12 +44,12 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 		/// состояние двигателя 1 (ЗАПУСК, ВЫКЛЮЧЕНИЕ, АВАРИЙНОЕ ОТКЛЮЧЕНИЕ, ПОЖАР)
 		/// </summary>
 		[Description("состояние двигателя 1 (ЗАПУСК, ВЫКЛЮЧЕНИЕ, АВАРИЙНОЕ ОТКЛЮЧЕНИЕ, ПОЖАР)")]
-		private double EngState;
+		public double EngState;
 
 		/// <summary>
 		/// расход топлива данным двигателем, кг/ч
 		/// </summary>
 		[Description("расход топлива данным двигателем, кг/ч")]
-		private double FuelFlow;
+		public double FuelFlow;
 	}
 }
