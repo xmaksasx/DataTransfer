@@ -120,7 +120,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 		[Description("горизонтальная скорость ветра, м/с")]
 		public double HorizontalWindSpeed;
 		[Description("Максимально допустимая скорость ветра")]
-		public double MaPermissibleWindSpeed;
+		public double MaxPermissibleWindSpeed;
 		[Description("Механизация")]
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
 		public double[] Mechanization = new double[30];

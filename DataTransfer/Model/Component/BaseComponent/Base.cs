@@ -85,7 +85,12 @@ namespace DataTransfer.Model.Component.BaseComponent
 				{
 					AddToCollection(field, parentName, parentDescription, lst);
 				}
-				else if (field.FieldType.IsClass && !field.FieldType.IsArray)
+				else if (field.FieldType.IsClass &&  !field.FieldType.IsArray)
+				{
+					var curDescription = GetDescription(field);
+					SearchFields(field.FieldType, field.Name, curDescription, lst);
+				}
+				else if (!field.FieldType.IsPrimitive && field.FieldType.IsValueType)
 				{
 					var curDescription = GetDescription(field);
 					SearchFields(field.FieldType, field.Name, curDescription, lst);

@@ -2,8 +2,8 @@
 
 namespace DataTransfer.Model.Structs.Config
 {
-	[XmlRoot(ElementName = "ControlElement")]
-	public class ControlElement
+	[XmlRoot(ElementName = "State")]
+	public class State
 	{
 
 		[XmlAttribute(AttributeName = "Port")]
@@ -12,4 +12,7 @@ namespace DataTransfer.Model.Structs.Config
 		[XmlAttribute(AttributeName = "Ip")]
 		public string Ip { get; set; }
 	}
+
+	
+
 }

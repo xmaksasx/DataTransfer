@@ -11,16 +11,16 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 		/// температруа окружающего воздуха, С
 		/// </summary>
 		[Description("температруа окружающего воздуха, С")]
-		double TAT; 
+		public double TAT; 
 		/// <summary>
 		/// аэродинамический угол атаки (по продольной оси), град
 		/// </summary>
 		[Description("аэродинамический угол атаки (по продольной оси), град")]
-		double AOA; 
+		public double AOA; 
 		/// <summary>
 		/// аэродинамический угол скольжения (по продольной оси), град
 		/// </summary>
 		[Description("аэродинамический угол скольжения (по продольной оси), град")]
-		double Beta;
+		public double Beta;
 	}
 }

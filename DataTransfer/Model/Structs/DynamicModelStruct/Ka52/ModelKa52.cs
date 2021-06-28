@@ -39,11 +39,85 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 
 		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)
 		{
-
 			//todo: тут нужно заполнить модель
-			modelToVaps.BarometricHeight = in_Hbar;
-			modelToVaps.HeadingCurrent = out_dPsi;
+			modelToVaps.Eng1.N = out_NOborotL;
+			modelToVaps.Eng1.Mode = out_EngPwrL;
+			modelToVaps.Eng1.Egt = out_TGazL;
+			modelToVaps.Eng1.MaxAllowedEgt = 0;
+			modelToVaps.Eng1.EmergencyEgt = 0;
+			modelToVaps.Eng1.EngState = upr_EngineLeftOff;
+			modelToVaps.Eng1.FuelFlow = out_ToplivoCurL;
 
+			modelToVaps.Eng2.N = out_NOborotR;
+			modelToVaps.Eng2.Mode = out_EngPwrR;
+			modelToVaps.Eng2.Egt = out_TGazR;
+			modelToVaps.Eng2.MaxAllowedEgt = 0;
+			modelToVaps.Eng2.EmergencyEgt = 0;
+			modelToVaps.Eng2.EngState = upr_EngineRightOff;
+			modelToVaps.Eng2.FuelFlow = out_ToplivoCurR;
+
+			modelToVaps.ModeFly = 1;
+			modelToVaps.RemainingFuel = in_Toplivo;
+			modelToVaps.RotorSpeed = out_Nnv; 
+			modelToVaps.MaximumPermissibleRotor = 0;
+			modelToVaps.TotalRotor = out_OShag;
+			modelToVaps.RecommendedValueRotor = 0;
+			modelToVaps.HeadingCurrent = out_Kurs;
+			modelToVaps.HeadingTrack = 0;
+			modelToVaps.AngleDrift = 0;
+			modelToVaps.Angleslip = out_Skolj;
+			modelToVaps.RollCurrent = out_Kren;
+			modelToVaps.MaximumPermissibleRoll = out_KrenMax;
+			modelToVaps.RecommendedRollVlue = 0;
+			modelToVaps.PitchCurrent = out_Tang;
+			modelToVaps.RecommendedPitchValue = 0;
+			modelToVaps.RermissiblePitchPitching = out_TangMaxKabr;
+			modelToVaps.PermissiblePitchDiving = out_TangMaxPikir;
+			modelToVaps.AngleAttack = 0;
+			modelToVaps.PermissibleAngleAttack = 0;
+			modelToVaps.PositionBall = out_Skolj;
+			modelToVaps.AngleTrajectory = 0;
+			modelToVaps.Vy = out_Vy;
+			modelToVaps.MinVy = 0;
+			modelToVaps.MaxVy = 0;
+			modelToVaps.InstrumentSpeedCurrent = out_Vprib / 3.6;
+			modelToVaps.MaxInstrumentSpeed = 0;
+			modelToVaps.MinInstrumentSpeed = 0;
+			modelToVaps.SpeedX = out_Vxprib / 3.6;  //??
+			modelToVaps.SpeedZ = out_Vzprib / 3.6;  //??
+			modelToVaps.RecommendedDiveSpeed = 0;
+			modelToVaps.RecommendedSpeedDiveEnd = 0;
+			modelToVaps.TrueSpeedCurrent = in_V / 3.6;  //??
+			modelToVaps.GroundSpeedX = out_Wxg / 3.6; //??
+			modelToVaps.GroundSpeedZ = out_Wzg / 3.6; //??
+			modelToVaps.Mach = 0;
+			modelToVaps.RelativeHeight = out_Hotn;
+			modelToVaps.BarometricHeight = in_Hbar;
+			modelToVaps.Pressure =0;
+			modelToVaps.HeightAltimeter = 0;
+			modelToVaps.DangerousHeight = 0;
+
+			modelToVaps.Ny.Value = out_ny;
+			modelToVaps.Ny.Min = 0;
+			modelToVaps.Ny.Max = out_nyMax;
+
+			modelToVaps.Nx.Value = out_nz;
+			modelToVaps.Nx.Min = 0;
+			modelToVaps.Nx.Max = 0;
+
+			modelToVaps.Nz.Value = 0;
+			modelToVaps.Nz.Min = 0;
+			modelToVaps.Nz.Max = 0;
+
+			modelToVaps.HeadingWind = in_WindDir;
+			modelToVaps.HorizontalWindSpeed = in_WindPwrHorz;
+			modelToVaps.MaxPermissibleWindSpeed = 0;
+
+			modelToVaps.Mechanization[0] = 0;
+			modelToVaps.Mechanization[1] = 0;
+			modelToVaps.Mechanization[2] = 0;
+			modelToVaps.Mechanization[3] = 0;
+										   
 			var dgram = ConvertHelper.ObjectToByte(modelToVaps);
 			for (int i = 68; i < dgram.Length; i = i + 4)
 				Array.Reverse(dgram, i, 4);

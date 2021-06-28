@@ -18,6 +18,7 @@ namespace HxModel.FdmManager
 		{
 			UdpReceivers.Add(new UdpClient(20030));
 			UdpReceivers.Add(new UdpClient(20031));
+			UdpReceivers.Add(new UdpClient(20032));
 			UdpReceivers.Add(new UdpClient(21222));
 			_sendClient = new UdpClient();
 		}

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 
 
+
 namespace HxModel.FdmManager
 {
 	class FdmManager
@@ -180,7 +181,7 @@ namespace HxModel.FdmManager
 			_svvo.Packetcam.ht = (float)state.Pos.Elevation;
 			_svvo.Packetcam.tet = (float)(state.Angs.Fi * Math.PI / 180D);
 			_svvo.Packetcam.gam = (float)(state.Angs.Gam * Math.PI / 180D);
-			_svvo.Packetcam.psi = (float)(-state.Angs.Psi * Math.PI / 180D);
+			_svvo.Packetcam.psi = (float)(state.Angs.Psi * Math.PI / 180D);
 			_svvo.Packetcam.flag = 1;
 
 			return ConvertHelper.ObjectToByte(_svvo);
@@ -245,6 +246,15 @@ namespace HxModel.FdmManager
 					ConvertHelper.ByteToObject(receivedBytes, _controlElement);
 					break;
 
+				case "ModelState":
+					{
+						byte[] bytes = new byte[Marshal.SizeOf(Hel.FCSState)];
+						Array.Copy(receivedBytes, 68, bytes, 0, 80);
+						Hel.FCSState= (FCSState)ConvertHelper.ByteToObject(bytes,  Hel.FCSState, Hel.FCSState.GetType());
+						
+					}
+					break;
+
 				default:
 					if (receivedBytes.Length == 4)
 					{
@@ -254,6 +264,7 @@ namespace HxModel.FdmManager
 			}
 		}
 
+	
 		void Send()
 		{
 			while (_isSend)

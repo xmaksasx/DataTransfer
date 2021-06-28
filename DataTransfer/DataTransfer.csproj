@@ -98,6 +98,7 @@
     <Compile Include="Model\Structs\Config\Route.cs" />
     <Compile Include="Model\Structs\Config\Rud.cs" />
     <Compile Include="Model\Structs\Config\Rus.cs" />
+    <Compile Include="Model\Structs\Config\State.cs" />
     <Compile Include="Model\Structs\Config\Svvo.cs" />
     <Compile Include="Model\Structs\Config\TacticalEditor.cs" />
     <Compile Include="Model\Structs\ControlElements\ControlElement.cs" />
@@ -108,12 +109,18 @@
     <Compile Include="Model\Structs\ControlElements\Pedals.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\DynamicModel.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\AirPars.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\AirState.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\AngleTriplet.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\Eng.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\FCSState.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\FCSValue.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\GearRes.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\GearState.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\InstrumentsState.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\KinematicsState.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\ModelHx.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\VehicleCtrl.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Hx\VhclInp.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\VhclOutp.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Hx\XVECTOR3.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\AngleTriplet.cs" />
@@ -131,6 +138,9 @@
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\VhclInp.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Ka50\VhclOutp.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\Eng.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Vaps\FCSState.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Vaps\FCSValue.cs" />
+    <Compile Include="Model\Structs\DynamicModelStruct\Vaps\ModelState.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\Overload.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\DynamicModelToVaps.cs" />
     <Compile Include="Model\Structs\RouteStruct\Landing.cs" />

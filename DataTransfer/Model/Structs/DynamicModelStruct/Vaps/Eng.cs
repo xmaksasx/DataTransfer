@@ -14,7 +14,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 		public double N;
 
 		/// <summary>
-		/// обороты турбокомпрессора, (% от номинальной величины)
+		/// режим работы двигателя 1, (% от номинальной величины)
 		/// </summary>
 		[Description("режим работы двигателя 1, (% от номинальной величины)")]
 		public double Mode;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HxModel.Models;
+using System;
 using System.Runtime.InteropServices;
 
 namespace HxModel.FdmManager
@@ -14,6 +15,15 @@ namespace HxModel.FdmManager
 			Marshal.FreeHGlobal(i);
 		}
 
+		public static object ByteToObject(byte[] receiveBytes, object obj, Type type)
+		{
+			int len = Marshal.SizeOf(obj);
+			IntPtr i = Marshal.AllocHGlobal(len);
+			Marshal.Copy(receiveBytes, 0, i, len);
+			object currobj = Marshal.PtrToStructure(i, type);
+			Marshal.FreeHGlobal(i);
+			return currobj;
+		}
 
 		public static byte[] ObjectToByte<T>(T obj)
 		{

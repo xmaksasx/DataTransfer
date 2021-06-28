@@ -11,73 +11,73 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 		/// текущие воздушные параметры 
 		/// </summary>
 		[Description("текущие воздушные параметры")]
-		public AirPars AirPars;
+		public AirPars AirPars = new AirPars();
 
 		/// <summary>
 		/// приборная скорость, м/с
 		/// </summary>
 		[Description("приборная скорость, м/с")]
-		double IAS;
+		public double IAS;
 
 		/// <summary>
 		/// истинная скорость (кинематическая), м/с
 		/// </summary>
 		[Description("истинная скорость (кинематическая), м/с")]
-		double TAS;
+		public double TAS;
 
 
 		/// <summary>
 		/// барометрическая высота, измеряемая анероидным высотомером, c учетом переданных AirTemperatureGround, AirPressureGround, AirHumidityGround и AltimeterBaroPressure, м
 		/// </summary>
 		[Description("барометрическая высота")]
-		double Hbaro;
+		public double Hbaro;
 
 		/// <summary>
 		/// вертикальная скорость с учетом особенностей работы анеродиного вариометра, м/с
 		/// </summary>
 		[Description("вертикальная скорость с учетом особенностей работы анеродиного вариометра, м/с")]
-		double VyVar;
+		public double VyVar;
 
 		/// <summary>
 		/// компоненты измеряемых перегрузок по трем осям, сглаженные, nd
 		/// </summary>
 		[Description("компоненты измеряемых перегрузок по трем осям, сглаженные, nd")]
-		XVECTOR3 GLoad;
+		public XVECTOR3 GLoad = new XVECTOR3();
 
 		/// <summary>
 		/// обобщенное положение механического шарика указателя угла скольжения, -1 до +1, соответствующее положениям от крайнего левого до крайнего правого, nd
 		/// </summary>
 		[Description("обобщенное положение механического шарика указателя угла скольжения, -1 до +1")]
-		double SlipBallPos;
+		public double SlipBallPos;
 
 		/// <summary>
 		/// продольная составляющая путевой скорости, м/с
 		/// </summary>
 		[Description("продольная составляющая путевой скорости, м/с")]
-		double VsurfX;
+		public double VsurfX;
 
 		/// <summary>
 		/// боковая составляющая путевой скорости, м/с
 		/// </summary>
-		[Description("оковая составляющая путевой скорости, м/с")]
-		double VsurfZ;
+		[Description("боковая составляющая путевой скорости, м/с")]
+		public double VsurfZ;
 
 		/// <summary>
 		/// текущая масса топлива, кг
 		/// </summary>
-		[Description("екущая масса топлива, кг")]
-		double FuelMass;
+		[Description("текущая масса топлива, кг")]
+		public double FuelMass;
 
 		/// <summary>
 		/// обороты несущей системы, % от номинального
 		/// </summary>
 		[Description("обороты несущей системы, % от номинального")]
-		double RotorRPM;
+		public double RotorRPM;
 
 		/// <summary>
 		/// результирующий общий шаг несущей системы, град
 		/// </summary>
 		[Description("результирующий общий шаг несущей системы, град")]
-		double CollectivePitch; 
+		public double CollectivePitch; 
 	}
 }

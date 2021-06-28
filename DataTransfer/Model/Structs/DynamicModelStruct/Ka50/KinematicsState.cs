@@ -32,19 +32,19 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 		/// абсолютная скорость перемещения начала связной ск. относительно локальной с.к., м/с
 		/// </summary>
 		[Description("абсолютная скорость перемещения начала связной ск. относительно локальной с.к., м/с")]
-		public XVECTOR3 AbsSpeed;
+		public XVECTOR3 AbsSpeed = new XVECTOR3();
 
 		/// <summary>
 		/// угловые скорости вращения осей связной с.к. (град/с)
 		/// </summary>
 		[Description("угловые скорости вращения осей связной с.к. (град/с)")]
-		public XVECTOR3 Rotation;
+		public XVECTOR3 Rotation = new XVECTOR3();
 
 
 		/// <summary>
 		/// ускорения в связной с.к. (м/с**2) - имеются в виду кинематические ускорения, а не измеряемые перегрузки!
 		/// </summary>
 		[Description("ускорения в связной с.к. (м/с**2) - имеются в виду кинематические ускорения, а не измеряемые перегрузки!")]
-		public XVECTOR3 Accel;
+		public XVECTOR3 Accel = new XVECTOR3();
 	}
 }

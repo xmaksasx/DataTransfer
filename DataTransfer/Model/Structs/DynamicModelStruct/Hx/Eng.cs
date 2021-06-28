@@ -13,24 +13,24 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 		/// обороты вентилятора, (% от номинальной величины)) 
 		/// </summary>
 		[Description("обороты вентилятора, (% от номинальной величины))")]
-		private double N1;
+		public double N1;
 
 		/// <summary>
 		/// обороты турбокомпрессора, (% от номинальной величины)
 		/// </summary>
 		[Description("обороты турбокомпрессора, (% от номинальной величины)")]
-		private double N2;
+		public double N2;
 
 		/// <summary>
 		/// температура газов за турбиной, (град С)
 		/// </summary>
 		[Description("температура газов за турбиной, (град С)")]
-		private double Egt;
+		public double Egt;
 
 		/// <summary>
 		/// расход топлива данным двигателем, кг/ч
 		/// </summary>
 		[Description("расход топлива данным двигателем, кг/ч")]
-		private double FuelFlow;
+		public double FuelFlow;
 	}
 }

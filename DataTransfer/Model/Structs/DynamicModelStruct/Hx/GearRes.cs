@@ -16,13 +16,13 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 		/// нуль  соответствует полностью разжатому положению, а единица - полностью обжатому
 		/// </summary>
 		[Description("Обжатие стойки  0 - разжатому положению, 1 - полностью обжатому")]
-		private double RodShift;
+		public double RodShift;
 
 		/// <summary>
 		/// перемещения обжатия пневматика, по правилу, аналогичному описанному выше
 		/// </summary>
 		[Description("перемещения обжатия пневматика  0 - разжатому положению, 1 - полностью обжатому")]
-		private double TireShift;
+		public double TireShift;
 
 		/// <summary>
 		/// угол проворота колеса относительно начального положения, град,
@@ -30,13 +30,13 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 		/// </summary>
 		[Description("угол проворота колеса относительно начального положения, град")]
 
-		private double WheelRot;
+		public double WheelRot;
 
 		/// <summary>
 		/// угол поворота самоориентирующегося колеса (стойки) в путевом направлении,
 		/// со знаком, положительный соответствует повороту влево. (град)
 		/// </summary>
 		[Description("угол поворота самоориентирующегося колеса (стойки) в путевом направлении, град")]
-		private double WheelSteer;
+		public double WheelSteer;
 	}
 }

@@ -13,6 +13,7 @@
 		<Model>
 			<Command Port="20030" Ip="127.0.0.1"/>
 			<ControlElement Port="20031" Ip="127.0.0.1"/>
+			<State Port="20032" Ip="127.0.0.1"/>
 		</Model>
 		<IupVaps>
 			<ControlElement Port="20040" Ip="127.0.0.1"/>

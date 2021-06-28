@@ -38,6 +38,7 @@ namespace DataTransfer.Services.DataManager
 		private ControlElement _controlElement;
 		private DynamicModel _dynamicModel;
 		private DynamicModelToVaps _dynamicModelToVaps;
+		private ModelState _modelState;
 
 		private StartPosition _startPosition;
 		private DeviceControlElement _deviceControlElement;
@@ -144,6 +145,7 @@ namespace DataTransfer.Services.DataManager
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rud.Guid);
 
 			_dynamicModelToVaps = new DynamicModelToVaps();
+			_modelState = new ModelState();
 			//	_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
 			//	_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 			_channelRadar = new ChannelRadar();
@@ -331,6 +333,11 @@ namespace DataTransfer.Services.DataManager
 					_landing.Assign(receivedBytes);
 					break;
 
+				case "ModelState":
+					_modelState.AssignReverse(receivedBytes);
+					break;
+					
+
 				default:
 					break;
 			}
@@ -345,6 +352,9 @@ namespace DataTransfer.Services.DataManager
 				_udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
 					_config.NetworkSettings.Model.ControlElement.Port);
 
+				_udpHelper.Send(_modelState.GetBytes(), _config.NetworkSettings.Model.State.Ip,
+					_config.NetworkSettings.Model.State.Port);
+				
 				#endregion
 
 				#region Отправка на ИУП

@@ -12,5 +12,6 @@ namespace HxModel.Models
 
 		public KinematicsState KinematicsState;
 		public VhclOutp VhclOutp;
+		public VhclInp VhclInp;
 	}
 }

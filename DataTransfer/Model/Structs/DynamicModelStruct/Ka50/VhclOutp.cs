@@ -16,16 +16,16 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 
 		#region Рассчитанные параметры стоек шасси
 
-		private GearRes NoseGear;
-		private GearRes MainGearLeft;
-		private GearRes MainGearRight;
+		public GearRes NoseGear = new GearRes();
+		public GearRes MainGearLeft = new GearRes();
+		public GearRes MainGearRight = new GearRes();
 
 		#endregion
 
 		#region Состояния встроенных моделей двигателей
 
-		private Eng EngLeft;
-		private Eng EngRight;
+		public Eng EngLeft = new Eng();
+		public Eng EngRight = new Eng();
 
 		#endregion
 
@@ -33,12 +33,12 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 		/// обороты несущей системы, % от номинального
 		/// </summary>
 		[Description("обороты несущей системы, % от номинального")]
-		private double RotorRPM;
+		public double RotorRPM;
 
 		/// <summary>
 		/// результирующий общий шаг несущей системы, град
 		/// </summary>
 		[Description("результирующий общий шаг несущей системы, градо")]
-		private double CollectivePitch;
+		public double CollectivePitch;
 	}
 }
