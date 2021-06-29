@@ -6,7 +6,7 @@ namespace DataTransfer.Model.Structs.Config
 	public class Default
 	{
 
-		[XmlElement(ElementName = "DefaultModel")]
+		[XmlElement(ElementName = "DefaultDynamicModel")]
 		public DefaultDynamicModel DefaultDynamicModel { get; set; }
 
 		[XmlElement(ElementName = "DefaultControlElement")]

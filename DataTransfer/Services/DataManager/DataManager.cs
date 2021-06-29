@@ -138,7 +138,7 @@ namespace DataTransfer.Services.DataManager
 
 		private void InitObject()
 		{
-			_config = LoadConfig();
+			_config = Config.Instance();
 			_udpHelper = new UdpHelper();
 			_deviceControlElement = DeviceControlElement.GetInstance();
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rus.Guid);
@@ -146,8 +146,6 @@ namespace DataTransfer.Services.DataManager
 
 			_dynamicModelToVaps = new DynamicModelToVaps();
 			_modelState = new ModelState();
-			//	_deviceControlElement.AddJoystick("0402044f-0000-0000-0000-504944564944");
-			//	_deviceControlElement.AddJoystick("0404044f-0000-0000-0000-504944564944");
 			_channelRadar = new ChannelRadar();
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
@@ -163,31 +161,6 @@ namespace DataTransfer.Services.DataManager
 
 		#endregion
 
-		private Config LoadConfig()
-		{
-			Config config = null;
-			try
-			{
-				XmlSerializer serializer = new XmlSerializer(typeof(Config));
-				using (StreamReader reader = new StreamReader("Config.xml"))
-					config = (Config)serializer.Deserialize(reader);
-
-			}
-			catch (Exception e)
-			{
-				OnMessageEvent("Не найден \"Config.xml\" загружен внутренний конфигурационный файл!");
-				var assembly = Assembly.GetExecutingAssembly();
-				var resourceName = "DataTransfer.Infrastructure.Resource.Config.xml";
-				using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-				{
-					XmlSerializer serializer = new XmlSerializer(typeof(Config));
-					using (StreamReader reader = new StreamReader(stream))
-						config = (Config)serializer.Deserialize(reader);
-				}
-			}
-		
-			return config;
-		}
 
 		public void ChangeModel(string nameModel)
 		{
@@ -267,8 +240,6 @@ namespace DataTransfer.Services.DataManager
 			{
 				_controlElement.UpdateRud(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rud.Guid));
 				_controlElement.UpdateRus(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rus.Guid));
-				//_controlElement.UpdateRud(_deviceControlElement?.ReadData("0404044f-0000-0000-0000-504944564944"));
-				//_controlElement.UpdateRus(_deviceControlElement?.ReadData("0402044f-0000-0000-0000-504944564944"));
 				Thread.Sleep(20);
 			}
 		}

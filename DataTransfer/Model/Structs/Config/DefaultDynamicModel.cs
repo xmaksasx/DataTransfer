@@ -10,7 +10,7 @@ namespace DataTransfer.Model.Structs.Config
 	// }
 
 
-	[XmlRoot(ElementName = "DefaultModel")]
+	[XmlRoot(ElementName = "DefaultDynamicModel")]
 	public class DefaultDynamicModel
 	{
 

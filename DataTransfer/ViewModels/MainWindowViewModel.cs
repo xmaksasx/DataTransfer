@@ -84,7 +84,7 @@ namespace DataTransfer.ViewModels
 
 		#region ModelSelect: string - Выбранная модель
 		/// <summary>Выбранная модель</summary>
-		private string _modelSelect = "Ka52";
+		private string _modelSelect;
 		/// <summary>Выбранная модель</summary>
 		public string ModelSelect { get =>_modelSelect;
 			set
@@ -224,12 +224,16 @@ namespace DataTransfer.ViewModels
 			OpenDataDescriptionCreatorCommand = new LambdaCommand(OnOpenDataDescriptionCreatorCommandExecuted, CanOpenDataDescriptionCreatorCommandExecute);
 			UploadConfigCommand = new LambdaCommand(OnUploadConfigCommandExecuted, CanUploadConfigCommandExecute);
 			_dataManager = DataManager.GetInstance();
+			_dataManager.Init();
+			ModelSelect = Config.Instance().Default.DefaultDynamicModel.Value;
 			DynamicInfos = _dataManager.DynamicInfos;
 			ControlElementInfos = _dataManager.ControlElementInfos;
 			_dataManager.StatusModelEvent += OnStatusModelEvent; 
 			_dataManager.StatusPacketEvent += OnStatusPacketEvent;
 			_dataManager.MessageEvent += OnMessageEvent;
-			_dataManager.Init();
+		
+			
+
 		}
 
 		private void OnMessageEvent(string str)
