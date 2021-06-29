@@ -113,7 +113,7 @@ namespace HxModel.FdmManager
 			KinematicsState initialState = default;
 			initialState.AbsSpeed = new XVECTOR3() { X = 1, Y = 0, Z = 0 };
 			initialState.Angs.Psi = startPosition.in_Kurs0;
-			initialState.Pos.Elevation = startPosition.in_Hbar = 50;
+			initialState.Pos.Elevation = startPosition.in_Hbar;
 			initialState.Pos.Latitude = startPosition.StartX = 43.44794255;
 			initialState.Pos.Longitude = startPosition.StartY = 39.94518977;
 			IntPtr ksPtr = GetIntPtr(initialState);
