@@ -1,24 +1,16 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
-using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component.BaseComponent;
-using DataTransfer.Model.Structs.DynamicModelStruct.Ka50;
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	class DynamicModelToVaps:Header
 	{
-
 		public DynamicModelToVaps()
 		{
-			GetHeadDouble("ModelHx");
+			GetHeadDouble("DynamicModelToVaps");
 		}
-
-
-		
-
 
 		[Description("Двигатель1")]
 		public Eng Eng1 = new Eng();
@@ -124,7 +116,5 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 		[Description("Механизация")]
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
 		public double[] Mechanization = new double[30];
-
-		
 	}
 }

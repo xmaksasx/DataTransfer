@@ -132,8 +132,8 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 			modelToVaps.Mechanization[11] = VhclOutp.MainGearRight.WheelSteer;
 
 			var dgram = ConvertHelper.ObjectToByte(modelToVaps);
-			for (int i = 68; i < dgram.Length; i = i + 4)
-				Array.Reverse(dgram, i, 4);
+			for (int i = 68; i < dgram.Length; i = i + 8)
+				Array.Reverse(dgram, i, 8);
 			return dgram;
 		}
 

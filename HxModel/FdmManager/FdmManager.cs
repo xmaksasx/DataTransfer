@@ -148,6 +148,7 @@ namespace HxModel.FdmManager
 			ResHel = (VhclOutp)Marshal.PtrToStructure(ptrRh, typeof(VhclOutp));
 			_dataOut.KinematicsState = ResState;
 			_dataOut.VhclOutp = ResHel;
+			_dataOut.VhclInp = Hel;
 
 			_udpHelper.Send(GetByte(ResState), "127.0.0.1", 6100);
 			_udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
