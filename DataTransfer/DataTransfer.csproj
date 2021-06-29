@@ -77,6 +77,7 @@
     <Compile Include="Infrastructure\Helpers\ConvertHelper.cs" />
     <Compile Include="Infrastructure\Helpers\ExtensionMethods.cs" />
     <Compile Include="Infrastructure\Helpers\UdpHelper.cs" />
+    <Compile Include="Model\Structs\AircraftPosition.cs" />
     <Compile Include="Model\Component\BaseComponent\Base.cs" />
     <Compile Include="Model\Component\BaseComponent\Header.cs" />
     <Compile Include="Model\Component\CollectionInfo.cs" />

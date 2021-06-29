@@ -22,19 +22,18 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 				Array.Reverse(dgram, i, 4);
 		}
 		
-		public override byte[] GetPosition()
+		public override byte[] GetPosition(AircraftPosition aircraftPosition)
 		{
-			List<byte> lst = new List<byte>(); 
-			lst.AddRange(BitConverter.GetBytes(out_Tang));
-			lst.AddRange(BitConverter.GetBytes(out_Kren));
-			lst.AddRange(BitConverter.GetBytes(out_Kurs));
-			lst.AddRange(BitConverter.GetBytes(0.0));
-			lst.AddRange(BitConverter.GetBytes(0.0));
-			lst.AddRange(BitConverter.GetBytes(out_Hotn));
-			lst.AddRange(BitConverter.GetBytes(out_Xg));
-			lst.AddRange(BitConverter.GetBytes(out_Zg));
-			return lst.ToArray();
-
+			aircraftPosition.IsDegree = 0;
+			aircraftPosition.Tang = out_Tang;
+			aircraftPosition.Kren =out_Kren;
+			aircraftPosition.Risk = out_Kurs;
+			aircraftPosition.GeoCoordinate.Latitude = 0;
+			aircraftPosition.GeoCoordinate.Longitude = 0;
+			aircraftPosition.GeoCoordinate.H = in_Hgeom;
+			aircraftPosition.GeoCoordinate.X = out_Xg;
+			aircraftPosition.GeoCoordinate.Z = out_Zg;
+			return ConvertHelper.ObjectToByte(aircraftPosition);
 		}
 
 		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)

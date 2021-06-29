@@ -21,18 +21,18 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 				Array.Reverse(dgram, i, 8);
 		}
 
-		public override byte[] GetPosition()
+		public override byte[] GetPosition(AircraftPosition aircraftPosition)
 		{
-			List<byte> lst = new List<byte>();
-			lst.AddRange(BitConverter.GetBytes(KinematicsState.Angs.Fi));
-			lst.AddRange(BitConverter.GetBytes(KinematicsState.Angs.Gam));
-			lst.AddRange(BitConverter.GetBytes(KinematicsState.Angs.Psi));
-			lst.AddRange(BitConverter.GetBytes(KinematicsState.Pos.Latitude));
-			lst.AddRange(BitConverter.GetBytes(KinematicsState.Pos.Longitude));
-			lst.AddRange(BitConverter.GetBytes(KinematicsState.Pos.Elevation));
-			lst.AddRange(BitConverter.GetBytes(0));
-			lst.AddRange(BitConverter.GetBytes(0));
-			return lst.ToArray();
+			aircraftPosition.IsDegree=1;
+			aircraftPosition.Tang=KinematicsState.Angs.Fi;
+			aircraftPosition.Kren=KinematicsState.Angs.Gam;
+			aircraftPosition.Risk=KinematicsState.Angs.Psi;
+			aircraftPosition.GeoCoordinate.Latitude=KinematicsState.Pos.Latitude;
+			aircraftPosition.GeoCoordinate.Longitude= KinematicsState.Pos.Longitude;
+			aircraftPosition.GeoCoordinate.H= KinematicsState.Pos.Elevation;
+			aircraftPosition.GeoCoordinate.X= 0;
+			aircraftPosition.GeoCoordinate.X = 0;
+			return ConvertHelper.ObjectToByte(aircraftPosition);
 		}
 
 		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)

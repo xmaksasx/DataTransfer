@@ -39,7 +39,7 @@ namespace DataTransfer.Services.DataManager
 		private DynamicModel _dynamicModel;
 		private DynamicModelToVaps _dynamicModelToVaps;
 		private ModelState _modelState;
-
+		private AircraftPosition _aircraftPosition;
 		private StartPosition _startPosition;
 		private DeviceControlElement _deviceControlElement;
 		private Landing _landing;
@@ -143,7 +143,7 @@ namespace DataTransfer.Services.DataManager
 			_deviceControlElement = DeviceControlElement.GetInstance();
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rus.Guid);
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rud.Guid);
-
+			_aircraftPosition = new AircraftPosition();
 			_dynamicModelToVaps = new DynamicModelToVaps();
 			_modelState = new ModelState();
 			_channelRadar = new ChannelRadar();
@@ -353,7 +353,7 @@ namespace DataTransfer.Services.DataManager
 
 				#region Отправка на тактический редактор
 
-				_udpHelper.Send(_dynamicModel.GetPosition(), _config.NetworkSettings.TacticalEditor.DynamicModel.Ip,
+				_udpHelper.Send(_dynamicModel.GetPosition(_aircraftPosition), _config.NetworkSettings.TacticalEditor.DynamicModel.Ip,
 					_config.NetworkSettings.TacticalEditor.DynamicModel.Port);
 
 				#endregion
