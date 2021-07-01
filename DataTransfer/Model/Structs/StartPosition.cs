@@ -21,7 +21,7 @@ namespace DataTransfer.Model.Structs
 			StartX = 0;
 			StartY = 0;
 			in_V = 0;
-			in_Hgeom = 16;
+			in_Hgeom = 14;
 			in_t = 0;
 			in_Shag = 0.01f;
 			in_TemperatVozd0 = 20;

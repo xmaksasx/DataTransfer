@@ -111,9 +111,9 @@ namespace HxModel.FdmManager
 		private void InitModel(StartPosition startPosition)
 		{
 			KinematicsState initialState = default;
-			initialState.AbsSpeed = new XVECTOR3() { X = 1, Y = 0, Z = 0 };
+			initialState.AbsSpeed = new XVECTOR3() { X = 0, Y = 0, Z = 0 };
 			initialState.Angs.Psi = startPosition.in_Kurs0;
-			initialState.Pos.Elevation = startPosition.in_Hbar;
+			initialState.Pos.Elevation = startPosition.in_Hbar+3;
 			initialState.Pos.Latitude = startPosition.StartX = 43.44794255;
 			initialState.Pos.Longitude = startPosition.StartY = 39.94518977;
 			IntPtr ksPtr = GetIntPtr(initialState);
@@ -123,7 +123,8 @@ namespace HxModel.FdmManager
 
 		public void Step(ControlElement controlElement)
 		{
-			ContactEnv.Elevation =  _gmTerrainH;
+			Hel.VehicleCtrl.AltimeterBaroPressure = 760;
+			ContactEnv.Elevation =_gmTerrainH;
 			ContactEnv.Normal = _normal;
 			Hel.AirState.WindSpeed = _windSpeed;
 			Hel.Mass = 10800.0;
@@ -133,9 +134,7 @@ namespace HxModel.FdmManager
 			Hel.VehicleCtrl.CyclicRoll =  controlElement._cyclicStepHandleLeft.Aileron;
 			Hel.VehicleCtrl.Direction =  controlElement._pedalsLeft.Pedal;
 			Hel.VehicleCtrl.Collective =  controlElement._generalStepHandleLeft.GeneralStep;
-			Hel.AirState.AirHumidityGround = 60;
-			Hel.AirState.AirPressureGround = 750;
-			Hel.AirState.AirTemperatureGround = 20;
+
 
 			IntPtr ptrHel = GetIntPtr(Hel);
 			IntPtr ptrCe = GetIntPtr(ContactEnv);
