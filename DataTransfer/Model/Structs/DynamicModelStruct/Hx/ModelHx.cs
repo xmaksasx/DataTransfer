@@ -31,7 +31,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 			aircraftPosition.GeoCoordinate.Longitude= KinematicsState.Pos.Longitude;
 			aircraftPosition.GeoCoordinate.H= KinematicsState.Pos.Elevation;
 			aircraftPosition.GeoCoordinate.X= 0;
-			aircraftPosition.GeoCoordinate.X = 0;
+			aircraftPosition.GeoCoordinate.Z = 0;
 			return ConvertHelper.ObjectToByte(aircraftPosition);
 		}
 

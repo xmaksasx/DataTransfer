@@ -39,10 +39,13 @@ namespace DataTransfer.Services.DataDescriptionCreator
 				.Where(t => t.Namespace == "DataTransfer.Model.Structs.ControlElements")
 				.ToList());
 			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
-				.Where(t => t.Namespace == "DataTransfer.Model.Structs.DynamicModelStruct.Ka50")
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.RouteStruct")
 				.ToList());
 			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
-				.Where(t => t.Namespace == "DataTransfer.Model.Structs.DynamicModelStruct.Ka52")
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.RouteStruct.NavigationPointStruct")
+				.ToList());
+			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
+				.Where(t => t.Namespace == "DataTransfer.Model.Structs.RouteStruct.AerodromeStruct")
 				.ToList());
 			types.AddRange(Assembly.GetExecutingAssembly().GetTypes()
 			.Where(t => t.Namespace == "DataTransfer.Model.Structs.DynamicModelStruct.Vaps")
