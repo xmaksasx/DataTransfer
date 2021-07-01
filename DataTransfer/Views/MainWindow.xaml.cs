@@ -15,6 +15,10 @@ namespace DataTransfer.Views
 	{
 		public MainWindow()
 		{
+			SplashScreen splash = new SplashScreen("/Infrastructure/resource/Splash.png");
+			
+			splash.Show(false);
+			splash.Close(TimeSpan.FromMilliseconds(2));
 			InitializeComponent();
 
 		}

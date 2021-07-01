@@ -21,6 +21,7 @@ using DataTransfer.Services.ControlElements;
 
 namespace DataTransfer.Services.DataManager
 {
+	public delegate void Message(string str);
 	class DataManager
 	{
 		[DllImport("Kernel32.dll")]
@@ -51,7 +52,7 @@ namespace DataTransfer.Services.DataManager
 		private UdpHelper _udpHelper;
 		public ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
 		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
-		public delegate void Message(string str);
+
 		public event Message StatusModelEvent;
 		public event Message StatusPacketEvent;
 		public event Message MessageEvent;

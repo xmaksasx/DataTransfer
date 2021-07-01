@@ -8,7 +8,7 @@
 	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:DataTransfer.ViewModels"
-	Title="MainWindow"
+	Title="Диспетчер данных"
 	Width="1000"
 	Height="650"
 	fw:AcrylicWindow.AcrylicWindowStyle="None"
@@ -100,6 +100,25 @@
 					</MenuItem>
 				</Menu>
 			</StackPanel>
+			<Button
+				Width="35"
+				Height="35"
+				Margin="0,0,40,0"
+				Padding="0"
+				HorizontalAlignment="Right"
+				Command="{Binding MinimizeAppCommand}"
+				Content="{materialDesign:PackIcon Size=25,
+				                                  Kind=WindowMinimize}"
+				Style="{StaticResource MaterialDesignFlatButton}">
+				<Button.Effect>
+					<DropShadowEffect
+						BlurRadius="10"
+						Direction="0"
+						ShadowDepth="0"
+						Color="#FF03A9F4" />
+				</Button.Effect>
+
+			</Button>
 			<Button
 				Width="35"
 				Height="35"

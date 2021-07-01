@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataTransfer.Services.DataManager;
 using SharpDX.DirectInput;
 
 namespace DataTransfer.Services.ControlElements
@@ -10,7 +11,7 @@ namespace DataTransfer.Services.ControlElements
 		private DirectInput _directInput = new DirectInput();
 		private List<Joystick> _joysticks = new List<Joystick>();
 		private List<DeviceInstance> _deviceInstances;
-
+		public event Message MessageEvent;
 		private static DeviceControlElement _instance;
 		public static DeviceControlElement GetInstance()
 		{
@@ -41,11 +42,23 @@ namespace DataTransfer.Services.ControlElements
 		{
 			foreach (var joystick in _joysticks)
 				if (guid == joystick.Information.ProductGuid.ToString())
-					return joystick.GetCurrentState();
+					try
+					{
+						return joystick.GetCurrentState();
+					}
+					catch (Exception)
+					{
+
+						OnMessageEvent("Сбой органов управления");
+					}
+					
 
 			return new JoystickState();
 		}
-
+		protected void OnMessageEvent(string str)
+		{
+			MessageEvent?.Invoke(str);
+		}
 		public void AddJoystick(string guid)
 		{
 			Guid guidDevice = new Guid(guid);

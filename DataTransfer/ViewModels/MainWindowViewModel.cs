@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using DataTransfer.Infrastructure.Commands;
 using DataTransfer.Model.Component;
 using DataTransfer.Model.Structs.Config.Base;
+using DataTransfer.Services.ControlElements;
 using DataTransfer.Services.DataManager;
 using DataTransfer.ViewModels.Base;
 using DataTransfer.Views;
@@ -20,6 +21,7 @@ namespace DataTransfer.ViewModels
 	class MainWindowViewModel:ViewModel
 	{
 		readonly DataManager _dataManager;
+		readonly DeviceControlElement _deviceControlElement;
 
 		#region MessageQueue: SnackbarMessageQueue - Сообщение для пользователя
 		
@@ -108,6 +110,20 @@ namespace DataTransfer.ViewModels
 			Application.Current.Shutdown();
 		}
 		#endregion
+
+		#region MinimizeAppCommand
+		public ICommand MinimizeAppCommand { get; set; }
+
+		private bool CanMinimizeAppCommandExecute(object p) => true;
+
+		private void OnMinimizeAppCommandExecuted(object p)
+		{
+
+			Application.Current.MainWindow.WindowState = WindowState.Minimized;
+		}
+		#endregion
+
+		
 
 		#region StartModeling
 		public ICommand StartModelingCommand { get; set; }
@@ -217,6 +233,7 @@ namespace DataTransfer.ViewModels
 		public MainWindowViewModel()
 		{
 			CloseAppCommand = new LambdaCommand(OnCloseAppCommandExecuted, CanCloseAppCommandExecute);
+			MinimizeAppCommand = new LambdaCommand(OnMinimizeAppCommandExecuted, CanMinimizeAppCommandExecute);
 			StartModelingCommand = new LambdaCommand(OnStartModelingCommandExecuted, CanStartModelingCommandExecute);
 			PauseModelingCommand = new LambdaCommand(OnPauseModelingCommandExecuted, CanPauseModelingCommandExecute);
 			StopModelingCommand = new LambdaCommand(OnStopModelingCommandExecuted, CanStopModelingCommandExecute);
@@ -224,6 +241,7 @@ namespace DataTransfer.ViewModels
 			OpenDataDescriptionCreatorCommand = new LambdaCommand(OnOpenDataDescriptionCreatorCommandExecuted, CanOpenDataDescriptionCreatorCommandExecute);
 			UploadConfigCommand = new LambdaCommand(OnUploadConfigCommandExecuted, CanUploadConfigCommandExecute);
 			_dataManager = DataManager.GetInstance();
+			_deviceControlElement = DeviceControlElement.GetInstance();
 			_dataManager.Init();
 			ModelSelect = Config.Instance().Default.DefaultDynamicModel.Value;
 			DynamicInfos = _dataManager.DynamicInfos;
@@ -231,10 +249,14 @@ namespace DataTransfer.ViewModels
 			_dataManager.StatusModelEvent += OnStatusModelEvent; 
 			_dataManager.StatusPacketEvent += OnStatusPacketEvent;
 			_dataManager.MessageEvent += OnMessageEvent;
-		
-			
+			_deviceControlElement.MessageEvent += OnMessageEvent;
+
+
+
 
 		}
+
+
 
 		private void OnMessageEvent(string str)
 		{
