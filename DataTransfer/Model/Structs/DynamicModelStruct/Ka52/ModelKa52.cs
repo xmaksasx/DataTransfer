@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using DataTransfer.Model.Structs.Bmpi;
 
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
@@ -121,6 +122,61 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 			for (int i = 68; i < dgram.Length; i = i + 8)
 				Array.Reverse(dgram, i, 8);
 			return dgram;
+		}
+
+		public override byte[] GetForBmpi(DynamicModelToBmpi modelToBmpi)
+		{
+			modelToBmpi.lat_sns = 0;
+			modelToBmpi.lon_sns = 0;
+			modelToBmpi.H_sns = out_Hotn;
+			modelToBmpi.Day = (ushort)DateTime.Now.Day;
+			modelToBmpi.Month = (ushort)DateTime.Now.Month;
+			modelToBmpi.Year = (ushort)DateTime.Now.Year;
+			modelToBmpi.Minute = (ushort)DateTime.Now.Minute;
+			modelToBmpi.Hour = (ushort)DateTime.Now.Hour;
+			modelToBmpi.Second = (ushort)DateTime.Now.Second;
+			modelToBmpi.FPU_sns = 0;
+			modelToBmpi.Vputev_sns = 0;//??
+			modelToBmpi.Vy_sns = out_Vy;
+			modelToBmpi.Vxg = (float)(out_Wxg/ 1.852);
+			modelToBmpi.Vzg = (float)(out_Wzg/ 1.852);
+
+			modelToBmpi.lat_ins = 0;
+			modelToBmpi.lon_ins = 0;
+			modelToBmpi.Vputev_ins = 0;//??
+			modelToBmpi.PU = out_Kurs;//??
+			modelToBmpi.PsiIst = out_Kurs;
+			modelToBmpi.Uwind = (float)(in_WindPwrHorz * 3.6);
+			modelToBmpi.AlfaWind = in_WindDir;
+			modelToBmpi.FPUmagn = 0;//??
+			modelToBmpi.PSImagn = 0;//??
+			modelToBmpi.Snos = 0;//??
+			modelToBmpi.Teta = out_Tang;
+			modelToBmpi.Gamma = out_Kren;
+			modelToBmpi.OmegaZ = out_omegaz;
+			modelToBmpi.OmegaX = out_omegax;
+			modelToBmpi.OmegaY = out_omegay;
+			modelToBmpi.JX = 0;//??
+			modelToBmpi.JZ = 0;//??
+			modelToBmpi.JY = 0;//??
+			modelToBmpi.JYg = 0;//??
+
+			modelToBmpi.Hotn_QFE = in_Hbar;//??
+			modelToBmpi.Hotn_QNH = in_Hbar;//??
+			modelToBmpi.Vpr = out_Vprib;
+			modelToBmpi.Hbar_abs = in_Hbar;
+			modelToBmpi.Vist = out_Vx;
+			modelToBmpi.Tvozd = 0;
+
+			modelToBmpi.Hrv = in_Hbar;
+
+			modelToBmpi.lat_vpp = 0;
+			modelToBmpi.lon_vpp = 0;
+			modelToBmpi.Hzad = 0;
+			modelToBmpi.TOffset_Minute = 0;
+			modelToBmpi.TOffset_Hour = 0;
+			modelToBmpi.TOffset_Second = 0;
+			return  ConvertHelper.ObjectToByte(modelToBmpi);
 		}
 
 		#region Fields

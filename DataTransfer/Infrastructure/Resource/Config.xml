@@ -30,5 +30,11 @@
 		<Svvo>
 			<Route Port="20070" Ip="127.0.0.1"/>
 		</Svvo>
+		<Lptp>
+			<DynamicModel Port="20080" Ip="127.0.0.1"/>
+		</Lptp>
+		<Bpmi>
+			<DynamicModel Port="20090" Ip="127.0.0.1"/>
+		</Bpmi>
 	</NetworkSettings>
 </Config>

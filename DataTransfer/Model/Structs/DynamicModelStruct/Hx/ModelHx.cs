@@ -3,6 +3,7 @@ using DataTransfer.Model.Structs.DynamicModelStruct.Vaps;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using DataTransfer.Model.Structs.Bmpi;
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 {
@@ -132,6 +133,61 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 			for (int i = 68; i < dgram.Length; i = i + 8)
 				Array.Reverse(dgram, i, 8);
 			return dgram;
+		}
+
+		public override byte[] GetForBmpi(DynamicModelToBmpi modelToBmpi)
+		{
+			modelToBmpi.lat_sns = KinematicsState.Pos.Latitude;
+			modelToBmpi.lon_sns = KinematicsState.Pos.Longitude;
+			modelToBmpi.H_sns = KinematicsState.Pos.Elevation;
+			modelToBmpi.Day = (ushort)DateTime.Now.Day;
+			modelToBmpi.Month = (ushort)DateTime.Now.Month;
+			modelToBmpi.Year = (ushort)DateTime.Now.Year;
+			modelToBmpi.Minute = (ushort)DateTime.Now.Minute;
+			modelToBmpi.Hour = (ushort)DateTime.Now.Hour;
+			modelToBmpi.Second = (ushort)DateTime.Now.Second;
+			modelToBmpi.FPU_sns = 0;
+			modelToBmpi.Vputev_sns = 0;//??
+			modelToBmpi.Vy_sns = (float)VhclOutp.InstrumentsState.VyVar;
+			modelToBmpi.Vxg = (float)(VhclOutp.InstrumentsState.VsurfX * 1.944);
+			modelToBmpi.Vzg = (float)(VhclOutp.InstrumentsState.VsurfZ * 1.944);
+
+			modelToBmpi.lat_ins = KinematicsState.Pos.Latitude;
+			modelToBmpi.lon_ins = KinematicsState.Pos.Longitude;
+			modelToBmpi.Vputev_ins = 0;//??
+			modelToBmpi.PU = (float)KinematicsState.Angs.Psi;//??
+			modelToBmpi.PsiIst = (float)KinematicsState.Angs.Psi;
+			modelToBmpi.Uwind = (float)(VhclInp.AirState.WindSpeed.X * 3.6);
+			modelToBmpi.AlfaWind = 0;
+			modelToBmpi.FPUmagn = 0;//??
+			modelToBmpi.PSImagn = 0;//??
+			modelToBmpi.Snos = 0;//??
+			modelToBmpi.Teta = (float)KinematicsState.Angs.Fi;
+			modelToBmpi.Gamma = (float)KinematicsState.Angs.Gam;
+			modelToBmpi.OmegaZ = (float)KinematicsState.Rotation.Z;
+			modelToBmpi.OmegaX = (float)KinematicsState.Rotation.X;
+			modelToBmpi.OmegaY = (float)KinematicsState.Rotation.Y;
+			modelToBmpi.JX = (float)KinematicsState.Accel.X;
+			modelToBmpi.JZ = (float)KinematicsState.Accel.Z;
+			modelToBmpi.JY = (float)KinematicsState.Accel.Y;
+			modelToBmpi.JYg = 0;//??
+
+			modelToBmpi.Hotn_QFE = (float)KinematicsState.Pos.Elevation;//??
+			modelToBmpi.Hotn_QNH = (float)KinematicsState.Pos.Elevation;//??
+			modelToBmpi.Vpr = (float)VhclOutp.InstrumentsState.IAS;
+			modelToBmpi.Hbar_abs = (float)KinematicsState.Pos.Elevation;
+			modelToBmpi.Vist = (float)VhclOutp.InstrumentsState.TAS;
+			modelToBmpi.Tvozd = (float)VhclOutp.InstrumentsState.AirPars.TAT;
+
+			modelToBmpi.Hrv = (float)KinematicsState.Pos.Elevation; ;
+
+			modelToBmpi.lat_vpp = 0;
+			modelToBmpi.lon_vpp = 0;
+			modelToBmpi.Hzad = 0;
+			modelToBmpi.TOffset_Minute = 0;
+			modelToBmpi.TOffset_Hour = 0;
+			modelToBmpi.TOffset_Second = 0;
+			return ConvertHelper.ObjectToByte(modelToBmpi);
 		}
 
 		public ModelHx()

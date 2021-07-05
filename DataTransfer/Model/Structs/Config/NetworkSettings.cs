@@ -20,6 +20,12 @@ namespace DataTransfer.Model.Structs.Config
 
 		[XmlElement(ElementName = "Svvo")]
 		public Svvo Svvo { get; set; }
+
+		[XmlElement(ElementName = "Lptp")]
+		public Lptp Lptp { get; set; }
+
+		[XmlElement(ElementName = "Bpmi")]
+		public Bpmi Bpmi { get; set; }
 	}
 
 

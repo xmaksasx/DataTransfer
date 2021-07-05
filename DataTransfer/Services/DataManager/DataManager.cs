@@ -319,6 +319,8 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isSend)
 			{
+				var begin = DateTime.Now;
+
 				#region Отправка на модель
 
 				_udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
@@ -366,6 +368,13 @@ namespace DataTransfer.Services.DataManager
 
 				#endregion
 
+				#region Отправка на ЛПТП
+
+				_udpHelper.Send(_dynamicModel.GetBytes(), _config.NetworkSettings.Lptp.DynamicModel.Ip,
+					_config.NetworkSettings.Lptp.DynamicModel.Port);
+
+				#endregion
+
 				#region Обновление коллекций
 
 				App.Current.Dispatcher.Invoke(() => { 
@@ -375,6 +384,9 @@ namespace DataTransfer.Services.DataManager
 
 				#endregion
 
+				var end = DateTime.Now;
+
+				Console.WriteLine((end-begin).Milliseconds);
 				Thread.Sleep(20);
 			}
 		}

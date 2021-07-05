@@ -84,6 +84,8 @@
     <Compile Include="Model\Component\BaseComponent\Base.cs" />
     <Compile Include="Model\Component\BaseComponent\Header.cs" />
     <Compile Include="Model\Component\CollectionInfo.cs" />
+    <Compile Include="Model\Structs\Bmpi\DynamicModelToBmpi.cs" />
+    <Compile Include="Model\Structs\Bmpi\PlanPoleta.cs" />
     <Compile Include="Model\Structs\ChannelRadar.cs" />
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
@@ -97,12 +99,14 @@
     <Compile Include="Model\Structs\Config\Iup.cs" />
     <Compile Include="Model\Structs\Config\IupVaps.cs" />
     <Compile Include="Model\Structs\Config\Landing.cs" />
+    <Compile Include="Model\Structs\Config\Bpmi.cs" />
     <Compile Include="Model\Structs\Config\Model.cs" />
     <Compile Include="Model\Structs\Config\NetworkSettings.cs" />
     <Compile Include="Model\Structs\Config\Route.cs" />
     <Compile Include="Model\Structs\Config\Rud.cs" />
     <Compile Include="Model\Structs\Config\Rus.cs" />
     <Compile Include="Model\Structs\Config\State.cs" />
+    <Compile Include="Model\Structs\Config\Lptp.cs" />
     <Compile Include="Model\Structs\Config\Svvo.cs" />
     <Compile Include="Model\Structs\Config\TacticalEditor.cs" />
     <Compile Include="Model\Structs\ControlElements\ControlElement.cs" />
@@ -228,6 +232,7 @@
   <ItemGroup>
     <Resource Include="Infrastructure\Resource\Splash.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
