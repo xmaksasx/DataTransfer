@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Xml.Serialization;
 using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component;
 using DataTransfer.Model.Structs;
+using DataTransfer.Model.Structs.Bmpi;
 using DataTransfer.Model.Structs.Config.Base;
 using DataTransfer.Model.Structs.ControlElements;
-using DataTransfer.Model.Structs.DynamicModelStruct;
 using DataTransfer.Model.Structs.DynamicModelStruct.Hx;
 using DataTransfer.Model.Structs.DynamicModelStruct.Ka50;
 using DataTransfer.Model.Structs.DynamicModelStruct.Ka52;
 using DataTransfer.Model.Structs.DynamicModelStruct.Vaps;
-using DataTransfer.Model.Structs.RouteStruct;
 using DataTransfer.Services.ControlElements;
+using ControlElement = DataTransfer.Model.Structs.ControlElements.ControlElement;
+using DynamicModel = DataTransfer.Model.Structs.DynamicModelStruct.DynamicModel;
+using Landing = DataTransfer.Model.Structs.RouteStruct.Landing;
+using Route = DataTransfer.Model.Structs.RouteStruct.Route;
 
 namespace DataTransfer.Services.DataManager
 {
@@ -34,6 +34,7 @@ namespace DataTransfer.Services.DataManager
 		#region Objects
 
 		private ChannelRadar _channelRadar;
+		private DynamicModelToBmpi _dynamicModelToBmpi;
 		private ChannelThermalEffect _channelThermalEffect;
 		private ChannelTvHeadEffect _channelTvHeadEffect;
 		private ControlElement _controlElement;
@@ -144,6 +145,7 @@ namespace DataTransfer.Services.DataManager
 			_deviceControlElement = DeviceControlElement.GetInstance();
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rus.Guid);
 			_deviceControlElement.AddJoystick(_config.Default.DefaultControlElement.Rud.Guid);
+			_dynamicModelToBmpi = new DynamicModelToBmpi();
 			_aircraftPosition = new AircraftPosition();
 			_dynamicModelToVaps = new DynamicModelToVaps();
 			_modelState = new ModelState();
@@ -372,6 +374,13 @@ namespace DataTransfer.Services.DataManager
 
 				_udpHelper.Send(_dynamicModel.GetBytes(), _config.NetworkSettings.Lptp.DynamicModel.Ip,
 					_config.NetworkSettings.Lptp.DynamicModel.Port);
+
+				#endregion
+
+				#region Отправка на БПМИ
+
+				_udpHelper.Send(_dynamicModel.GetForBmpi(_dynamicModelToBmpi), _config.NetworkSettings.Bpmi.DynamicModel.Ip,
+					_config.NetworkSettings.Bpmi.DynamicModel.Port);
 
 				#endregion
 
