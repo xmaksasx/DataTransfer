@@ -8,11 +8,14 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Pue</RootNamespace>
     <AssemblyName>Pue</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,7 +36,23 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DynamicDataDisplay, Version=0.3.2.0, Culture=neutral, PublicKeyToken=5b7d744a7263923f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\DynamicDataDisplay.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentWPF, Version=0.9.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentWPF.0.9.0\lib\net45\FluentWPF.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignColors, Version=2.0.1.2556, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.2.0.1\lib\net452\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=4.1.0.2556, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.4.1.0\lib\net452\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -85,6 +104,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,5 +113,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets'))" />
+  </Target>
 </Project>
