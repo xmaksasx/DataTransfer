@@ -159,6 +159,7 @@
     <Compile Include="Model\Structs\RouteStruct\AerodromeStruct\RunwayInfo.cs" />
     <Compile Include="Model\Structs\RouteStruct\Route.cs" />
     <Compile Include="Model\Structs\StartPosition.cs" />
+    <Compile Include="Model\Structs\Lptp.cs" />
     <Compile Include="Services\ControlElements\DeviceControlElement.cs" />
     <Page Include="Views\DataDescriptionCreatorWindow.xaml">
       <SubType>Designer</SubType>
