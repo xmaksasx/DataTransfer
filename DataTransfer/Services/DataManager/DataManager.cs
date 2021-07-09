@@ -301,6 +301,8 @@ namespace DataTransfer.Services.DataManager
 
 				case "Route":
 					_route.Assign(receivedBytes);
+					_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Route.Ip,
+						_config.NetworkSettings.IupVaps.Route.Port);
 					break;
 
 				case "Landing":
@@ -341,8 +343,7 @@ namespace DataTransfer.Services.DataManager
 				_udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps), _config.NetworkSettings.IupVaps.DynamicModel.Ip,
 					_config.NetworkSettings.IupVaps.DynamicModel.Port);
 
-				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Route.Ip,
-					_config.NetworkSettings.IupVaps.Route.Port);
+				
 
 				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
 				_config.NetworkSettings.IupVaps.Landing.Port);
