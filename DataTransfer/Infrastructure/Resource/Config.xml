@@ -3,8 +3,8 @@
 	<Default>
 		<!--Ka50, Hx-->
 		<DefaultDynamicModel Value="Ka52"/>
-		<!--Network-->
-		<DefaultControlElement Value="Usb">
+		<!--Ethernet-->
+		<DefaultControlElement Value="Joystick">
 			<Rus Guid="0402044f-0000-0000-0000-504944564944"/>
 			<Rud Guid="0404044f-0000-0000-0000-504944564944"/>
 		</DefaultControlElement>

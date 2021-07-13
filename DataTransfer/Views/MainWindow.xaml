@@ -70,6 +70,22 @@
 					</MenuItem>
 					<MenuItem VerticalAlignment="Center" Header="Органы управления">
 						<MenuItem Click="MenuItem_OnClick" Header="Диспетчер УСО" />
+						<MenuItem Header="Управления от джостика">
+							<MenuItem.Icon>
+								<RadioButton
+									Margin="-2"
+									GroupName="controlElement"
+									IsChecked="{Binding ControlElementSelect, Converter={StaticResource ResourceKey=ModelSwitchConverter}, ConverterParameter=Joystick}" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Управления от сети">
+							<MenuItem.Icon>
+								<RadioButton
+									Margin="-2"
+									GroupName="controlElement"
+									IsChecked="{Binding ControlElementSelect, Converter={StaticResource ResourceKey=ModelSwitchConverter}, ConverterParameter=Ethernet}" />
+							</MenuItem.Icon>
+						</MenuItem>
 						<MenuItem Header="Перезапуск" />
 					</MenuItem>
 					<MenuItem VerticalAlignment="Center" Header="Модель">
@@ -231,11 +247,10 @@
 		</Grid>
 		<materialDesign:Snackbar
 			Grid.Row="2"
+			HorizontalAlignment="Stretch"
 			Background="#B2636363"
 			Foreground="White"
-			MessageQueue="{Binding MessageQueue}" HorizontalAlignment="Stretch">
-
-		</materialDesign:Snackbar>
+			MessageQueue="{Binding MessageQueue}" />
 		<StatusBar Grid.Row="3" Background="#FF212121">
 			<StatusBarItem>
 				<StackPanel Orientation="Horizontal">

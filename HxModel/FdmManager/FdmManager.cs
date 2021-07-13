@@ -254,8 +254,7 @@ namespace HxModel.FdmManager
 						
 					}
 					break;
-
-				default:
+                default:
 					if (receivedBytes.Length == 4)
 					{
 						_gmTerrainH = BitConverter.ToSingle(receivedBytes, 0);
@@ -264,8 +263,7 @@ namespace HxModel.FdmManager
 			}
 		}
 
-	
-		void Send()
+          void Send()
 		{
 			while (_isSend)
 			{

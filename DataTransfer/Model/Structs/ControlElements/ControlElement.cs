@@ -40,6 +40,19 @@ namespace DataTransfer.Model.Structs.ControlElements
 		{
 		}
 
+
+		public virtual void UpdateRus(EthernetControlElement joystickState)
+		{
+		}
+
+		public virtual void UpdatePedals(EthernetControlElement joystickState)
+		{
+		}
+
+		public virtual void UpdateRud(EthernetControlElement joystickState)
+		{
+		}
+
 		public void Update(byte[] bytes)
 		{
 		}

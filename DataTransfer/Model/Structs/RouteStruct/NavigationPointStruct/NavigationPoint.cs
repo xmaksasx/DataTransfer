@@ -24,20 +24,20 @@ namespace DataTransfer.Model.Structs.RouteStruct.NavigationPointStruct
         /// </summary>
         [Description("признак исполняемой НТ 0-нет, 1-да")]
         public double Executable;
-
+    
 
         /// <summary>
         /// признак прохода
         /// </summary>
         [Description("признак прохода")]
         public double PrPro;
-
+      
         /// <summary>
         /// Геодезические координаты
         /// </summary>
         [Description("Геодезические координаты")]
         public GeoCoordinate GeoCoordinate;
-
+        
         /// <summary>
         /// Расчетные параметры 
         /// </summary>

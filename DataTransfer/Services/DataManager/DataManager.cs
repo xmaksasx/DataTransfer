@@ -46,6 +46,7 @@ namespace DataTransfer.Services.DataManager
 		private DeviceControlElement _deviceControlElement;
 		private Landing _landing;
 		private Route _route;
+		private EthernetControlElement _ethernetControlElement;
 		private Config _config;
 
 		#endregion
@@ -67,6 +68,7 @@ namespace DataTransfer.Services.DataManager
 		private bool _isPoll = true;
 		private bool _isReceive = true;
 		private string _isCorrectModel;
+		private string _typeControlElement;
 
 
 		//_ipModel
@@ -152,6 +154,7 @@ namespace DataTransfer.Services.DataManager
 			_channelRadar = new ChannelRadar();
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
+			_ethernetControlElement = new EthernetControlElement();
 			if (_typeModel == 0)
 			{
 				_controlElement = new ControlElementKa52();
@@ -188,6 +191,12 @@ namespace DataTransfer.Services.DataManager
 				DynamicInfos.Clear();
 			}
 		}
+
+		public void ChangeControlElement(string controlElement)
+		{
+			_typeControlElement = controlElement;
+		}
+
 
 		public void RestartControlElement()
 		{
@@ -241,8 +250,16 @@ namespace DataTransfer.Services.DataManager
 		{
 			while (_isPoll)
 			{
-				_controlElement.UpdateRud(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rud.Guid));
-				_controlElement.UpdateRus(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rus.Guid));
+				if (_typeControlElement == "Joystick")
+				{
+					_controlElement.UpdateRud(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rud.Guid));
+					_controlElement.UpdateRus(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rus.Guid));
+				}
+				if (_typeControlElement == "Ethernet")
+				{
+					_controlElement.UpdateRud(_ethernetControlElement);
+					_controlElement.UpdateRus(_ethernetControlElement);
+				}
 				Thread.Sleep(20);
 			}
 		}
@@ -312,7 +329,11 @@ namespace DataTransfer.Services.DataManager
 				case "ModelState":
 					_modelState.AssignReverse(receivedBytes);
 					break;
-					
+
+				case "USO":
+					_ethernetControlElement.AssignReverse(receivedBytes);
+					break;
+
 
 				default:
 					break;
@@ -325,14 +346,16 @@ namespace DataTransfer.Services.DataManager
 			{
 				var begin = DateTime.Now;
 
-				#region Отправка на модель
-
-				_udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
+                #region Отправка на модель
+            
+                _udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
 					_config.NetworkSettings.Model.ControlElement.Port);
+                //_udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
+                    //_config.NetworkSettings.Model.ControlElement.Port);
 
-				_udpHelper.Send(_modelState.GetBytes(), _config.NetworkSettings.Model.State.Ip,
+                _udpHelper.Send(_modelState.GetBytes(), _config.NetworkSettings.Model.State.Ip,
 					_config.NetworkSettings.Model.State.Port);
-				
+
 				#endregion
 
 				#region Отправка на ИУП
@@ -340,33 +363,35 @@ namespace DataTransfer.Services.DataManager
 				_udpHelper.Send(_controlElement.GetReverseBytes(), _config.NetworkSettings.IupVaps.ControlElement.Ip,
 					_config.NetworkSettings.IupVaps.ControlElement.Port);
 
-				_udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps), _config.NetworkSettings.IupVaps.DynamicModel.Ip,
+				_udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps),
+					_config.NetworkSettings.IupVaps.DynamicModel.Ip,
 					_config.NetworkSettings.IupVaps.DynamicModel.Port);
 
-				
 
-				_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
-				_config.NetworkSettings.IupVaps.Landing.Port);
+
+				_udpHelper.Send(_landing.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
+					_config.NetworkSettings.IupVaps.Landing.Port);
 
 				#endregion
 
 				#region Отправка на отдельные индикаторы
 
-				_udpHelper.Send(_dynamicModel.GetBytes(), _config.NetworkSettings.Iup.DynamicModel.Ip,
-					_config.NetworkSettings.Iup.DynamicModel.Port);
+					_udpHelper.Send(_dynamicModel.GetBytes(), _config.NetworkSettings.Iup.DynamicModel.Ip,
+						_config.NetworkSettings.Iup.DynamicModel.Port);
 
 				#endregion
 
 				#region Отправка на тактический редактор
 
-				_udpHelper.Send(_dynamicModel.GetPosition(_aircraftPosition), _config.NetworkSettings.TacticalEditor.DynamicModel.Ip,
+				_udpHelper.Send(_dynamicModel.GetPosition(_aircraftPosition),
+					_config.NetworkSettings.TacticalEditor.DynamicModel.Ip,
 					_config.NetworkSettings.TacticalEditor.DynamicModel.Port);
 
 				#endregion
 
 				#region Отправка на СВВО
 
-				_udpHelper.Send(_route.GetBytes(), _config.NetworkSettings.Svvo.Route.Ip, 
+				_udpHelper.Send(_route.GetBytes(), _config.NetworkSettings.Svvo.Route.Ip,
 					_config.NetworkSettings.Svvo.Route.Port);
 
 				#endregion
@@ -380,14 +405,16 @@ namespace DataTransfer.Services.DataManager
 
 				#region Отправка на БПМИ
 
-				_udpHelper.Send(_dynamicModel.GetForBmpi(_dynamicModelToBmpi), _config.NetworkSettings.Bpmi.DynamicModel.Ip,
+				_udpHelper.Send(_dynamicModel.GetForBmpi(_dynamicModelToBmpi),
+					_config.NetworkSettings.Bpmi.DynamicModel.Ip,
 					_config.NetworkSettings.Bpmi.DynamicModel.Port);
 
 				#endregion
 
 				#region Обновление коллекций
 
-				App.Current.Dispatcher.Invoke(() => { 
+				App.Current.Dispatcher.Invoke(() =>
+				{
 					_dynamicModel.Update(DynamicInfos);
 					_controlElement.Update(ControlElementInfos);
 				});
@@ -396,7 +423,7 @@ namespace DataTransfer.Services.DataManager
 
 				var end = DateTime.Now;
 
-				Console.WriteLine((end-begin).Milliseconds);
+				Console.WriteLine((end - begin).Milliseconds);
 				Thread.Sleep(20);
 			}
 		}

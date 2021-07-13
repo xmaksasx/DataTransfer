@@ -95,7 +95,22 @@ namespace DataTransfer.ViewModels
 				_dataManager.ChangeModel(value);
 			}
 		}
-		#endregion		
+		#endregion
+
+		#region ModelSelect: string - Выбранные органы управления
+		/// <summary>Выбранные органы управления</summary>
+		private string _controlElementSelect;
+		/// <summary>Выбранные органы управления</summary>
+		public string ControlElementSelect
+		{
+			get => _controlElementSelect;
+			set
+			{
+				Set(ref _controlElementSelect, value);
+				_dataManager.ChangeControlElement(value);
+			}
+		}
+		#endregion
 
 		#region Команды
 
@@ -244,6 +259,7 @@ namespace DataTransfer.ViewModels
 			_deviceControlElement = DeviceControlElement.GetInstance();
 			_dataManager.Init();
 			ModelSelect = Config.Instance().Default.DefaultDynamicModel.Value;
+			ControlElementSelect = Config.Instance().Default.DefaultControlElement.Value;
 			DynamicInfos = _dataManager.DynamicInfos;
 			ControlElementInfos = _dataManager.ControlElementInfos;
 			_dataManager.StatusModelEvent += OnStatusModelEvent; 

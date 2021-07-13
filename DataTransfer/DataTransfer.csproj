@@ -113,6 +113,7 @@
     <Compile Include="Model\Structs\ControlElements\ControlElementKa50.cs" />
     <Compile Include="Model\Structs\ControlElements\ControlElementKa52.cs" />
     <Compile Include="Model\Structs\ControlElements\CyclicStepHandle.cs" />
+    <Compile Include="Model\Structs\ControlElements\EthernetControlElement.cs" />
     <Compile Include="Model\Structs\ControlElements\GeneralStepHandle.cs" />
     <Compile Include="Model\Structs\ControlElements\Pedals.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\DynamicModel.cs" />

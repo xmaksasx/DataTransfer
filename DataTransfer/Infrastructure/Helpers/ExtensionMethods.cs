@@ -10,9 +10,10 @@ namespace DataTransfer.Infrastructure.Helpers
 	{
 		public static void ToBigEndianUnicode16(this char[] arr) 
 		{
-			Array.Copy(Encoding.Unicode.GetBytes(arr), arr, arr.Length);
-			//for (int i = 0; i < arr.Length; i = i + 8)
-			//	Array.Reverse(arr,i,8);
+			Array.Copy(Encoding.BigEndianUnicode.GetBytes(arr), arr, arr.Length);
+			//for (int i = 0; i < arr.Length; i = i + 4)
+			//	Array.Reverse(arr,i,4);
+			//Array.Reverse(arr);
 		}
 
 		public static void ToBigEndianUnicode(this char[] arr)
@@ -26,8 +27,8 @@ namespace DataTransfer.Infrastructure.Helpers
 		public static void ToBigEndianUnicode40(this char[] arr)
 		{
 			Array.Copy(Encoding.BigEndianUnicode.GetBytes(arr), arr, arr.Length);
-			for (int i = 0; i < arr.Length; i = i + 8)
-				Array.Reverse(arr, i, 8);
+		//for (int i = 0; i < arr.Length; i = i + 8)
+		//		Array.Reverse(arr, i, 8);
 			//Array.Reverse(arr);
 		}
 
