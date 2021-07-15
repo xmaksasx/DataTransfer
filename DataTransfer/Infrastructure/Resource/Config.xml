@@ -11,30 +11,61 @@
 	</Default>
 	<NetworkSettings>
 		<Model>
-			<Command Port="20030" Ip="127.0.0.1"/>
-			<ControlElement Port="20031" Ip="127.0.0.1"/>
-			<State Port="20032" Ip="127.0.0.1"/>
+			<Command>
+				<IPPoint Port="20030" Ip="127.0.0.1"/>
+			</Command>
+			<ControlElement>
+				<IPPoint Port="20031" Ip="127.0.0.1"/>
+			</ControlElement>
+			<State>
+				<IPPoint Port="20032" Ip="127.0.0.1"/>
+			</State>
 		</Model>
 		<IupVaps>
-			<ControlElement Port="20040" Ip="127.0.0.1"/>
-			<DynamicModel Port="20041" Ip="127.0.0.1"/>
-			<Route Port="20044" Ip="127.0.0.1"/>
-			<Landing Port="20045" Ip="127.0.0.1"/>
+			<ControlElement>
+				<IPPoint Port="20040" Ip="192.168.0.2"/>
+			</ControlElement>
+			<DynamicModel>
+				<IPPoint Port="20041" Ip="192.168.0.2"/>
+				<IPPoint Port="20041" Ip="192.168.0.1"/>
+			</DynamicModel>
+			<Route>
+				<IPPoint Port="20044" Ip="192.168.0.2"/>
+				<IPPoint Port="20044" Ip="192.168.0.1"/>
+			</Route>
+			<Landing>
+				<IPPoint Port="20045" Ip="192.168.0.2"/>
+				<IPPoint Port="20045" Ip="192.168.0.1"/>
+			</Landing>
 		</IupVaps>
 		<Iup>
-			<DynamicModel Port="20050" Ip="127.0.0.1"/>
+			<DynamicModel>
+				<IPPoint Port="20050" Ip="192.168.0.2"/>
+			</DynamicModel>
 		</Iup>
 		<TacticalEditor>
-			<DynamicModel Port="20060" Ip="127.0.0.1"/>
+			<DynamicModel>
+				<IPPoint Port="20060" Ip="192.168.0.1"/>
+			</DynamicModel>
 		</TacticalEditor>
 		<Svvo>
-			<Route Port="20070" Ip="127.0.0.1"/>
+			<Route>
+				<IPPoint Port="20070" Ip="192.168.0.1"/>
+				<IPPoint Port="20070" Ip="192.168.0.2"/>
+				<IPPoint Port="20070" Ip="192.168.0.3"/>
+				<IPPoint Port="20070" Ip="192.168.0.4"/>
+				<IPPoint Port="20070" Ip="192.168.0.6"/>
+			</Route>
 		</Svvo>
 		<Lptp>
-			<DynamicModel Port="20080" Ip="127.0.0.1"/>
+			<DynamicModel>
+				<IPPoint Port="20080" Ip="192.168.0.2"/>
+			</DynamicModel>
 		</Lptp>
 		<Bpmi>
-			<DynamicModel Port="20090" Ip="127.0.0.1"/>
+			<DynamicModel>
+				<IPPoint Port="20090" Ip="192.168.0.1"/>
+			</DynamicModel>
 		</Bpmi>
 	</NetworkSettings>
 </Config>

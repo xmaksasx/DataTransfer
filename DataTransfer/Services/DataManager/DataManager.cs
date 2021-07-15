@@ -256,13 +256,14 @@ namespace DataTransfer.Services.DataManager
 			if (_stateModel==-1)
 			{
 				_startPosition.InitPosition(0);
-				_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip, 
-					_config.NetworkSettings.Model.Command.Port);
+				foreach (var ippoint in _config.NetworkSettings.Model.Command.IPPoint)
+					_udpHelper.Send(_startPosition.GetBytes(), ippoint.Ip,	ippoint.Port);
 			}
 			
 			_startPosition.InitPosition(1);
-			_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip,
-								_config.NetworkSettings.Model.Command.Port);
+			foreach (var ippoint in _config.NetworkSettings.Model.Command.IPPoint)
+				_udpHelper.Send(_startPosition.GetBytes(), ippoint.Ip, ippoint.Port);
+
 			OnStatusModelEvent("Идет моделирование!");
 			_stateModel = 1;
 		}
@@ -270,8 +271,8 @@ namespace DataTransfer.Services.DataManager
 		public void Pause()
 		{
 			_startPosition.InitPosition(2);
-			_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip,
-								_config.NetworkSettings.Model.Command.Port);
+			foreach (var ippoint in _config.NetworkSettings.Model.Command.IPPoint)
+				_udpHelper.Send(_startPosition.GetBytes(), ippoint.Ip, ippoint.Port);
 			OnStatusModelEvent("Пауза!");
 			_stateModel = 2;
 		}
@@ -279,8 +280,8 @@ namespace DataTransfer.Services.DataManager
 		public void Stop()
 		{
 			_startPosition.InitPosition(-1);
-			_udpHelper.Send(_startPosition.GetBytes(), _config.NetworkSettings.Model.Command.Ip,
-								_config.NetworkSettings.Model.Command.Port);
+			foreach (var ippoint in _config.NetworkSettings.Model.Command.IPPoint)
+				_udpHelper.Send(_startPosition.GetBytes(), ippoint.Ip, ippoint.Port);
 			OnStatusModelEvent("Моделирование остановлено!"); 
 			_stateModel = -1;
 		}
@@ -374,8 +375,8 @@ namespace DataTransfer.Services.DataManager
 
 				case "Route":
 					_route.Assign(receivedBytes);
-					_udpHelper.Send(_route.GetReverseBytes(), _config.NetworkSettings.IupVaps.Route.Ip,
-						_config.NetworkSettings.IupVaps.Route.Port);
+					foreach (var ippoint in _config.NetworkSettings.IupVaps.Route.IPPoint)
+						_udpHelper.Send(_route.GetReverseBytes(), ippoint.Ip,ippoint.Port);
 					break;
 
 				case "Landing":
@@ -401,67 +402,69 @@ namespace DataTransfer.Services.DataManager
 			while (_isSend)
 			{
 				var begin = DateTime.Now;
+				var controlElementBytes = _controlElement.GetBytes();
+				var controlElementBytesReverse = _controlElement.GetReverseBytes();
+				var dynamicModelBytesReverse = _dynamicModel.GetForVaps(_dynamicModelToVaps);
+				var landingBytesReverse = _landing.GetReverseBytes();
+				var routeBytes = _route.GetBytes();
+				var dynamicModelBytes = _dynamicModel.GetBytes();
 
-                #region Отправка на модель
-            
-                _udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
-					_config.NetworkSettings.Model.ControlElement.Port);
-                //_udpHelper.Send(_controlElement.GetBytes(), _config.NetworkSettings.Model.ControlElement.Ip,
-                    //_config.NetworkSettings.Model.ControlElement.Port);
+				#region Отправка на модель
 
-                _udpHelper.Send(_modelState.GetBytes(), _config.NetworkSettings.Model.State.Ip,
-					_config.NetworkSettings.Model.State.Port);
+
+				foreach (var ippoint in _config.NetworkSettings.Model.ControlElement.IPPoint)
+					_udpHelper.Send(controlElementBytes, ippoint.Ip, ippoint.Port);
+
+				foreach (var ippoint in _config.NetworkSettings.Model.State.IPPoint)
+					_udpHelper.Send(_modelState.GetBytes(), ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на ИУП
 
-				_udpHelper.Send(_controlElement.GetReverseBytes(), _config.NetworkSettings.IupVaps.ControlElement.Ip,
-					_config.NetworkSettings.IupVaps.ControlElement.Port);
+				foreach (var ippoint in _config.NetworkSettings.IupVaps.ControlElement.IPPoint)
+					_udpHelper.Send(controlElementBytesReverse, ippoint.Ip, ippoint.Port);
 
-				_udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps),
-					_config.NetworkSettings.IupVaps.DynamicModel.Ip,
-					_config.NetworkSettings.IupVaps.DynamicModel.Port);
+				foreach (var ippoint in _config.NetworkSettings.IupVaps.DynamicModel.IPPoint)
+					_udpHelper.Send(dynamicModelBytesReverse, ippoint.Ip, ippoint.Port);
 
-				_udpHelper.Send(_landing.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
-					_config.NetworkSettings.IupVaps.Landing.Port);
+				foreach (var ippoint in _config.NetworkSettings.IupVaps.Landing.IPPoint)
+					_udpHelper.Send(landingBytesReverse, ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на отдельные индикаторы
 
-					_udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps), _config.NetworkSettings.Iup.DynamicModel.Ip,
-						_config.NetworkSettings.Iup.DynamicModel.Port);
+				foreach (var ippoint in _config.NetworkSettings.Iup.DynamicModel.IPPoint)
+					_udpHelper.Send(dynamicModelBytesReverse, ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на тактический редактор
 
-				_udpHelper.Send(_dynamicModel.GetPosition(_aircraftPosition),
-					_config.NetworkSettings.TacticalEditor.DynamicModel.Ip,
-					_config.NetworkSettings.TacticalEditor.DynamicModel.Port);
+				foreach (var ippoint in _config.NetworkSettings.TacticalEditor.DynamicModel.IPPoint)
+					_udpHelper.Send(_dynamicModel.GetPosition(_aircraftPosition), ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на СВВО
 
-				_udpHelper.Send(_route.GetBytes(), _config.NetworkSettings.Svvo.Route.Ip,
-					_config.NetworkSettings.Svvo.Route.Port);
+				foreach (var ippoint in _config.NetworkSettings.TacticalEditor.DynamicModel.IPPoint)
+					_udpHelper.Send(routeBytes, ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на ЛПТП
 
-				_udpHelper.Send(_dynamicModel.GetBytes(), _config.NetworkSettings.Lptp.DynamicModel.Ip,
-					_config.NetworkSettings.Lptp.DynamicModel.Port);
+				foreach (var ippoint in _config.NetworkSettings.TacticalEditor.DynamicModel.IPPoint)
+					_udpHelper.Send(dynamicModelBytes, ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на БПМИ
 
-				_udpHelper.Send(_dynamicModel.GetForBmpi(_dynamicModelToBmpi),
-					_config.NetworkSettings.Bpmi.DynamicModel.Ip,
-					_config.NetworkSettings.Bpmi.DynamicModel.Port);
+				foreach (var ippoint in _config.NetworkSettings.TacticalEditor.DynamicModel.IPPoint)
+					_udpHelper.Send(_dynamicModel.GetForBmpi(_dynamicModelToBmpi), ippoint.Ip, ippoint.Port);
 
 				#endregion
 

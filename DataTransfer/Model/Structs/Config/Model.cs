@@ -11,12 +11,12 @@ namespace DataTransfer.Model.Structs.Config
 
 		[XmlElement(ElementName = "ControlElement")]
 		public ControlElement ControlElement { get; set; }
-		
+
 		[XmlElement(ElementName = "State")]
 		public State State { get; set; }
-
-		
 	}
 
 
+
+	
 }

@@ -2,14 +2,6 @@
 
 namespace DataTransfer.Model.Structs.Config
 {
-	// using System.Xml.Serialization;
-	// XmlSerializer serializer = new XmlSerializer(typeof(Config));
-	// using (StringReader reader = new StringReader(xml))
-	// {
-	//    var test = (Config)serializer.Deserialize(reader);
-	// }
-
-
 	[XmlRoot(ElementName = "DefaultDynamicModel")]
 	public class DefaultDynamicModel
 	{
@@ -19,4 +11,6 @@ namespace DataTransfer.Model.Structs.Config
 	}
 
 
+
+	
 }

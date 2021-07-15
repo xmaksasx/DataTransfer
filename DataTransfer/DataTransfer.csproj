@@ -91,6 +91,7 @@
     <Compile Include="Model\Structs\ChannelRadar.cs" />
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
+    <Compile Include="Model\Structs\Config\Bpmi.cs" />
     <Compile Include="Model\Structs\Config\Command.cs" />
     <Compile Include="Model\Structs\Config\Base\Config.cs" />
     <Compile Include="Model\Structs\Config\ControlElement.cs" />
@@ -98,17 +99,17 @@
     <Compile Include="Model\Structs\Config\DefaultControlElement.cs" />
     <Compile Include="Model\Structs\Config\DefaultDynamicModel.cs" />
     <Compile Include="Model\Structs\Config\DynamicModel.cs" />
+    <Compile Include="Model\Structs\Config\IPPoint.cs" />
     <Compile Include="Model\Structs\Config\Iup.cs" />
     <Compile Include="Model\Structs\Config\IupVaps.cs" />
     <Compile Include="Model\Structs\Config\Landing.cs" />
-    <Compile Include="Model\Structs\Config\Bpmi.cs" />
+    <Compile Include="Model\Structs\Config\Lptp.cs" />
     <Compile Include="Model\Structs\Config\Model.cs" />
     <Compile Include="Model\Structs\Config\NetworkSettings.cs" />
     <Compile Include="Model\Structs\Config\Route.cs" />
     <Compile Include="Model\Structs\Config\Rud.cs" />
     <Compile Include="Model\Structs\Config\Rus.cs" />
     <Compile Include="Model\Structs\Config\State.cs" />
-    <Compile Include="Model\Structs\Config\Lptp.cs" />
     <Compile Include="Model\Structs\Config\Svvo.cs" />
     <Compile Include="Model\Structs\Config\TacticalEditor.cs" />
     <Compile Include="Model\Structs\ControlElements\ControlElement.cs" />

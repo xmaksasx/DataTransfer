@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace DataTransfer.Model.Structs.Config
 {
@@ -6,12 +7,11 @@ namespace DataTransfer.Model.Structs.Config
 	public class Command
 	{
 
-		[XmlAttribute(AttributeName = "Port")]
-		public int Port { get; set; }
-
-		[XmlAttribute(AttributeName = "Ip")]
-		public string Ip { get; set; }
+		[XmlElement(ElementName = "IPPoint")]
+		public List<IPPoint> IPPoint { get; set; }
 	}
 
 
+
+	
 }
