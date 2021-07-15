@@ -7,6 +7,6 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 	struct FCSValue
 	{
 		double Value; // величина параметра
-		double Activated; // признак активности данного параметра
+		byte Activated; // признак активности данного параметра
 	}
 }

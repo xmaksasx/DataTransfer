@@ -17,8 +17,8 @@ namespace HxModel.Models
 		public GearState MainGearLeft;
 		public GearState MainGearRight;
 
-		public int Trimmer; // признак нажатия кнопки триммера продольно-поперечного упрвления
-		public int Friction; // признак нажатия кнопки фиркциона общего шага
+		public byte Trimmer; // признак нажатия кнопки триммера продольно-поперечного упрвления
+		public byte Friction; // признак нажатия кнопки фиркциона общего шага
 
 		public double AltimeterBaroPressure; // давление, установленное на барометрическом высотомере, ммрс
 	}

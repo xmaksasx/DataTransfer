@@ -7,6 +7,7 @@ using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Component;
 using DataTransfer.Model.Structs;
 using DataTransfer.Model.Structs.Bmpi;
+using DataTransfer.Model.Structs.Brunner;
 using DataTransfer.Model.Structs.Config.Base;
 using DataTransfer.Model.Structs.ControlElements;
 using DataTransfer.Model.Structs.DynamicModelStruct.Hx;
@@ -31,9 +32,27 @@ namespace DataTransfer.Services.DataManager
 		private static extern bool QueryPerformanceFrequency(out long lpFrequency);
 
 
-		#region Objects
+		[DllImport(@"CLSEConnector.dll", EntryPoint = "Initialize", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Init(string path); //ConfigBrunner.xml
 
-		private ChannelRadar _channelRadar;
+        [DllImport(@"CLSEConnector.dll", EntryPoint = "Step", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Step(IntPtr InpControl, IntPtr OutpState); //ConfigBrunner.xml
+                                                                             
+        [DllImport(@"CLSEConnector.dll", EntryPoint = "GetDllVersion", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GetDllVersion(IntPtr version, IntPtr release, IntPtr releaseDay, IntPtr releaseMonth,
+            IntPtr releaseYear);
+
+        private IntPtr GetIntPtr<T>(T obj)
+        {
+            var size = Marshal.SizeOf(obj);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(obj, ptr, false);
+            return ptr;
+        }
+
+        #region Objects
+
+        private ChannelRadar _channelRadar;
 		private DynamicModelToBmpi _dynamicModelToBmpi;
 		private ChannelThermalEffect _channelThermalEffect;
 		private ChannelTvHeadEffect _channelTvHeadEffect;
@@ -48,6 +67,9 @@ namespace DataTransfer.Services.DataManager
 		private Route _route;
 		private EthernetControlElement _ethernetControlElement;
 		private Config _config;
+		private CLSEControl _cLSEControl;
+		private CLSEState _cLSEState;
+
 
 		#endregion
 
@@ -58,6 +80,7 @@ namespace DataTransfer.Services.DataManager
 		public event Message StatusModelEvent;
 		public event Message StatusPacketEvent;
 		public event Message MessageEvent;
+
 		private Thread _receiveThread;
 		private Thread _sendThread;
 		private Thread _pollThread;
@@ -155,6 +178,8 @@ namespace DataTransfer.Services.DataManager
 			_channelThermalEffect = new ChannelThermalEffect();
 			_channelTvHeadEffect = new ChannelTvHeadEffect();
 			_ethernetControlElement = new EthernetControlElement();
+			_cLSEControl = new CLSEControl();
+			_cLSEState = new CLSEState();
 			if (_typeModel == 0)
 			{
 				_controlElement = new ControlElementKa52();
@@ -163,7 +188,26 @@ namespace DataTransfer.Services.DataManager
 			_startPosition = new StartPosition();
 			_landing = new Landing();
 			_route = new Route();
-		}
+
+            uint version = 0;
+            uint release = 0;
+            uint releaseDay = 0;
+            uint releaseMonth = 0;
+            uint releaseYear = 0;
+            IntPtr pversion = GetIntPtr(version);
+            IntPtr prelease = GetIntPtr(release);
+            IntPtr preleaseDay = GetIntPtr(releaseDay);
+            IntPtr preleaseMonth = GetIntPtr(releaseMonth);
+            IntPtr preleaseYear = GetIntPtr(releaseYear);
+            GetDllVersion(pversion, prelease, preleaseDay, preleaseMonth, preleaseYear);
+            version = (uint)Marshal.ReadInt32(pversion);
+            release = (uint)Marshal.ReadInt32(prelease);
+            releaseDay = (uint)Marshal.ReadInt32(preleaseDay);
+            releaseMonth = (uint)Marshal.ReadInt32(preleaseMonth);
+            releaseYear = (uint)Marshal.ReadInt32(preleaseYear);
+            Init("ConfigBrunner.xml"); 
+
+        }
 
 		#endregion
 
@@ -196,7 +240,6 @@ namespace DataTransfer.Services.DataManager
 		{
 			_typeControlElement = controlElement;
 		}
-
 
 		public void RestartControlElement()
 		{
@@ -242,11 +285,11 @@ namespace DataTransfer.Services.DataManager
 			_stateModel = -1;
 		}
 
-		#endregion
+        #endregion
 
-		#region Method for thread
+        #region Method for thread
 
-		private void Poll()
+        private void Poll()
 		{
 			while (_isPoll)
 			{
@@ -255,12 +298,25 @@ namespace DataTransfer.Services.DataManager
 					_controlElement.UpdateRud(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rud.Guid));
 					_controlElement.UpdateRus(_deviceControlElement?.ReadData(_config.Default.DefaultControlElement.Rus.Guid));
 				}
+
 				if (_typeControlElement == "Ethernet")
 				{
+					IntPtr InpControl = GetIntPtr(_cLSEControl);
+					IntPtr OutpState = GetIntPtr(_cLSEState);
+
+					Step(InpControl, OutpState);
+
+					_cLSEControl = (CLSEControl)Marshal.PtrToStructure(InpControl, typeof(CLSEControl));
+					_cLSEState = (CLSEState)Marshal.PtrToStructure(OutpState, typeof(CLSEState));
+
 					_controlElement.UpdateRud(_ethernetControlElement);
-					_controlElement.UpdateRus(_ethernetControlElement);
+					_controlElement.UpdateRus(_ethernetControlElement, _cLSEState);
+
+					Marshal.FreeHGlobal(InpControl);
+					Marshal.FreeHGlobal(OutpState);
 				}
-				Thread.Sleep(20);
+
+                Thread.Sleep(20);
 			}
 		}
 
@@ -367,8 +423,6 @@ namespace DataTransfer.Services.DataManager
 					_config.NetworkSettings.IupVaps.DynamicModel.Ip,
 					_config.NetworkSettings.IupVaps.DynamicModel.Port);
 
-
-
 				_udpHelper.Send(_landing.GetReverseBytes(), _config.NetworkSettings.IupVaps.Landing.Ip,
 					_config.NetworkSettings.IupVaps.Landing.Port);
 
@@ -376,7 +430,7 @@ namespace DataTransfer.Services.DataManager
 
 				#region Отправка на отдельные индикаторы
 
-					_udpHelper.Send(_dynamicModel.GetBytes(), _config.NetworkSettings.Iup.DynamicModel.Ip,
+					_udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps), _config.NetworkSettings.Iup.DynamicModel.Ip,
 						_config.NetworkSettings.Iup.DynamicModel.Port);
 
 				#endregion

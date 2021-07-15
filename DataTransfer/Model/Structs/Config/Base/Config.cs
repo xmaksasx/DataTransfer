@@ -45,11 +45,6 @@ namespace DataTransfer.Model.Structs.Config.Base
 			}
 
 			return instance;
-
-
-
-
-
 		}
 
 		private Config LoadConfig()

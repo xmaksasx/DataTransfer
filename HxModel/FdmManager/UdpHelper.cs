@@ -16,11 +16,13 @@ namespace HxModel.FdmManager
 		IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
 		public UdpHelper()
         {
-            
+            IPEndPoint localEP = new IPEndPoint(IPAddress.Parse("192.168.0.2"), 21222);
+            UdpClient cd = new UdpClient();
+            cd.Connect(localEP);
             UdpReceivers.Add(new UdpClient(20030));
 			UdpReceivers.Add(new UdpClient(20031));
 			UdpReceivers.Add(new UdpClient(20032));
-			UdpReceivers.Add(new UdpClient(21222));
+			UdpReceivers.Add(cd);
 			_sendClient = new UdpClient();
 		}
 

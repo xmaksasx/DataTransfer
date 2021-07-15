@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using DataTransfer.Infrastructure.Helpers;
+using DataTransfer.Model.Structs.Brunner;
 using SharpDX.DirectInput;
 
 namespace DataTransfer.Model.Structs.ControlElements
@@ -20,7 +21,7 @@ namespace DataTransfer.Model.Structs.ControlElements
 			_pedalsRight = new Pedals();
 		}
 
-		#region Органы управления Ka50
+		#region Джойстик
 
 		public override void UpdateRus(JoystickState joystickState)
 		{
@@ -62,12 +63,7 @@ namespace DataTransfer.Model.Structs.ControlElements
 			_cyclicStepHandleLeft.Aileron = (float) (1 - (65535.0 - joystickState.X) / 65535.0 * 1);
 		}
 
-		public override void UpdatePedals(JoystickState joystickState)
-		{
-			_pedalsLeft.Pedal = (float) (-(1 - joystickState.Z / 32767.0) * 81.49);
-		}
-
-		public override void UpdateRud(JoystickState joystickState)
+	    public override void UpdateRud(JoystickState joystickState)
 		{
 
 			_generalStepHandleLeft.BtnGh = Convert.ToInt32(joystickState.Buttons[1]);
@@ -110,19 +106,14 @@ namespace DataTransfer.Model.Structs.ControlElements
 			_pedalsLeft.Pedal = (float) ((65535.0 - joystickState.Sliders[0]) / 65535.0 * 1);
 		}
 
-		public void Update(byte[] bytes)
+        #endregion
+
+        #region Сеть и брюннер
+
+        public override void UpdateRus(EthernetControlElement joystickState, CLSEState clseState)
 		{
-			ConvertHelper.ByteToObject(bytes, this);
-			//_generalStepHandleLeft.GeneralStep = (float)((65535.0 - joystickState.Z) / 65535.0 * 1);
-			//_pedalsLeft.Pedal = (float)(-(1 - joystickState.Z / 32767.0) * 81.49);
-			//_cyclicStepHandleLeft.Elevator = (float)(1 - (65535.0 - joystickState.Y) / 65535.0 * 1);
-			//_cyclicStepHandleLeft.Aileron = (float)(1 - (65535.0 - joystickState.X) / 65535.0 * 1);
-		}
+			#region Левый РУС
 
-
-
-		public override void UpdateRus(EthernetControlElement joystickState)
-		{
 			//тангаж на себя=675 от себя = 488
 			//крен влево = 455 вправо=610
 			//педали: левая=545 правая=410
@@ -132,62 +123,114 @@ namespace DataTransfer.Model.Structs.ControlElements
 			//тормоз: не нажат = 15 нажат=300
 
 			//РАДИО НАЖАТИЕ
-			_cyclicStepHandleLeft.BtnGh = 1 - joystickState.Buttons[30];
+			_cyclicStepHandleLeft.BtnGh = 1 - joystickState.Buttons[31];
 
-			_cyclicStepHandleLeft.BtnGhPosition = 0;
-			//ФАРА ВВЕРХ
-			if (joystickState.Buttons[31] == 0)
-				_cyclicStepHandleLeft.BtnGhPosition = 1;
-			//ФАРА ВЛЕВО
-			if (joystickState.Buttons[28] == 0)
-				_cyclicStepHandleLeft.BtnGhPosition = 2;
-			//ФАРА ВНИЗ
-			if (joystickState.Buttons[29] == 0)
-				_cyclicStepHandleLeft.BtnGhPosition = 3;
-			//ФАРА ВПРАВО
-			if (joystickState.Buttons[32] == 0)
-				_cyclicStepHandleLeft.BtnGhPosition = 4;
-
-
-			//ФАРА ВЛЕВО
-			_cyclicStepHandleLeft.BtnJoystickX = -(1 - joystickState.Buttons[25]);
-			//ФАРА ВНИЗ
-			_cyclicStepHandleLeft.BtnJoystickY = -(1 - joystickState.Buttons[26]);
-			//ФАРА ВВЕРХ
-			_cyclicStepHandleLeft.BtnJoystickX = 1 - joystickState.Buttons[24];
-			//ФАРА ВПРАВО
-			_cyclicStepHandleLeft.BtnJoystickY = 1 - joystickState.Buttons[27];
+            _cyclicStepHandleLeft.BtnGhPosition = 0;
+            //ФАРА ВВЕРХ
+            if (joystickState.Buttons[30] == 0)
+                _cyclicStepHandleLeft.BtnGhPosition = 1;
+            //ФАРА ВЛЕВО
+            if (joystickState.Buttons[32] == 0)
+                _cyclicStepHandleLeft.BtnGhPosition = 2;
+            //ФАРА ВНИЗ
+            if (joystickState.Buttons[29] == 0)
+                _cyclicStepHandleLeft.BtnGhPosition = 3;
+            //ФАРА ВПРАВО
+            if (joystickState.Buttons[28] == 0)
+                _cyclicStepHandleLeft.BtnGhPosition = 4;
 
 
-			//ОТКЛ АП
-			_cyclicStepHandleLeft.BtnAutopilotOff = 1 - joystickState.Buttons[23];
-			//ТРИМ УГЛОВ
-			_cyclicStepHandleLeft.BtnTrim = 1 - joystickState.Buttons[12];
-			//ВИСЕНИЕ
-			_cyclicStepHandleLeft.BtnHover = 1 - joystickState.Buttons[20];
+            //ФАРА ВЛЕВО
+            _cyclicStepHandleLeft.BtnJoystickX = -(1 - joystickState.Buttons[25]);
+            //ФАРА ВНИЗ
+            _cyclicStepHandleLeft.BtnJoystickY = -(1 - joystickState.Buttons[26]);
+            //ФАРА ВВЕРХ
+            _cyclicStepHandleLeft.BtnJoystickX = 1 - joystickState.Buttons[27];
+            //ФАРА ВПРАВО
+            _cyclicStepHandleLeft.BtnJoystickY = 1 - joystickState.Buttons[24];
 
-			_cyclicStepHandleLeft.BtnCargoOff = 0;
-			_cyclicStepHandleLeft.BtnWheelBrake = 0;
 
-			//тангаж на себя=675 от себя = 488
-			//крен влево = 455 вправо=610
-			//педали: левая=545 правая=410
-			//ош: вниз=990 вверх=770
-			//рудлев: на себя = 694 от себя = 948
-			//рудправ: на себя = 627 от себя = 972
-			//тормоз: не нажат = 15 нажат=300
+            //ОТКЛ АП
+            _cyclicStepHandleLeft.BtnAutopilotOff = 1 - joystickState.Buttons[23];
+            //ТРИМ УГЛОВ
+            _cyclicStepHandleLeft.BtnTrim = 1 - joystickState.Buttons[12];
+            //ВИСЕНИЕ
+            _cyclicStepHandleLeft.BtnHover = 1 - joystickState.Buttons[20];
 
-			//ТАНГАЖ
-			_cyclicStepHandleLeft.Elevator = (float)map(joystickState.Sliders[8], 488, 675, 0.0, 1.0);
+            _cyclicStepHandleLeft.BtnCargoOff = 1 - joystickState.Buttons[22];
+            _cyclicStepHandleLeft.BtnWheelBrake = 0;
+
+            //ТАНГАЖ
+            _cyclicStepHandleLeft.Elevator = (float)Map(joystickState.Sliders[8], 488, 675, 0.0, 1.0);
 			//КРЕН
-			_cyclicStepHandleLeft.Aileron = (float)map(joystickState.Sliders[9], 610, 455, 0.0, 1.0);
+			_cyclicStepHandleLeft.Aileron = (float)Map(joystickState.Sliders[9], 455, 610, 0.0, 1.0);
 			//ПЕДАЛИ
-			_pedalsLeft.Pedal = (float)map(joystickState.Sliders[10], 545, 410, 0.0, 1.0);
+			_pedalsLeft.Pedal = (float)Map(joystickState.Sliders[10], 545, 410, 0.0, 1.0);
 
-		}
+            #endregion
 
-		public override void UpdateRud(EthernetControlElement joystickState)
+            #region Правый РУС
+
+            //РАДИО НАЖАТИЕ
+            if (clseState.Buttons == 262144)
+                _cyclicStepHandleRight.BtnGh = 1;
+
+            _cyclicStepHandleRight.BtnGhPosition = 0;
+            //ФАРА ВВЕРХ
+            if (clseState.Buttons == 2147483648)
+                _cyclicStepHandleRight.BtnGhPosition = 1;
+            //ФАРА ВЛЕВО
+            if (clseState.Buttons == 268435456)
+                _cyclicStepHandleRight.BtnGhPosition = 2;
+            //ФАРА ВНИЗ
+            if (clseState.Buttons == 1073741824)
+                _cyclicStepHandleRight.BtnGhPosition = 3;
+            //ФАРА ВПРАВО
+            if (clseState.Buttons == 536870912)
+                _cyclicStepHandleRight.BtnGhPosition = 4;
+
+
+            //ФАРА ВВЕРХ
+            if (clseState.Buttons == 1024)
+                _cyclicStepHandleRight.BtnJoystickY = 1;
+            //ФАРА ВПРАВО
+            if (clseState.Buttons == 2048)
+                _cyclicStepHandleRight.BtnJoystickX = 1;
+            //ФАРА ВНИЗ
+            if (clseState.Buttons == 4096)
+                _cyclicStepHandleRight.BtnJoystickY = -1;
+            //ФАРА ВЛЕВО  
+            if (clseState.Buttons == 8192)
+                _cyclicStepHandleRight.BtnJoystickX = -1;
+
+
+            //ОТКЛ АП
+            if (clseState.Buttons == 2)
+                _cyclicStepHandleRight.BtnAutopilotOff = 1;
+            //ТРИМ УГЛОВ
+            if (clseState.Buttons == 1)
+                _cyclicStepHandleRight.BtnTrim = 1;
+            //ВИСЕНИЕ
+            _cyclicStepHandleRight.BtnHover = 0;
+
+            if (clseState.Buttons == 4)
+                _cyclicStepHandleRight.BtnCargoOff = 1;
+            if (clseState.Buttons == 8)
+                _cyclicStepHandleRight.BtnWheelBrake = 0;
+
+            //ТАНГАЖ
+            _cyclicStepHandleRight.Elevator = (float)clseState.PositionZ;
+            //КРЕН
+            _cyclicStepHandleRight.Aileron = (float)clseState.PositionX;
+            //ПЕДАЛИ
+            _pedalsRight.Pedal = (float)Map(joystickState.Sliders[10], 545, 410, 0.0, 1.0);
+            #endregion
+        }
+
+        public override void UpdateRud(EthernetControlElement joystickState)
 		{
+			#region Левый РУД
+
 			//тангаж на себя=675 от себя = 488
 			//крен влево = 455 вправо=610
 			//педали: левая=545 правая=410
@@ -197,57 +240,124 @@ namespace DataTransfer.Model.Structs.ControlElements
 			//тормоз: не нажат = 15 нажат=300
 
 			//ФАРА НАЖАТИЕ
-			_generalStepHandleLeft.BtnGh = Convert.ToInt32(joystickState.Buttons[48]);
+			_generalStepHandleLeft.BtnGh = Convert.ToInt32(joystickState.Buttons[39]);
 
-			_generalStepHandleLeft.BtnGhPosition = 0;
+            _generalStepHandleLeft.BtnGhPosition = 0;
 
-			//ФАРА ВВЕРХ
-			if (joystickState.Buttons[47] == 0)
-				_generalStepHandleLeft.BtnGhPosition = 1;
-			//ФАРА ВПРАВО
-			if (joystickState.Buttons[49] == 0)
-				_generalStepHandleLeft.BtnGhPosition = 2;
-			//ФАРА ВНИЗ
-			if (joystickState.Buttons[46] == 0)
-				_generalStepHandleLeft.BtnGhPosition = 3;
-			//ФАРА ВЛЕВО
-			if (joystickState.Buttons[45] == 0)
-				_generalStepHandleLeft.BtnGhPosition = 4;
+            //ФАРА ВВЕРХ
+            if (joystickState.Buttons[40] == 0)
+                _generalStepHandleLeft.BtnGhPosition = 1;
+            //ФАРА ВПРАВО
+            if (joystickState.Buttons[37] == 0)
+                _generalStepHandleLeft.BtnGhPosition = 2;
+            //ФАРА ВНИЗ
+            if (joystickState.Buttons[36] == 0)
+                _generalStepHandleLeft.BtnGhPosition = 3;
+            //ФАРА ВЛЕВО
+            if (joystickState.Buttons[38] == 0)
+                _generalStepHandleLeft.BtnGhPosition = 4;
 
-			//??????
-			_generalStepHandleLeft.BtnMode1 = 0;
-			//??????
-			_generalStepHandleLeft.BtnMode2 = 0;
+            //??????
+            _generalStepHandleLeft.BtnMode1 = 0;
+            //??????
+            _generalStepHandleLeft.BtnMode2 = 0;
 
-			//ТРИМ ВЫС
-			_generalStepHandleLeft.BtnStabilizer = 1 - joystickState.Buttons[11];
-			//АВАР СБРОС
-			_generalStepHandleLeft.BtnCargoOff = 1 - joystickState.Buttons[6];
+            //ТРИМ ВЫС
+            _generalStepHandleLeft.BtnStabilizer = 1 - joystickState.Buttons[11];
+            //АВАР СБРОС
+            _generalStepHandleLeft.BtnCargoOff = 0;
 
-			//??????
-			_generalStepHandleLeft.BtnTrigger = 0;
+            //??????
+            _generalStepHandleLeft.BtnTrigger = 0;
 
-			//СТОП ЛЕВ ЗАКРЫТО
-			_generalStepHandleLeft.EmergencyBrakeEng1 = 1 - joystickState.Buttons[7];
-			//СТОП ПРАВ ЗАКРЫТО
-			_generalStepHandleLeft.EmergencyBrakeEng2 = 1 - joystickState.Buttons[8];
-			//РУД ТОРМОЗ ЗАТОРМОЖЕНО
-			_generalStepHandleLeft.EmergencyBrakeRotor = 1 - joystickState.Buttons[9];
-			//РОШ
-			_generalStepHandleLeft.GeneralStep = (float)map(joystickState.Sliders[11], 990, 770, 0.0, 1.0);
+            //СТОП ЛЕВ ЗАКРЫТО
+            _generalStepHandleLeft.EmergencyBrakeEng1 = 1 - joystickState.Buttons[7];
+            //СТОП ПРАВ ЗАКРЫТО
+            _generalStepHandleLeft.EmergencyBrakeEng2 = 1 - joystickState.Buttons[8];
+            //РУД ТОРМОЗ ЗАТОРМОЖЕНО
+            _generalStepHandleLeft.EmergencyBrakeRotor = 1 - joystickState.Buttons[9];
+            //РОШ
+            _generalStepHandleLeft.GeneralStep = (float)Map(joystickState.Sliders[11], 990, 770, 0.0, 1.0);
 			//РУД ЛЕВ
-			_generalStepHandleLeft.Throttle1 = (float)map(joystickState.Sliders[12], 694, 948, 0.0, 1.0);
+			_generalStepHandleLeft.Throttle1 = (float)Map(joystickState.Sliders[12], 694, 948, 0.0, 1.0);
 			//РУД ПРАВ
-			_generalStepHandleLeft.Throttle2 = (float)map(joystickState.Sliders[13], 972, 948, 0.0, 1.0);
+			_generalStepHandleLeft.Throttle2 = (float)Map(joystickState.Sliders[13], 972, 948, 0.0, 1.0);
+
+            #endregion
+
+            #region Правый РУД
+
+            //тангаж на себя=675 от себя = 488
+            //крен влево = 455 вправо=610
+            //педали: левая=545 правая=410
+            //ош: вниз=990 вверх=770
+            //рудлев: на себя = 694 от себя = 948
+            //рудправ: на себя = 627 от себя = 972
+            //тормоз: не нажат = 15 нажат=300
+
+            //ФАРА НАЖАТИЕ
+            _generalStepHandleRight.BtnGh = Convert.ToInt32(joystickState.Buttons[47]);
+
+            _generalStepHandleRight.BtnGhPosition = 0;
+
+            //ФАРА ВВЕРХ
+            if (joystickState.Buttons[48] == 0)
+                _generalStepHandleRight.BtnGhPosition = 1;
+            //ФАРА ВПРАВО
+            if (joystickState.Buttons[49] == 0)
+                _generalStepHandleRight.BtnGhPosition = 2;
+            //ФАРА ВНИЗ
+            if (joystickState.Buttons[46] == 0)
+                _generalStepHandleRight.BtnGhPosition = 3;
+            //ФАРА ВЛЕВО
+            if (joystickState.Buttons[45] == 0)
+                _generalStepHandleRight.BtnGhPosition = 4;
 
 
-		}
+            _generalStepHandleRight.BtnMode1 = 0;
+            if (joystickState.Buttons[2] == 0)
+            {
+                _generalStepHandleRight.BtnMode1 = 1;
+            }
+            if (joystickState.Buttons[3] == 0)
+            {
+                _generalStepHandleRight.BtnMode1 = 2;
+            }
 
-		private double map(double x, double inMin, double inMax, double outMin, double outMax)
-		{
-			return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
-		}
+            _generalStepHandleRight.BtnMode2 = 0;
+            if (joystickState.Buttons[4] == 0)
+            {
+                _generalStepHandleRight.BtnMode2 = 1;
+            }
+            if (joystickState.Buttons[5] == 0)
+            {
+                _generalStepHandleRight.BtnMode2 = 2;
+            }
 
-		#endregion
+
+            //ТРИМ ВЫС
+            _generalStepHandleRight.BtnStabilizer = 0;
+            //АВАР СБРОС
+            _generalStepHandleRight.BtnCargoOff = 1 - joystickState.Buttons[6];
+
+            //??????
+            _generalStepHandleRight.BtnTrigger = 0;
+
+            //СТОП ЛЕВ ЗАКРЫТО
+            _generalStepHandleRight.EmergencyBrakeEng1 = 1 - joystickState.Buttons[7];
+            //СТОП ПРАВ ЗАКРЫТО
+            _generalStepHandleRight.EmergencyBrakeEng2 = 1 - joystickState.Buttons[8];
+            //РУД ТОРМОЗ ЗАТОРМОЖЕНО
+            _generalStepHandleRight.EmergencyBrakeRotor = 1 - joystickState.Buttons[9];
+            //РОШ
+            _generalStepHandleRight.GeneralStep = (float)Map(joystickState.Sliders[11], 990, 770, 0.0, 1.0);
+            //РУД ЛЕВ
+            _generalStepHandleRight.Throttle1 = (float)Map(joystickState.Sliders[12], 694, 948, 0.0, 1.0);
+            //РУД ПРАВ
+            _generalStepHandleRight.Throttle2 = (float)Map(joystickState.Sliders[13], 972, 948, 0.0, 1.0);
+
+            #endregion
+        }
+        #endregion
 	}
 }

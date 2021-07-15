@@ -124,7 +124,7 @@ namespace HxModel.FdmManager
 		public void Step(ControlElement controlElement)
 		{
 			Hel.VehicleCtrl.AltimeterBaroPressure = 760;
-			ContactEnv.Elevation =_gmTerrainH;
+			ContactEnv.Elevation =_gmTerrainH=14;
 			ContactEnv.Normal = _normal;
 			Hel.AirState.WindSpeed = _windSpeed;
 			Hel.Mass = 10800.0;
@@ -134,9 +134,11 @@ namespace HxModel.FdmManager
 			Hel.VehicleCtrl.CyclicRoll =  controlElement._cyclicStepHandleLeft.Aileron;
 			Hel.VehicleCtrl.Direction =  controlElement._pedalsLeft.Pedal;
 			Hel.VehicleCtrl.Collective =  controlElement._generalStepHandleLeft.GeneralStep;
+            Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleLeft.BtnTrim;
+            Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleLeft.BtnStabilizer;
 
-
-			IntPtr ptrHel = GetIntPtr(Hel);
+            IntPtr ptrHel = GetIntPtr(Hel);
+            var gg = Marshal.SizeOf(ResState);
 			IntPtr ptrCe = GetIntPtr(ContactEnv);
 			IntPtr ptrRs = GetIntPtr(ResState);
 			IntPtr ptrRh = GetIntPtr(ResHel);
@@ -149,9 +151,9 @@ namespace HxModel.FdmManager
 			_dataOut.VhclOutp = ResHel;
 			_dataOut.VhclInp = Hel;
 
-			_udpHelper.Send(GetByte(ResState), "127.0.0.1", 6100);
+			_udpHelper.Send(GetByte(ResState), "255.255.255.255", 6100);
 			_udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
-			_udpHelper.Send(GetByte(ResState), "127.0.0.1", 6105);
+			_udpHelper.Send(GetByte(ResState), "255.255.255.255", 6105);
 			Marshal.FreeHGlobal(ptrHel);
 			Marshal.FreeHGlobal(ptrCe);
 			Marshal.FreeHGlobal(ptrRs);
@@ -201,7 +203,7 @@ namespace HxModel.FdmManager
 				var receivedBytes = _udpHelper.Receive();
 				if (receivedBytes.Length == 0) continue;
 				string header = "";
-				if (receivedBytes.Length > 30)
+                if (receivedBytes.Length > 30)
 					header = Encoding.UTF8.GetString(receivedBytes, 0, 30).Trim('\0');
 				ProcessingPackage(header, receivedBytes);
 			}
@@ -249,7 +251,7 @@ namespace HxModel.FdmManager
 				case "ModelState":
 					{
 						byte[] bytes = new byte[Marshal.SizeOf(Hel.FCSState)];
-						Array.Copy(receivedBytes, 68, bytes, 0, 80);
+						Array.Copy(receivedBytes, 68, bytes, 0, 48);
 						Hel.FCSState= (FCSState)ConvertHelper.ByteToObject(bytes,  Hel.FCSState, Hel.FCSState.GetType());
 						
 					}

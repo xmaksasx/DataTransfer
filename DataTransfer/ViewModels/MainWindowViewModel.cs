@@ -97,7 +97,7 @@ namespace DataTransfer.ViewModels
 		}
 		#endregion
 
-		#region ModelSelect: string - Выбранные органы управления
+		#region ControlElementSelect: string - Выбранные органы управления
 		/// <summary>Выбранные органы управления</summary>
 		private string _controlElementSelect;
 		/// <summary>Выбранные органы управления</summary>
@@ -266,9 +266,6 @@ namespace DataTransfer.ViewModels
 			_dataManager.StatusPacketEvent += OnStatusPacketEvent;
 			_dataManager.MessageEvent += OnMessageEvent;
 			_deviceControlElement.MessageEvent += OnMessageEvent;
-
-
-
 
 		}
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using DataTransfer.Model.Component.BaseComponent;
+using DataTransfer.Model.Structs.Brunner;
 using SharpDX.DirectInput;
 
 namespace DataTransfer.Model.Structs.ControlElements
@@ -32,20 +33,12 @@ namespace DataTransfer.Model.Structs.ControlElements
 		{
 		}
 
-		public virtual void UpdatePedals(JoystickState joystickState)
-		{
-		}
-
 		public virtual void UpdateRud(JoystickState joystickState)
 		{
 		}
 
 
-		public virtual void UpdateRus(EthernetControlElement joystickState)
-		{
-		}
-
-		public virtual void UpdatePedals(EthernetControlElement joystickState)
+		public virtual void UpdateRus(EthernetControlElement joystickState, CLSEState clseState)
 		{
 		}
 
@@ -53,8 +46,9 @@ namespace DataTransfer.Model.Structs.ControlElements
 		{
 		}
 
-		public void Update(byte[] bytes)
+		protected double Map(double x, double inMin, double inMax, double outMin, double outMax)
 		{
+			return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 		}
 	}
 }
