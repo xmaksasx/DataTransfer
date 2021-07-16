@@ -155,6 +155,7 @@
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\ModelState.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\Overload.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\DynamicModelToVaps.cs" />
+    <Compile Include="Model\Structs\ParametersOfControl.cs" />
     <Compile Include="Model\Structs\RouteStruct\Landing.cs" />
     <Compile Include="Model\Structs\RouteStruct\AerodromeStruct\Aerodrome.cs" />
     <Compile Include="Model\Structs\RouteStruct\NavigationPointStruct\GeoCoordinate.cs" />

@@ -69,6 +69,7 @@ namespace DataTransfer.Services.DataManager
 		private Config _config;
 		private CLSEControl _cLSEControl;
 		private CLSEState _cLSEState;
+		private ParametersOfControl _parametersOfControl;
 
 
 		#endregion
@@ -180,6 +181,7 @@ namespace DataTransfer.Services.DataManager
 			_ethernetControlElement = new EthernetControlElement();
 			_cLSEControl = new CLSEControl();
 			_cLSEState = new CLSEState();
+			_parametersOfControl = new ParametersOfControl();
 			if (_typeModel == 0)
 			{
 				_controlElement = new ControlElementKa52();
@@ -390,6 +392,11 @@ namespace DataTransfer.Services.DataManager
 				case "USO":
 					_ethernetControlElement.AssignReverse(receivedBytes);
 					break;
+
+				case "ParametersOfControl":
+					_parametersOfControl.AssignReverse(receivedBytes);
+					break;
+					
 
 
 				default:
