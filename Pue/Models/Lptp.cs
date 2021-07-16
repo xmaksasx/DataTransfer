@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace DataTransfer.Model.Structs
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	class Lptp: Base
+	class Lptp: Header
 	{
 
 		/// <summary>
