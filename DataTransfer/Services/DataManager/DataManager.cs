@@ -70,6 +70,7 @@ namespace DataTransfer.Services.DataManager
 		private CLSEControl _cLSEControl;
 		private CLSEState _cLSEState;
 		private ParametersOfControl _parametersOfControl;
+		private Lptp _lptp;
 
 
 		#endregion
@@ -182,6 +183,7 @@ namespace DataTransfer.Services.DataManager
 			_cLSEControl = new CLSEControl();
 			_cLSEState = new CLSEState();
 			_parametersOfControl = new ParametersOfControl();
+			_lptp = new Lptp();
 			if (_typeModel == 0)
 			{
 				_controlElement = new ControlElementKa52();
@@ -396,8 +398,12 @@ namespace DataTransfer.Services.DataManager
 				case "ParametersOfControl":
 					_parametersOfControl.AssignReverse(receivedBytes);
 					break;
-					
 
+				case "Lptp":
+					_lptp.Assign(receivedBytes);
+					foreach (var ippoint in _config.NetworkSettings.Lptp.DynamicModel.IPPoint)
+						_udpHelper.Send(_route.GetReverseBytes(), ippoint.Ip, ippoint.Port);
+					break;
 
 				default:
 					break;

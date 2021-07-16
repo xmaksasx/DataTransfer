@@ -7,7 +7,7 @@
 	xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
 	xmlns:local="clr-namespace:Pue"
 	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:h="http://helix-toolkit.org/wpf"
 	Title="Пост управления эспериментом"
 	Height="650"
 	fluentWpf:AcrylicWindow.AcrylicWindowStyle="None"
@@ -99,7 +99,6 @@
 				Background="{x:Null}"
 				Style="{StaticResource MaterialDesignNavigatilRailTabControl}">
 				<TabItem Header="{materialDesign:PackIcon Kind=SineWave, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-
 					<Grid
 						Width="1000"
 						Height="1000"
@@ -121,7 +120,7 @@
 							Foreground="#7FFFFFFF">
 							Графическое представление данных
 						</TextBlock>
-						<d3:ChartPlotter
+						<!--<d3:ChartPlotter
 							x:Name="plotter"
 							Grid.Row="1"
 							Margin="3"
@@ -136,11 +135,12 @@
 
 							<d3:IsolineTrackingGraph Name="trackingGraph" />
 							<d3:CursorCoordinateGraph x:Name="coorgraph" Foreground="#DD000000" />
-						</d3:ChartPlotter>
+						</d3:ChartPlotter>-->
 
 					</Grid>
 				</TabItem>
-				<TabItem Header="{materialDesign:PackIcon Kind=FormatListNumbered, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+				<TabItem Header="{materialDesign:PackIcon Kind=FormatListNumbered, Size=35}" 
+						 Style="{StaticResource MaterialDesignNavigationRailTabItem}">
 					<Grid
 						Width="1000"
 						Height="1000"
@@ -177,6 +177,43 @@
 						</ListView>
 
 					</Grid>
+				</TabItem>
+				<TabItem Header="{materialDesign:PackIcon Kind=SineWave, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+					<h:HelixViewport3D
+            x:Name="myView"
+      
+            ShowViewCube="False">
+						<ModelVisual3D x:Name="model">
+							<ModelVisual3D.Transform>
+								<Transform3DGroup>
+									<RotateTransform3D>
+										<RotateTransform3D.Rotation>
+											<AxisAngleRotation3D
+                                    x:Name="xxx"
+                                    Angle="0"
+                                    Axis="1,0,0" />
+										</RotateTransform3D.Rotation>
+									</RotateTransform3D>
+									<RotateTransform3D>
+										<RotateTransform3D.Rotation>
+											<AxisAngleRotation3D
+                                    x:Name="yyy"
+                                    Angle="0"
+                                    Axis="0,1,0" />
+										</RotateTransform3D.Rotation>
+									</RotateTransform3D>
+									<RotateTransform3D>
+										<RotateTransform3D.Rotation>
+											<AxisAngleRotation3D
+                                    x:Name="zzz"
+                                    Angle="0"
+                                    Axis="0,0,1" />
+										</RotateTransform3D.Rotation>
+									</RotateTransform3D>
+								</Transform3DGroup>
+							</ModelVisual3D.Transform>
+						</ModelVisual3D>
+					</h:HelixViewport3D>
 				</TabItem>
 			</TabControl>
 			<materialDesign:Card

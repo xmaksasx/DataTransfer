@@ -20,8 +20,6 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 				Array.Reverse(dgram, i, 8);
 		}
 
-	
-
 
 		public override byte[] GetPosition(AircraftPosition aircraftPosition)
 		{
@@ -36,7 +34,6 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 			aircraftPosition.GeoCoordinate.X = 0;
 			return ConvertHelper.ObjectToByte(aircraftPosition);
 		}
-
 
 		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)
 		{
@@ -71,7 +68,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka50
 			modelToVaps.Angleslip = 0;
 			modelToVaps.RollCurrent = KinematicsState.Angs.Gam;
 			modelToVaps.MaximumPermissibleRoll = 0;
-			modelToVaps.RecommendedRollVlue = 0;
+			modelToVaps.RecommendedRollValue = 0;
 			modelToVaps.PitchCurrent = KinematicsState.Angs.Fi;
 			modelToVaps.RecommendedPitchValue = 0;
 			modelToVaps.RermissiblePitchPitching = 0;

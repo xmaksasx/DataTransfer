@@ -1,11 +1,13 @@
-﻿using System;
+﻿using HelixToolkit.Wpf;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
-using Microsoft.Research.DynamicDataDisplay;
-using Microsoft.Research.DynamicDataDisplay.DataSources;
+using System.Windows.Media.Media3D;
+//using Microsoft.Research.DynamicDataDisplay;
+//using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace Pue
 {
@@ -20,39 +22,57 @@ namespace Pue
 		{
 			InitializeComponent();
 
-			// Prepare data in arrays
-			const int N = 1000;
-			double[] x = new double[N];
-			double[] y = new double[N];
+			Prepare3DModel();
+			//// Prepare data in arrays
+			//const int N = 1000;
+			//double[] x = new double[N];
+			//double[] y = new double[N];
 
-			for (int i = 0; i < N; i++)
-			{
-				x[i] = i * 0.1;
-				y[i] = Math.Sin(x[i]);
-			}
+			//for (int i = 0; i < N; i++)
+			//{
+			//	x[i] = i * 0.1;
+			//	y[i] = Math.Sin(x[i]);
+			//}
 
-			// Create data sources:
-			var xDataSource = x.AsXDataSource();
-			var yDataSource = y.AsYDataSource();
+			//// Create data sources:
+			//var xDataSource = x.AsXDataSource();
+			//var yDataSource = y.AsYDataSource();
 
-			CompositeDataSource compositeDataSource = xDataSource.Join(yDataSource);
-			// adding graph to plotter
-			plotter.AddLineGraph(compositeDataSource, Color.FromArgb(255,196,32,222),
-				3,
-				"Sine");
+			//CompositeDataSource compositeDataSource = xDataSource.Join(yDataSource);
+			//// adding graph to plotter
+			//plotter.AddLineGraph(compositeDataSource, Color.FromArgb(255,196,32,222),
+			//	3,
+			//	"Sine");
 
-			// Force evertyhing plotted to be visible
-			plotter.FitToView();
+			//// Force evertyhing plotted to be visible
+			//plotter.FitToView();
 
-			LstDataDesc = new ObservableCollection<NameDataDesc>();
-			LstDataDesc.Add(new NameDataDesc(){Description = "Тангаж", Name = "Taetta", Value = "54"});
-			LstDataDesc.Add(new NameDataDesc() { Description = "Крен", Name = "Gamma", Value = "21" });
-			LstDataDesc.Add(new NameDataDesc() { Description = "Курс", Name = "PSI", Value = "128" });
+			//LstDataDesc = new ObservableCollection<NameDataDesc>();
+			//LstDataDesc.Add(new NameDataDesc(){Description = "Тангаж", Name = "Taetta", Value = "54"});
+			//LstDataDesc.Add(new NameDataDesc() { Description = "Крен", Name = "Gamma", Value = "21" });
+			//LstDataDesc.Add(new NameDataDesc() { Description = "Курс", Name = "PSI", Value = "128" });
 
-			ListOfData.ItemsSource = LstDataDesc;
+			//ListOfData.ItemsSource = LstDataDesc;
 
 
 		}
+
+		private void Prepare3DModel()
+		{
+			ObjReader helixObjReader = new ObjReader();
+			string path = @"path-to-image.png";
+			Material material = MaterialHelper.CreateImageMaterial(path, 1);
+			var modelAircraft3D = helixObjReader.Read(@"mi24.obj");
+			model.Content = modelAircraft3D;
+
+
+			model.Children.Add(new DefaultLights());
+
+			myView.Camera.UpDirection = new Vector3D(0, 1, 0);
+			myView.Camera.LookDirection = new Vector3D(0, 0, -100);
+			myView.Camera.Position = new Point3D(0, 0, 100);
+		}
+
 
 		private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
