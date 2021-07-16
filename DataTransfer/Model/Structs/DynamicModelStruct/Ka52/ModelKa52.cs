@@ -39,36 +39,77 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 
 		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)
 		{
+			double Vpth = Math.Sqrt(out_36 * out_36 + out_37 * out_37); // м/с
+			double PsiP = Math.Asin(out_37 / Vpth);
+			double D2R = 180 / Math.PI;
+			double Psi = out_Kurs;
+			double psi_hi, psi_p_hi; // значения угла курса и путевого угла +-Pi (+-180)
+			if (PsiP >= 0) psi_p_hi = PsiP;
+			else psi_p_hi = PsiP - 2.0 * Math.PI; // путевой угол +-Pi (+-180)
+			if (Psi >= 0) psi_hi = Psi;
+			else psi_hi = Psi - 2.0 * Math.PI; // угол курса +-Pi (+-180)
+			double hi = psi_p_hi - psi_hi; // угол сноса +-Pi (+-180)
+			if (hi >= Math.PI) hi = hi - 2.0 * Math.PI;
+			if (hi <= -Math.PI) hi = hi + 2.0 * Math.PI;
+
+			double Tetr = 0; // угол наклона траектории, рад
+							 // 1 вариант
+							 //if (vhcloutp.instrumentsstate.tas != 0)
+							 //	tetr = math.asin(kinematicsstate.absspeed.y / vhcloutp.instrumentsstate.tas);
+
+			//// 2 вариант, альтернативно
+			//// истинная воздушная скорость полета
+			//double vp = math.sqrt(
+			//	kinematicsstate.absspeed.x
+			//	* kinematicsstate.absspeed.x
+			//	+ kinematicsstate.absspeed.y
+			//	* kinematicsstate.absspeed.y
+			//	+ kinematicsstate.absspeed.z
+			//	* kinematicsstate.absspeed.z);
+
+			////(кинематическая)м / с
+			//if (vp != 0)
+			//	tetr = math.asin(kinematicsstate.absspeed.y / vp);
+
+			//// ограничение для обоих вараинтов
+			//if (tetr > math.pi / 2.0) tetr = tetr - math.pi / 2.0;
+			//if (tetr < -math.pi / 2.0) tetr = tetr + math.pi / 2.0;
+
 			//todo: тут нужно заполнить модель
 			modelToVaps.Eng1.N = out_NOborotL;
 			modelToVaps.Eng1.Mode = out_EngPwrL;
 			modelToVaps.Eng1.Egt = out_TGazL;
-			modelToVaps.Eng1.MaxAllowedEgt = 0;
-			modelToVaps.Eng1.EmergencyEgt = 0;
+			modelToVaps.Eng1.MaxAllowedEgt = 705;
+			modelToVaps.Eng1.EmergencyEgt = 735;
 			modelToVaps.Eng1.EngState = upr_EngineLeftOff;
 			modelToVaps.Eng1.FuelFlow = out_ToplivoCurL;
 
 			modelToVaps.Eng2.N = out_NOborotR;
 			modelToVaps.Eng2.Mode = out_EngPwrR;
 			modelToVaps.Eng2.Egt = out_TGazR;
-			modelToVaps.Eng2.MaxAllowedEgt = 0;
-			modelToVaps.Eng2.EmergencyEgt = 0;
+			modelToVaps.Eng2.MaxAllowedEgt = 705;
+			modelToVaps.Eng2.EmergencyEgt = 735;
 			modelToVaps.Eng2.EngState = upr_EngineRightOff;
 			modelToVaps.Eng2.FuelFlow = out_ToplivoCurR;
 
 			modelToVaps.ModeFly = 1;
-			modelToVaps.RemainingFuel = in_Toplivo;
-			modelToVaps.RotorSpeed = out_Nnv; 
-			modelToVaps.MaximumPermissibleRotor = 0;
+			modelToVaps.RemainingFuel = in_Massa0 -out_MassaCur;
+			modelToVaps.RotorSpeed = out_Nnv;
+
+			//todo: нужно написать условия о смене значения от скорости
+			///98	-	до 200
+			///93	-	от 200 до 270
+			///91	-	от 270 до 300
+			modelToVaps.MaximumPermissibleRotor = 93;
 			modelToVaps.TotalRotor = out_OShag;
 			modelToVaps.RecommendedValueRotor = 0;
 			modelToVaps.HeadingCurrent = out_Kurs;
-			modelToVaps.HeadingTrack = 0;
-			modelToVaps.AngleDrift = 0;
+			modelToVaps.HeadingTrack = PsiP * D2R;
+			modelToVaps.AngleDrift = hi * D2R;
 			modelToVaps.Angleslip = out_Skolj;
 			modelToVaps.RollCurrent = out_Kren;
 			modelToVaps.MaximumPermissibleRoll = out_KrenMax;
-			modelToVaps.RecommendedRollVlue = 0;
+			modelToVaps.RecommendedRollValue = 0;
 			modelToVaps.PitchCurrent = out_Tang;
 			modelToVaps.RecommendedPitchValue = 0;
 			modelToVaps.RermissiblePitchPitching = out_TangMaxKabr;
@@ -78,40 +119,43 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Ka52
 			modelToVaps.PositionBall = out_Skolj;
 			modelToVaps.AngleTrajectory = 0;
 			modelToVaps.Vy = out_Vy;
-			modelToVaps.MinVy = 0;
-			modelToVaps.MaxVy = 0;
-			modelToVaps.InstrumentSpeedCurrent = out_Vprib / 3.6;
-			modelToVaps.MaxInstrumentSpeed = 0;
-			modelToVaps.MinInstrumentSpeed = 0;
-			modelToVaps.SpeedX = out_Vxprib / 3.6;  //??
-			modelToVaps.SpeedZ = out_Vzprib / 3.6;  //??
+			modelToVaps.MinVy = -5;
+			modelToVaps.MaxVy = +5;
+			modelToVaps.InstrumentSpeedCurrent = out_Vprib;
+			modelToVaps.MaxInstrumentSpeed = out_Vmax;
+			modelToVaps.MinInstrumentSpeed = 50;
+			modelToVaps.SpeedX = out_Vxprib;  //??
+			modelToVaps.SpeedZ = out_Vzprib;  //??
 			modelToVaps.RecommendedDiveSpeed = 0;
 			modelToVaps.RecommendedSpeedDiveEnd = 0;
-			modelToVaps.TrueSpeedCurrent = in_V / 3.6;  //??
-			modelToVaps.GroundSpeedX = out_Wxg / 3.6; //??
-			modelToVaps.GroundSpeedZ = out_Wzg / 3.6; //??
-			modelToVaps.Mach = 0;
+			modelToVaps.TrueSpeedCurrent = in_V;  //??
+			modelToVaps.GroundSpeedX = out_Wxg; //??
+			modelToVaps.GroundSpeedZ = out_Wzg; //??
+			modelToVaps.Mach = 0;//??
 			modelToVaps.RelativeHeight = out_Hotn;
 			modelToVaps.BarometricHeight = in_Hbar;
 			modelToVaps.Pressure =0;
-			modelToVaps.HeightAltimeter = 0;
-			modelToVaps.DangerousHeight = 0;
+
+			//минус высота рельефа
+			modelToVaps.HeightAltimeter = out_Hotn;
+			modelToVaps.DangerousHeight = 50;
 
 			modelToVaps.Ny.Value = out_ny;
-			modelToVaps.Ny.Min = 0;
+			modelToVaps.Ny.Min = -0.5;
 			modelToVaps.Ny.Max = out_nyMax;
 
-			modelToVaps.Nx.Value = out_nz;
+			modelToVaps.Nx.Value = 0;
 			modelToVaps.Nx.Min = 0;
 			modelToVaps.Nx.Max = 0;
 
-			modelToVaps.Nz.Value = 0;
+			modelToVaps.Nz.Value = out_nz;
 			modelToVaps.Nz.Min = 0;
 			modelToVaps.Nz.Max = 0;
 
 			modelToVaps.HeadingWind = in_WindDir;
 			modelToVaps.HorizontalWindSpeed = in_WindPwrHorz;
-			modelToVaps.MaxPermissibleWindSpeed = 0;
+
+			modelToVaps.MaxPermissibleWindSpeed = 25;
 
 			modelToVaps.Mechanization[0] = 0;
 			modelToVaps.Mechanization[1] = 0;
