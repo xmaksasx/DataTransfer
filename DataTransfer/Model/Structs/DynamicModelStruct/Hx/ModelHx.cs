@@ -38,21 +38,58 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 
 		public override byte[] GetForVaps(DynamicModelToVaps modelToVaps)
 		{
+			double Vpth = Math.Sqrt(KinematicsState.AbsSpeed.X * KinematicsState.AbsSpeed.X + KinematicsState.AbsSpeed.Z * KinematicsState.AbsSpeed.Z); // м/с
+			double PsiP = Math.Asin(KinematicsState.AbsSpeed.Z / Vpth);
+			double D2R = 180 / Math.PI;
+			double Psi = KinematicsState.Angs.Psi;
+			double psi_hi, psi_p_hi; // значения угла курса и путевого угла +-Pi (+-180)
+			if (PsiP >= 0) psi_p_hi = PsiP;
+			else psi_p_hi = PsiP - 2.0 * Math.PI; // путевой угол +-Pi (+-180)
+			if (Psi >= 0) psi_hi = Psi;
+			else psi_hi = Psi - 2.0 * Math.PI; // угол курса +-Pi (+-180)
+			double hi = psi_p_hi - psi_hi; // угол сноса +-Pi (+-180)
+			if (hi >= Math.PI) hi = hi - 2.0 * Math.PI;
+			if (hi <= -Math.PI) hi = hi + 2.0 * Math.PI;
+
+			double Tetr = 0; // угол наклона траектории, рад
+							 // 1 вариант
+			if (VhclOutp.InstrumentsState.TAS != 0)
+				Tetr = Math.Asin(KinematicsState.AbsSpeed.Y / VhclOutp.InstrumentsState.TAS);
+
+			// 2 вариант, альтернативно
+			// истинная воздушная скорость полета
+			double Vp = Math.Sqrt(
+				KinematicsState.AbsSpeed.X
+				* KinematicsState.AbsSpeed.X
+				+ KinematicsState.AbsSpeed.Y
+				* KinematicsState.AbsSpeed.Y
+				+ KinematicsState.AbsSpeed.Z
+				* KinematicsState.AbsSpeed.Z);
+
+			//(кинематическая)м / с
+			if (Vp != 0)
+				Tetr = Math.Asin(KinematicsState.AbsSpeed.Y / Vp);
+
+			// ограничение для обоих вараинтов
+			if (Tetr > Math.PI / 2.0) Tetr = Tetr - Math.PI / 2.0;
+			if (Tetr < -Math.PI / 2.0) Tetr = Tetr + Math.PI / 2.0;
+
+
 			//todo: тут нужно заполнить модель
 
 			modelToVaps.Eng1.N = VhclOutp.EngLeft.N1;
 			modelToVaps.Eng1.Mode = 1;
 			modelToVaps.Eng1.Egt = VhclOutp.EngLeft.Egt;
-			modelToVaps.Eng1.MaxAllowedEgt = 0;
-			modelToVaps.Eng1.EmergencyEgt = 0;
+			modelToVaps.Eng1.MaxAllowedEgt = 705;
+			modelToVaps.Eng1.EmergencyEgt = 735;
 			modelToVaps.Eng1.EngState = 1;
 			modelToVaps.Eng1.FuelFlow = VhclOutp.EngLeft.FuelFlow;
 
 			modelToVaps.Eng2.N = VhclOutp.EngRight.N1;
 			modelToVaps.Eng2.Mode = 1;
 			modelToVaps.Eng2.Egt = VhclOutp.EngRight.Egt;
-			modelToVaps.Eng2.MaxAllowedEgt = 0;
-			modelToVaps.Eng2.EmergencyEgt = 0;
+			modelToVaps.Eng2.MaxAllowedEgt = 705;
+			modelToVaps.Eng2.EmergencyEgt = 735;
 			modelToVaps.Eng2.EngState = 1;
 			modelToVaps.Eng2.FuelFlow = VhclOutp.EngRight.FuelFlow;
 
@@ -60,47 +97,54 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 			modelToVaps.ModeFly = 1;
 			modelToVaps.RemainingFuel = VhclOutp.InstrumentsState.FuelMass;
 			modelToVaps.RotorSpeed = VhclOutp.InstrumentsState.RotorRPM;
-			modelToVaps.MaximumPermissibleRotor = 0;
+
+			//todo: нужно написать условия о смене значения от скорости
+			///98	-	до 200
+			///93	-	от 200 до 270
+			///91	-	от 270 до 300
+			modelToVaps.MaximumPermissibleRotor = 93;
 			modelToVaps.TotalRotor = VhclOutp.InstrumentsState.CollectivePitch;
 			modelToVaps.RecommendedValueRotor = 0;
 			modelToVaps.HeadingCurrent = KinematicsState.Angs.Psi;
-			modelToVaps.HeadingTrack = 0;
-			modelToVaps.AngleDrift = 0;
+			modelToVaps.HeadingTrack = PsiP * D2R;
+			modelToVaps.AngleDrift = hi * D2R;
 			modelToVaps.Angleslip = VhclOutp.InstrumentsState.AirPars.Beta;
 			modelToVaps.RollCurrent = KinematicsState.Angs.Gam;
 			modelToVaps.MaximumPermissibleRoll = VhclInp.FCSState.RoolLimit;
-			modelToVaps.RecommendedRollVlue = 0;
+			modelToVaps.RecommendedRollValue = 0;
 			modelToVaps.PitchCurrent = KinematicsState.Angs.Fi;
 			modelToVaps.RecommendedPitchValue = 0;
-			modelToVaps.RermissiblePitchPitching = 0;
-			modelToVaps.PermissiblePitchDiving = 0;
+			modelToVaps.RermissiblePitchPitching = 60;
+			modelToVaps.PermissiblePitchDiving = -60;
 			modelToVaps.AngleAttack = VhclOutp.InstrumentsState.AirPars.AOA;
 			modelToVaps.PermissibleAngleAttack = 0;
 			modelToVaps.PositionBall = VhclOutp.InstrumentsState.SlipBallPos;
-			modelToVaps.AngleTrajectory = 0;
+			modelToVaps.AngleTrajectory = Tetr * D2R;
 			modelToVaps.Vy = VhclOutp.InstrumentsState.VyVar;
-			modelToVaps.MinVy = 0;
-			modelToVaps.MaxVy = 0;
-			modelToVaps.InstrumentSpeedCurrent = VhclOutp.InstrumentsState.IAS;
-			modelToVaps.MaxInstrumentSpeed = 0;
-			modelToVaps.MinInstrumentSpeed = 0;
-			modelToVaps.SpeedX = KinematicsState.Accel.X;
-			modelToVaps.SpeedZ = KinematicsState.Accel.X;
+			modelToVaps.MinVy = -5;
+			modelToVaps.MaxVy = +5;
+			modelToVaps.InstrumentSpeedCurrent = VhclOutp.InstrumentsState.IAS * 3.6;
+			modelToVaps.MaxInstrumentSpeed = 300;
+			modelToVaps.MinInstrumentSpeed = 50;
+			modelToVaps.SpeedX = VhclOutp.InstrumentsState.VsurfX;
+			modelToVaps.SpeedZ = VhclOutp.InstrumentsState.VsurfZ;
 			modelToVaps.RecommendedDiveSpeed = 0;
 			modelToVaps.RecommendedSpeedDiveEnd = 0;
-			modelToVaps.TrueSpeedCurrent = VhclOutp.InstrumentsState.TAS;
-			modelToVaps.GroundSpeedX = VhclOutp.InstrumentsState.VsurfX;
-			modelToVaps.GroundSpeedZ = VhclOutp.InstrumentsState.VsurfZ;
-			modelToVaps.Mach = 0;
+			modelToVaps.TrueSpeedCurrent = VhclOutp.InstrumentsState.TAS * 3.6;
+			modelToVaps.GroundSpeedX = KinematicsState.AbsSpeed.X * 3.6;
+			modelToVaps.GroundSpeedZ = KinematicsState.AbsSpeed.Z * 3.6;
+			modelToVaps.Mach = VhclOutp.InstrumentsState.TAS / 343.0;
 			modelToVaps.RelativeHeight = KinematicsState.Pos.Elevation;
 			modelToVaps.BarometricHeight = VhclOutp.InstrumentsState.Hbaro;
 			modelToVaps.Pressure = VhclInp.VehicleCtrl.AltimeterBaroPressure;
-			modelToVaps.HeightAltimeter = 0;
-			modelToVaps.DangerousHeight = 0;
+
+			//минус высота рельефа
+			modelToVaps.HeightAltimeter = KinematicsState.Pos.Elevation;
+			modelToVaps.DangerousHeight = 50;
 
 			modelToVaps.Ny.Value = VhclOutp.InstrumentsState.GLoad.Y;
-			modelToVaps.Ny.Min = 0;
-			modelToVaps.Ny.Max = 0;
+			modelToVaps.Ny.Min = -0.5;
+			modelToVaps.Ny.Max = 2.5;
 
 			modelToVaps.Nx.Value = VhclOutp.InstrumentsState.GLoad.X;
 			modelToVaps.Nx.Min = 0;
@@ -111,8 +155,13 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 			modelToVaps.Nz.Max = 0;
 
 			modelToVaps.HeadingWind = 0;
-			modelToVaps.HorizontalWindSpeed = VhclInp.AirState.WindSpeed.X;
-			modelToVaps.MaxPermissibleWindSpeed = 0;
+			modelToVaps.HorizontalWindSpeed = Math.Sqrt(
+				VhclInp.AirState.WindSpeed.X *
+				VhclInp.AirState.WindSpeed.X +
+				VhclInp.AirState.WindSpeed.Z *
+				VhclInp.AirState.WindSpeed.Z);
+
+			modelToVaps.MaxPermissibleWindSpeed = 25;
 
 			modelToVaps.Mechanization[0] = VhclOutp.NoseGear.RodShift;
 			modelToVaps.Mechanization[1] = VhclOutp.NoseGear.TireShift;

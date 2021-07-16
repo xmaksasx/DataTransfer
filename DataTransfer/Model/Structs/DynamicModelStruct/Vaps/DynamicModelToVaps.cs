@@ -46,7 +46,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Vaps
 		[Description("максимальное допустимое значение крена")]
 		public double MaximumPermissibleRoll;
 		[Description("рекомендуемое значение крена")]
-		public double RecommendedRollVlue;
+		public double RecommendedRollValue;
 		[Description("тангаж текущий")]
 		public double PitchCurrent;
 		[Description("рекомендуемое значение тангажа")]
