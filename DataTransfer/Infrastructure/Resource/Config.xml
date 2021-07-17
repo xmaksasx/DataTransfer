@@ -67,5 +67,10 @@
 				<IPPoint Port="20090" Ip="192.168.0.1"/>
 			</DynamicModel>
 		</Bpmi>
+		<Pue>
+			<DynamicModel>
+				<IPPoint Port="20100" Ip="192.168.0.1"/>
+			</DynamicModel>
+		</Pue>
 	</NetworkSettings>
 </Config>

@@ -26,6 +26,11 @@ namespace DataTransfer.Model.Structs.Config
 
 		[XmlElement(ElementName = "Bpmi")]
 		public Bpmi Bpmi { get; set; }
+
+		[XmlElement(ElementName = "Pue")]
+		public Pue Pue { get; set; }
+
+		
 	}
 
 

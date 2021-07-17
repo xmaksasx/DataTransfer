@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using Pue.Models;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 //using Microsoft.Research.DynamicDataDisplay;
 //using Microsoft.Research.DynamicDataDisplay.DataSources;
@@ -51,17 +53,37 @@ namespace Pue
 
 			//// Force evertyhing plotted to be visible
 			//plotter.FitToView();
-
-			//LstDataDesc = new ObservableCollection<NameDataDesc>();
-			//LstDataDesc.Add(new NameDataDesc(){Description = "Тангаж", Name = "Taetta", Value = "54"});
-			//LstDataDesc.Add(new NameDataDesc() { Description = "Крен", Name = "Gamma", Value = "21" });
-			//LstDataDesc.Add(new NameDataDesc() { Description = "Курс", Name = "PSI", Value = "128" });
-
-			//ListOfData.ItemsSource = LstDataDesc;
-
+			LoadLog();
+			LoadFault();
 
 		}
 
+		private void LoadLog()
+		{
+			LstDataDesc = new ObservableCollection<NameDataDesc>();
+			LstDataDesc.Add(new NameDataDesc() { Description = "Запуск приложения",  Name = "1", Value = DateTime.Now.ToShortTimeString() }); ;
+			LstDataDesc.Add(new NameDataDesc() { Description = "Запуск моделирования", Name = "2", Value = DateTime.Now.ToShortTimeString() });
+			LstDataDesc.Add(new NameDataDesc() { Description = "Смена времени суток", Name = "3", Value = DateTime.Now.ToShortTimeString() });
+
+			LogList.ItemsSource = LstDataDesc;
+		}
+
+		private void LoadFault()
+		{
+			var lst = new ObservableCollection<FaultInfo>();
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Пожар левого двигателя", IsSelected = false, Code = "A" }); ;
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Пожар првого двигателя", IsSelected = false, Code = "A" });
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Отказ левого двигателя", IsSelected = false, Code = "A" });
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Отказ правого двигателя", IsSelected = false, Code = "A" });
+
+			lst.Add(new FaultInfo() { Description = "Электрика", Name = "Отказ двух генераторов", IsSelected = false, Code = "Э" }); ;
+			lst.Add(new FaultInfo() { Description = "Топливо", Name = "Осталось 600 кг.", IsSelected = false, Code = "Т" });
+			lst.Add(new FaultInfo() { Description = "Радиовысотомер", Name = "Отказ радиовысотомера", IsSelected = false, Code = "Р" });
+			LstFault.ItemsSource = lst;
+		}
+
+
+		
 		private void Prepare3DModel()
 		{
 			ObjReader helixObjReader = new ObjReader();
@@ -194,7 +216,58 @@ namespace Pue
 					break;
 			}
 		}
+
+		private void SetLptp_Click(object sender, RoutedEventArgs e)
+		{
+			var lptp = new Lptp();
+		    lptp.scale=Convert.ToInt32(LptpScale.Text); 
+		    lptp.posx = Convert.ToInt32(LptpPosX.Text);
+			lptp.posy = Convert.ToInt32(LptpPosY.Text);
+			lptp.Dtrg = Convert.ToInt32(LptpDistanceToTarget.Text);
+			lptp.Htrg = Convert.ToInt32(LptpExcessElevationt.Text);
+			lptp.lptp1 = Convert.ToByte(LptpTargetOn.IsChecked);
+			lptp.lptp2 = Convert.ToByte(LptpScaleOn.IsChecked);
+			lptp.lptp_show = Convert.ToByte(LptpShowOn.IsChecked);
+			lptp.lptp_cel_show = Convert.ToByte(LptpMarkOn.IsChecked);
+			lptp.lptp_tipgr = Convert.ToByte(LptpTypeCargo.Text);
+
+		}
+		private void PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			Regex regex = new Regex("[^0-9]+");
+			e.Handled = regex.IsMatch(e.Text);
+		}
+
+	
+
+		private void LptpTypeCargo_TextChanged(object sender, TextChangedEventArgs e)
+		{
+
+				int.TryParse(LptpTypeCargo.Text, out int result);
+				if (result > 0 && result <= 255)
+					return;
+				else if (result < 0)
+				{
+					LptpTypeCargo.Text = "0";
+				
+				}
+				else if (result > 255)
+				{
+					LptpTypeCargo.Text = "255";
+					
+				}
+			
+		}
 	}
+
+	class FaultInfo
+	{
+		public string Code { get; set; }
+		public bool IsSelected { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+	}
+
 
 	[Serializable]
 	public class NameDataDesc : INotifyPropertyChanged

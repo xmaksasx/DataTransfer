@@ -91,6 +91,7 @@
     <Compile Include="Model\Structs\ChannelRadar.cs" />
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
+    <Compile Include="Model\Structs\Config\Pue.cs" />
     <Compile Include="Model\Structs\Config\Bpmi.cs" />
     <Compile Include="Model\Structs\Config\Command.cs" />
     <Compile Include="Model\Structs\Config\Base\Config.cs" />
