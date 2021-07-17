@@ -1,0 +1,94 @@
+﻿<Window
+	x:Class="StubModel.MainWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:StubModel"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Title="Заглушка Ка52"
+	Width="800"
+	Height="385.932"
+	mc:Ignorable="d">
+	<Grid>
+		<StackPanel>
+			<StackPanel Margin="5" VerticalAlignment="Top">
+
+
+				<TextBlock Text="{Binding StringFormat=Координата Х {0} в метрах,
+					ElementName=SliderX, Path=Value}"/>
+				<Slider
+					x:Name="SliderX"
+					Margin="5"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Top"
+					AutoToolTipPlacement="TopLeft"
+					AutoToolTipPrecision="0"
+					Maximum="2000"
+					Minimum="-2000"
+					ValueChanged="SliderX_OnValueChanged" />
+			</StackPanel>
+			<StackPanel Margin="5" VerticalAlignment="Top">
+				<TextBlock Text="{Binding StringFormat=Координата Z {0} в метрах,
+					ElementName=SliderZ, Path=Value}"/>
+				<Slider
+					x:Name="SliderZ"
+					Margin="5"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Top"
+					Maximum="2000"
+					Minimum="-2000"
+					ValueChanged="SliderZ_OnValueChanged" />
+			</StackPanel>
+			<StackPanel Margin="5" VerticalAlignment="Top">
+				<TextBlock Text="{Binding StringFormat=Высота {0} в метрах,
+					ElementName=SliderH, Path=Value}"/>
+				<Slider
+					x:Name="SliderH"
+					Margin="5"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Top"
+					Maximum="2000"
+					Minimum="-2000"
+					ValueChanged="SliderH_OnValueChanged" />
+			</StackPanel>
+
+			<StackPanel Margin="5" VerticalAlignment="Top">
+				<TextBlock Text="{Binding StringFormat=Крен {0} в градусах,
+					ElementName=SliderRoll, Path=Value}"/>
+				<Slider
+					x:Name="SliderRoll"
+					Margin="5"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Top"
+					Maximum="180"
+					Minimum="-180"
+					ValueChanged="SliderRoll_OnValueChanged" />
+			</StackPanel>
+			<StackPanel Margin="5" VerticalAlignment="Top">
+				<TextBlock Text="{Binding StringFormat=Тангаж {0} в градусах,
+					ElementName=SliderPitch, Path=Value}"/>
+				<Slider
+					x:Name="SliderPitch"
+					Margin="5"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Top"
+					Maximum="180"
+					Minimum="-180"
+					ValueChanged="SliderPitch_OnValueChanged" />
+			</StackPanel>
+			<StackPanel Margin="5" VerticalAlignment="Top">
+				<TextBlock Text="{Binding StringFormat=Курс {0} в градусах,
+					ElementName=SliderHead, Path=Value}"/>
+				<Slider
+					x:Name="SliderHead"
+					Margin="5"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Top"
+					Maximum="360"
+					Minimum="0"
+					ValueChanged="SliderHead_OnValueChanged" />
+			</StackPanel>
+		</StackPanel>
+
+	</Grid>
+</Window>
