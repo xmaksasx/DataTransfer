@@ -93,8 +93,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\ConvertHelper.cs" />
     <Compile Include="Models\Header.cs" />
     <Compile Include="Models\Lptp.cs" />
+    <Compile Include="Models\SendSvvoStruct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -10,8 +10,8 @@
 	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	Title="Пост управления эспериментом"
-	Width="1500"
-	Height="650"
+	Width="1920"
+	Height="1080"
 	fluentWpf:AcrylicWindow.AcrylicWindowStyle="None"
 	fluentWpf:AcrylicWindow.Enabled="true"
 	Background="#FF222831"
@@ -20,7 +20,6 @@
 	Opacity="1"
 	ResizeMode="NoResize"
 	WindowStartupLocation="CenterScreen"
-	WindowState="Maximized"
 	WindowStyle="None"
 	mc:Ignorable="d">
 	<Grid Background="#FF222831">
@@ -103,7 +102,7 @@
 				Background="{x:Null}"
 				Style="{StaticResource MaterialDesignNavigatilRailTabControl}">
 				<TabItem Header="{materialDesign:PackIcon Kind=SineWave, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-					<Grid Margin="2,0" HorizontalAlignment="Left">
+					<Grid Margin="2,0" HorizontalAlignment="Stretch">
 						<Grid.RowDefinitions>
 							<RowDefinition Height="40" />
 							<RowDefinition Height="*" />
@@ -120,7 +119,7 @@
 							Foreground="#7FFFFFFF">
 							Графическое представление данных
 						</TextBlock>
-						<!--<d3:ChartPlotter
+						<d3:ChartPlotter
 							x:Name="plotter"
 							Grid.Row="1"
 							Margin="3"
@@ -132,17 +131,14 @@
 								Name="isolineGraph"
 								Foreground="#DDBF0000"
 								Opacity="0.5" />
-
 							<d3:IsolineTrackingGraph Name="trackingGraph" />
 							<d3:CursorCoordinateGraph x:Name="coorgraph" Foreground="#DD000000" />
-						</d3:ChartPlotter>-->
-
+						</d3:ChartPlotter>
 					</Grid>
 				</TabItem>
 				<TabItem Header="{materialDesign:PackIcon Kind=FormatListNumbered, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
 					<Grid
 						Width="1000"
-						Height="1000"
 						Margin="2,0"
 						HorizontalAlignment="Left">
 						<Grid.RowDefinitions>
@@ -177,39 +173,66 @@
 
 					</Grid>
 				</TabItem>
-				<TabItem Header="{materialDesign:PackIcon Kind=SineWave, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
-					<h:HelixViewport3D x:Name="myView" ShowViewCube="False">
-						<ModelVisual3D x:Name="model">
-							<ModelVisual3D.Transform>
-								<Transform3DGroup>
-									<RotateTransform3D>
-										<RotateTransform3D.Rotation>
-											<AxisAngleRotation3D
-												x:Name="xxx"
-												Angle="0"
-												Axis="1,0,0" />
-										</RotateTransform3D.Rotation>
-									</RotateTransform3D>
-									<RotateTransform3D>
-										<RotateTransform3D.Rotation>
-											<AxisAngleRotation3D
-												x:Name="yyy"
-												Angle="0"
-												Axis="0,1,0" />
-										</RotateTransform3D.Rotation>
-									</RotateTransform3D>
-									<RotateTransform3D>
-										<RotateTransform3D.Rotation>
-											<AxisAngleRotation3D
-												x:Name="zzz"
-												Angle="0"
-												Axis="0,0,1" />
-										</RotateTransform3D.Rotation>
-									</RotateTransform3D>
-								</Transform3DGroup>
-							</ModelVisual3D.Transform>
-						</ModelVisual3D>
-					</h:HelixViewport3D>
+				<TabItem Header="{materialDesign:PackIcon Kind=Rotate3d, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
+					<Grid
+						Width="1000"
+						Margin="2,0"
+						HorizontalAlignment="Left">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40" />
+							<RowDefinition Height="*" />
+						</Grid.RowDefinitions>
+						<Border
+							Grid.RowSpan="2"
+							BorderBrush="#FF2A2D30"
+							BorderThickness="2" />
+						<TextBlock
+							Grid.Row="0"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							FontSize="20"
+							Foreground="#7FFFFFFF">
+							3D модель объекта
+						</TextBlock>
+
+						<h:HelixViewport3D
+							x:Name="myView"
+							Grid.Row="1"
+							Width="1000"
+							ShowViewCube="False">
+							<ModelVisual3D x:Name="modelVisual3D">
+
+								<ModelVisual3D.Transform>
+									<Transform3DGroup>
+										<RotateTransform3D>
+											<RotateTransform3D.Rotation>
+												<AxisAngleRotation3D
+													x:Name="xxx"
+													Angle="0"
+													Axis="1,0,0" />
+											</RotateTransform3D.Rotation>
+										</RotateTransform3D>
+										<RotateTransform3D>
+											<RotateTransform3D.Rotation>
+												<AxisAngleRotation3D
+													x:Name="yyy"
+													Angle="0"
+													Axis="0,1,0" />
+											</RotateTransform3D.Rotation>
+										</RotateTransform3D>
+										<RotateTransform3D>
+											<RotateTransform3D.Rotation>
+												<AxisAngleRotation3D
+													x:Name="zzz"
+													Angle="0"
+													Axis="0,0,1" />
+											</RotateTransform3D.Rotation>
+										</RotateTransform3D>
+									</Transform3DGroup>
+								</ModelVisual3D.Transform>
+							</ModelVisual3D>
+						</h:HelixViewport3D>
+					</Grid>
 				</TabItem>
 			</TabControl>
 			<materialDesign:Card
@@ -234,7 +257,7 @@
 							Height="30"
 							VerticalAlignment="Center"
 							Foreground="#FFEEEEEE"
-							Kind="GamepadVariant" />
+							Kind="StepForward2" />
 						<TextBlock
 							Margin="5,0"
 							VerticalAlignment="Center"
@@ -405,8 +428,8 @@
 			<materialDesign:Card
 				Grid.Column="0"
 				Width="284"
-				Height="384"
-Margin="10"
+				Height="367"
+				Margin="0,10,621,0"
 				Padding="8"
 				HorizontalAlignment="Right"
 				VerticalAlignment="Top"
@@ -438,8 +461,43 @@ Margin="10"
 			</materialDesign:Card>
 			<materialDesign:Card
 				Grid.Column="0"
+				Width="284"
+				Height="370"
+				Margin="0,382,621,0"
+				Padding="8"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+				Background="#FF303030"
+				Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<StackPanel Grid.Row="0" Orientation="Horizontal">
+
+						<materialDesign:PackIcon
+							Width="30"
+							Height="30"
+							VerticalAlignment="Center"
+							Foreground="#FFEEEEEE"
+							Kind="AlertDecagramOutline" />
+						<TextBlock
+							Margin="5,0"
+							VerticalAlignment="Center"
+							FontSize="16"
+							Foreground="#FFEEEEEE"
+							Text="Список отказов" />
+					</StackPanel>
+
+				</Grid>
+
+			</materialDesign:Card>
+
+			<materialDesign:Card
+				Grid.Column="0"
 				Height="148"
-				Margin="404,0,0,10"
+				Margin="608,0,910,10"
 				Padding="8"
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Bottom"
@@ -456,7 +514,193 @@ Margin="10"
 							Height="30"
 							VerticalAlignment="Center"
 							Foreground="#FFEEEEEE"
-							Kind="FormatListCheckbox" />
+							Kind="ThemeLightDark" />
+						<TextBlock
+							Margin="5,0"
+							VerticalAlignment="Center"
+							FontSize="16"
+							Foreground="#FFEEEEEE"
+							Text="Время суток" />
+					</StackPanel>
+					<StackPanel
+						Grid.Row="1"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Orientation="Horizontal">
+						<RadioButton
+							Height="Auto"
+							Margin="0"
+							Checked="SetTime_OnChecked"
+							Foreground="#FFCCCCCC"
+							IsChecked="True"
+							Style="{StaticResource MaterialDesignTabRadioButton}"
+							Tag="8">
+							<StackPanel>
+								<materialDesign:PackIcon
+									Width="60"
+									Height="50"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="WeatherSunsetUp" />
+								<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Утро</TextBlock>
+							</StackPanel>
+						</RadioButton>
+						<RadioButton
+							Height="Auto"
+							Margin="0"
+							Checked="SetTime_OnChecked"
+							Foreground="#FFCCCCCC"
+							Style="{StaticResource MaterialDesignTabRadioButton}"
+							Tag="14">
+							<StackPanel>
+								<materialDesign:PackIcon
+									Width="60"
+									Height="50"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="WeatherSunny" />
+								<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">День</TextBlock>
+							</StackPanel>
+
+						</RadioButton>
+						<RadioButton
+							Height="Auto"
+							Margin="0"
+							Checked="SetTime_OnChecked"
+							Foreground="#FFCCCCCC"
+							Style="{StaticResource MaterialDesignTabRadioButton}"
+							Tag="20">
+							<StackPanel>
+								<materialDesign:PackIcon
+									Width="60"
+									Height="50"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="WeatherSunsetDown" />
+								<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Вечер</TextBlock>
+							</StackPanel>
+
+						</RadioButton>
+						<RadioButton
+							Height="Auto"
+							Margin="0"
+							Checked="SetTime_OnChecked"
+							Foreground="#FFCCCCCC"
+							Style="{StaticResource MaterialDesignTabRadioButton}"
+							Tag="2">
+							<StackPanel>
+								<materialDesign:PackIcon
+									Width="60"
+									Height="50"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="WeatherSunnyOff" />
+								<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Ночь</TextBlock>
+							</StackPanel>
+
+						</RadioButton>
+
+					</StackPanel>
+				</Grid>
+
+			</materialDesign:Card>
+			<materialDesign:Card
+				Grid.Column="0"
+				Width="199"
+				Height="148"
+				Margin="404,0,0,10"
+				Padding="8"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Bottom"
+				Background="#FF303030"
+				Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<StackPanel Grid.Row="0" Orientation="Horizontal">
+						<materialDesign:PackIcon
+							Width="30"
+							Height="30"
+							VerticalAlignment="Center"
+							Foreground="#FFEEEEEE"
+							Kind="GamepadVariant" />
+						<TextBlock
+							Margin="5,0"
+							VerticalAlignment="Center"
+							FontSize="16"
+							Foreground="#FFEEEEEE"
+							Text="Ограны управления" />
+					</StackPanel>
+					<StackPanel
+						Grid.Row="1"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Orientation="Horizontal">
+						<RadioButton
+							Height="Auto"
+							Margin="0"
+							Foreground="#FFCCCCCC"
+							IsChecked="True"
+							Style="{StaticResource MaterialDesignTabRadioButton}">
+							<StackPanel>
+								<materialDesign:PackIcon
+									Width="40"
+									Height="40"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="Numeric1BoxOutline" />
+								<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Канал №1</TextBlock>
+							</StackPanel>
+						</RadioButton>
+						<RadioButton
+							Height="Auto"
+							Margin="0"
+							Foreground="#FFCCCCCC"
+							Style="{StaticResource MaterialDesignTabRadioButton}">
+							<StackPanel>
+								<materialDesign:PackIcon
+									Width="40"
+									Height="40"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="Numeric2BoxOutline" />
+								<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Канал №2</TextBlock>
+							</StackPanel>
+
+						</RadioButton>
+
+					</StackPanel>
+				</Grid>
+
+			</materialDesign:Card>
+
+			<materialDesign:Card
+				Grid.Column="0"
+				Height="253"
+				Margin="1015,0,10,10"
+				Padding="8"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Bottom"
+				Background="#FF303030"
+				Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<StackPanel
+						Grid.Row="0"
+						Width="879"
+						HorizontalAlignment="Right"
+						Orientation="Horizontal">
+						<materialDesign:PackIcon
+							Width="30"
+							Height="30"
+							VerticalAlignment="Center"
+							Foreground="#FFEEEEEE"
+							Kind="FormatListBulleted" />
 						<TextBlock
 							Margin="5,0"
 							VerticalAlignment="Center"
@@ -464,7 +708,145 @@ Margin="10"
 							Foreground="#FFEEEEEE"
 							Text="Лог событий" />
 					</StackPanel>
+					<ListView
+						x:Name="LogList"
+						Grid.Row="1"
+						Opacity="0.6">
+						<ListView.View>
+							<GridView>
+								<GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Name}">№</GridViewColumn>
+								<GridViewColumn Width="300" DisplayMemberBinding="{Binding Path=Description}">Время</GridViewColumn>
+								<GridViewColumn Width="200" DisplayMemberBinding="{Binding Path=Value}">Событие</GridViewColumn>
+							</GridView>
+						</ListView.View>
+					</ListView>
+				</Grid>
 
+			</materialDesign:Card>
+			<materialDesign:Card
+				Grid.Column="0"
+				Width="606"
+				Height="212"
+				Margin="0,540,10,0"
+				Padding="8"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+				Background="#FF303030"
+				Foreground="{DynamicResource PrimaryHueLightForegroundBrush}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<StackPanel Grid.Row="0" Orientation="Horizontal">
+
+						<materialDesign:PackIcon
+							Width="30"
+							Height="30"
+							VerticalAlignment="Center"
+							Foreground="#FFEEEEEE"
+							Kind="WeatherLightningRainy" />
+						<TextBlock
+							Margin="5,0"
+							VerticalAlignment="Center"
+							FontSize="16"
+							Foreground="#FFEEEEEE"
+							Text="Сложные метео условия" />
+					</StackPanel>
+					<StackPanel Grid.Row="1">
+						<StackPanel>
+
+							<TextBlock
+								Margin="5,5,0,5"
+								HorizontalAlignment="Left"
+								VerticalAlignment="Center"
+								FontFamily="Calibri"
+								FontSize="16"
+								Foreground="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+								Text="{Binding StringFormat=Интенсивность тумана: {0}, ElementName=IntensityFog, Path=Value}" />
+							<Slider
+								x:Name="IntensityFog"
+								Margin="10,2,10,2"
+								VerticalAlignment="Center"
+								IsSnapToTickEnabled="True"
+								Maximum="100"
+								ValueChanged="IntensityFog_OnValueChanged"
+								Value="50" />
+						</StackPanel>
+						<StackPanel
+							Margin="0,10"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							Orientation="Horizontal">
+							<RadioButton
+								Height="Auto"
+								Margin="0"
+								Checked="Precipitation_OnChecked"
+								Foreground="#FFCCCCCC"
+								IsChecked="True"
+								Style="{StaticResource MaterialDesignTabRadioButton}"
+								Tag="Good">
+								<StackPanel>
+									<materialDesign:PackIcon
+										Width="60"
+										Height="50"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Kind="WeatherPartlyCloudy" />
+									<TextBlock
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Text="Ясная погода" />
+								</StackPanel>
+							</RadioButton>
+							<RadioButton
+								Height="Auto"
+								Margin="0"
+								Checked="Precipitation_OnChecked"
+								Foreground="#FFCCCCCC"
+								Style="{StaticResource MaterialDesignTabRadioButton}"
+								Tag="Rain">
+								<StackPanel>
+									<materialDesign:PackIcon
+										Width="60"
+										Height="50"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Kind="WeatherPouring" />
+									<TextBlock
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Text="Дождь" />
+								</StackPanel>
+
+							</RadioButton>
+							<RadioButton
+								Height="Auto"
+								Margin="0"
+								Checked="Precipitation_OnChecked"
+								Foreground="#FFCCCCCC"
+								Style="{StaticResource MaterialDesignTabRadioButton}"
+								Tag="Snow">
+								<StackPanel>
+									<materialDesign:PackIcon
+										Width="60"
+										Height="50"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Kind="WeatherHail" />
+									<TextBlock
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Text="Снег" />
+								</StackPanel>
+
+							</RadioButton>
+						
+		
+
+						</StackPanel>
+
+					</StackPanel>
 				</Grid>
 
 			</materialDesign:Card>

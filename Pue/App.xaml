@@ -11,7 +11,7 @@
 
 				<materialDesign:BundledTheme
 					BaseTheme="Dark"
-					PrimaryColor="Teal"
+					PrimaryColor="Blue"
 					SecondaryColor="LightBlue" />
 				<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 			</ResourceDictionary.MergedDictionaries>
