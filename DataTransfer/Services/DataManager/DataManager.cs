@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -23,7 +24,7 @@ using Route = DataTransfer.Model.Structs.RouteStruct.Route;
 namespace DataTransfer.Services.DataManager
 {
 	public delegate void Message(string str);
-	class DataManager
+    class DataManager
 	{
 		[DllImport("Kernel32.dll")]
 		private static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
@@ -71,17 +72,19 @@ namespace DataTransfer.Services.DataManager
 		private CLSEState _cLSEState;
 		private ParametersOfControl _parametersOfControl;
 		private Lptp _lptp;
+        private CommandPue _commandPue;
 
 
-		#endregion
+        #endregion
 
-		private UdpHelper _udpHelper;
+        private UdpHelper _udpHelper;
 		public ObservableCollection<CollectionInfo> DynamicInfos = new ObservableCollection<CollectionInfo>();
 		public ObservableCollection<CollectionInfo> ControlElementInfos = new ObservableCollection<CollectionInfo>();
 
 		public event Message StatusModelEvent;
 		public event Message StatusPacketEvent;
-		public event Message MessageEvent;
+        public event Message ChangeBtnEvent;
+        public event Message MessageEvent;
 
 		private Thread _receiveThread;
 		private Thread _sendThread;
@@ -184,7 +187,9 @@ namespace DataTransfer.Services.DataManager
 			_cLSEState = new CLSEState();
 			_parametersOfControl = new ParametersOfControl();
 			_lptp = new Lptp();
-			if (_typeModel == 0)
+            _commandPue = new CommandPue();
+
+            if (_typeModel == 0)
 			{
 				_controlElement = new ControlElementKa52();
 				_dynamicModel = new ModelKa52();
@@ -220,24 +225,42 @@ namespace DataTransfer.Services.DataManager
 		{
 			if (nameModel == "Ka52")
 			{
-				_dynamicModel = new ModelKa52();
+            
+                foreach (var process in Process.GetProcessesByName("HxModel"))
+                    process.Kill();
+                foreach (var process in Process.GetProcessesByName("model_32_console"))
+                    process.Kill();
+                Process.Start(@"D:\!Develop\Ka52Model\model_32_console.exe");
+                _dynamicModel = new ModelKa52();
 				_controlElement = new ControlElementKa52();
 				DynamicInfos.Clear();
-			}
+       
+            }
 
 			if (nameModel == "Ka50")
 			{
 				_controlElement = new ControlElementKa50();
 				_dynamicModel = new ModelKa50();
 				DynamicInfos.Clear();
-			}
+                foreach (var process in Process.GetProcessesByName("HxModel"))
+                    process.Kill();
+                foreach (var process in Process.GetProcessesByName("model_32_console"))
+                    process.Kill();
+
+            }
 
 			if (nameModel == "Hx")
 			{
-				_controlElement = new ControlElementKa50();
+                foreach (var process in Process.GetProcessesByName("HxModel"))
+                    process.Kill();
+                foreach (var process in Process.GetProcessesByName("model_32_console"))
+                    process.Kill();
+                Process.Start(@"d:\!Develop\DataTransfer\HxModel\bin\Debug\HxModel.exe");
+                _controlElement = new ControlElementKa50();
 				_dynamicModel = new ModelHx();
 				DynamicInfos.Clear();
-			}
+              
+            }
 		}
 
 		public void ChangeControlElement(string controlElement)
@@ -309,7 +332,7 @@ namespace DataTransfer.Services.DataManager
 					IntPtr InpControl = GetIntPtr(_cLSEControl);
 					IntPtr OutpState = GetIntPtr(_cLSEState);
 
-					Step(InpControl, OutpState);
+                    Step(InpControl, OutpState);
 
 					_cLSEControl = (CLSEControl)Marshal.PtrToStructure(InpControl, typeof(CLSEControl));
 					_cLSEState = (CLSEState)Marshal.PtrToStructure(OutpState, typeof(CLSEState));
@@ -405,7 +428,25 @@ namespace DataTransfer.Services.DataManager
 						_udpHelper.Send(_route.GetReverseBytes(), ippoint.Ip, ippoint.Port);
 					break;
 
-				default:
+
+                case "Pue":
+                    _commandPue.Assign(receivedBytes);
+                    if (_commandPue.sps == 1 && _stateModel != 1)
+                        OnChangeBtnEvent("Start");
+                    if (_commandPue.sps == 2 && _stateModel != 2)
+                        OnChangeBtnEvent("Pause");
+                    if (_commandPue.sps == -1)
+                         OnChangeBtnEvent("Stop");
+
+                    if (_commandPue.channel == 1)
+                        OnChangeBtnEvent("Channel1");
+                    if (_commandPue.channel == 2)
+                        OnChangeBtnEvent("Channel2");
+
+
+                    break;
+
+                default:
 					break;
 			}
 		}
@@ -462,28 +503,35 @@ namespace DataTransfer.Services.DataManager
 
 				#region Отправка на СВВО
 
-				foreach (var ippoint in _config.NetworkSettings.TacticalEditor.DynamicModel.IPPoint)
+				foreach (var ippoint in _config.NetworkSettings.Svvo.Route.IPPoint)
 					_udpHelper.Send(routeBytes, ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на ЛПТП
 
-				foreach (var ippoint in _config.NetworkSettings.TacticalEditor.DynamicModel.IPPoint)
+				foreach (var ippoint in _config.NetworkSettings.Lptp.DynamicModel.IPPoint)
 					_udpHelper.Send(dynamicModelBytes, ippoint.Ip, ippoint.Port);
 
 				#endregion
 
 				#region Отправка на БПМИ
 
-				foreach (var ippoint in _config.NetworkSettings.TacticalEditor.DynamicModel.IPPoint)
+				foreach (var ippoint in _config.NetworkSettings.Bpmi.DynamicModel.IPPoint)
 					_udpHelper.Send(_dynamicModel.GetForBmpi(_dynamicModelToBmpi), ippoint.Ip, ippoint.Port);
 
-				#endregion
+                #endregion
 
-				#region Обновление коллекций
+                #region Отправка на Пуе
 
-				App.Current.Dispatcher.Invoke(() =>
+                foreach (var ippoint in _config.NetworkSettings.Pue.DynamicModel.IPPoint)
+                    _udpHelper.Send(_dynamicModel.GetForVaps(_dynamicModelToVaps), ippoint.Ip, ippoint.Port);
+
+                #endregion
+
+                #region Обновление коллекций
+
+                App.Current.Dispatcher.Invoke(() =>
 				{
 					_dynamicModel.Update(DynamicInfos);
 					_controlElement.Update(ControlElementInfos);
@@ -498,7 +546,11 @@ namespace DataTransfer.Services.DataManager
 			}
 		}
 
-		#endregion
+        #endregion
+        public void SetChannelControlElement(int channel)
+        {
+            _controlElement.SetChannel(channel);
+        }
 
 		#region Call events
 
@@ -517,9 +569,14 @@ namespace DataTransfer.Services.DataManager
 			MessageEvent?.Invoke(str);
 		}
 
-		#endregion
+        protected void OnChangeBtnEvent(string str)
+        {
+            ChangeBtnEvent?.Invoke(str);
+        }
 
-		private void Cik_Step()
+        #endregion
+
+        private void Cik_Step()
 		{
 			double ClockRate, StartTime;
 			double DeltaT;

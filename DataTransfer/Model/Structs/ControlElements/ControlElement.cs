@@ -17,7 +17,11 @@ namespace DataTransfer.Model.Structs.ControlElements
 		protected Pedals _pedalsLeft;
 		protected Pedals _pedalsRight;
 
-	
+
+        public void SetChannel(int channel)
+        {
+            Channel = channel;
+        }
 		protected override void SetHead()
 		{
 			GetHeadDouble("ControlElement");

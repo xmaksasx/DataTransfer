@@ -105,7 +105,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 			modelToVaps.MaximumPermissibleRotor = 93;
 			modelToVaps.TotalRotor = VhclOutp.InstrumentsState.CollectivePitch;
 			modelToVaps.RecommendedValueRotor = 0;
-			modelToVaps.HeadingCurrent = KinematicsState.Angs.Psi;
+			modelToVaps.HeadingCurrent = 360.0-KinematicsState.Angs.Psi;
 			modelToVaps.HeadingTrack = PsiP * D2R;
 			modelToVaps.AngleDrift = hi * D2R;
 			modelToVaps.Angleslip = VhclOutp.InstrumentsState.AirPars.Beta;

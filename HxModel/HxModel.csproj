@@ -48,12 +48,14 @@
     <Compile Include="Models\AirPars.cs" />
     <Compile Include="Models\AirState.cs" />
     <Compile Include="Models\AngleTriplet.cs" />
+    <Compile Include="Models\FCSCommand\FCSCmds.cs" />
     <Compile Include="Models\ContactEnvironment.cs" />
     <Compile Include="Models\ControlElement.cs" />
     <Compile Include="Models\CyclicStepHandle.cs" />
     <Compile Include="Models\DataOut.cs" />
     <Compile Include="Models\DGeoPosition.cs" />
     <Compile Include="Models\Eng.cs" />
+    <Compile Include="Models\FCSCommand\FCSCmd.cs" />
     <Compile Include="Models\FCSState.cs" />
     <Compile Include="Models\FCSValue.cs" />
     <Compile Include="Models\GearRes.cs" />

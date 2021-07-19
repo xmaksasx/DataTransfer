@@ -1,4 +1,5 @@
 ﻿using HxModel.Models;
+using HxModel.Models.FCSCommand;
 using HxModel.SvvoStruct;
 using System;
 using System.Runtime.InteropServices;
@@ -11,19 +12,25 @@ namespace HxModel.FdmManager
 {
 	class FdmManager
 	{
-		#region Импорт функций модели
+        #region Импорт функций модели
 
-		/// <summary>
-		/// Декларации экспортируемых пользовательских функций:
-		/// получить параметры версии библиотеки: номер версии Version, номер подверсии Release;
-		/// дату выхода версии: день ReleaseDay, месяц ReleaseMonth, год ReleaseYear
-		/// </summary>
-		/// <param name="version"></param>
-		/// <param name="release"></param>
-		/// <param name="releaseDay"></param>
-		/// <param name="releaseMonth"></param>
-		/// <param name="releaseYear"></param>
-		[DllImport(@"DynamicsHX.dll", EntryPoint = "GetDllVersion", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("Kernel32.dll")]
+        private static extern bool QueryPerformanceCounter(out long lpPerformanceCount);
+
+        [DllImport("Kernel32.dll")]
+        private static extern bool QueryPerformanceFrequency(out long lpFrequency);
+
+        /// <summary>
+        /// Декларации экспортируемых пользовательских функций:
+        /// получить параметры версии библиотеки: номер версии Version, номер подверсии Release;
+        /// дату выхода версии: день ReleaseDay, месяц ReleaseMonth, год ReleaseYear
+        /// </summary>
+        /// <param name="version"></param>
+        /// <param name="release"></param>
+        /// <param name="releaseDay"></param>
+        /// <param name="releaseMonth"></param>
+        /// <param name="releaseYear"></param>
+        [DllImport(@"DynamicsHX.dll", EntryPoint = "GetDllVersion", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void GetDllVersion(IntPtr version, IntPtr release, IntPtr releaseDay, IntPtr releaseMonth,
 			IntPtr releaseYear);
 
@@ -67,7 +74,8 @@ namespace HxModel.FdmManager
 		private Svvo _svvo;
 		private DataOut _dataOut;
 		private float _gmTerrainH;
-		public FdmManager()
+        private FCSCmds fCSCmds;
+        public FdmManager()
 		{
 			uint  version = 0;
 			uint  release = 0;
@@ -91,14 +99,16 @@ namespace HxModel.FdmManager
 			_controlElement = new ControlElement();
 			_svvo = new Svvo();
 			_dataOut = new DataOut();
-			InitThread();
+            fCSCmds = new FCSCmds();
+
+            InitThread();
 			StartThread();
 		}
 
 		private void InitThread()
 		{
 			_receiveThread = new Thread(Receive);
-			_sendThread = new Thread(Send);
+			_sendThread = new Thread(Cik_Step);
 
 		}
 
@@ -123,19 +133,39 @@ namespace HxModel.FdmManager
 
 		public void Step(ControlElement controlElement)
 		{
-			Hel.VehicleCtrl.AltimeterBaroPressure = 760;
-			ContactEnv.Elevation =_gmTerrainH=14;
+			Hel.VehicleCtrl.AltimeterBaroPressure = 761.2;
+			ContactEnv.Elevation =_gmTerrainH;
 			ContactEnv.Normal = _normal;
 			Hel.AirState.WindSpeed = _windSpeed;
 			Hel.Mass = 10800.0;
 			Hel.InertialMoments = _inertialMoments;
 			Hel.PosCG = _posCg;
-			Hel.VehicleCtrl.CyclicPitch =  controlElement._cyclicStepHandleLeft.Elevator;
-			Hel.VehicleCtrl.CyclicRoll =  controlElement._cyclicStepHandleLeft.Aileron;
-			Hel.VehicleCtrl.Direction =  controlElement._pedalsLeft.Pedal;
-			Hel.VehicleCtrl.Collective =  controlElement._generalStepHandleLeft.GeneralStep;
-            Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleLeft.BtnTrim;
-            Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleLeft.BtnStabilizer;
+            if (controlElement.Channel==1)
+            {
+                Hel.VehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleLeft.Elevator;
+                Hel.VehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleLeft.Aileron;
+                Hel.VehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
+                Hel.VehicleCtrl.Collective = controlElement._generalStepHandleLeft.GeneralStep;
+                Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleLeft.BtnTrim;
+                Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleLeft.BtnStabilizer;
+                Hel.VehicleCtrl.NoseGear.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
+                Hel.VehicleCtrl.MainGearLeft.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
+                Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
+            }
+            else if (controlElement.Channel == 2)
+            {
+                Hel.VehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleRight.Elevator;
+                Hel.VehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleRight.Aileron;
+                Hel.VehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
+                Hel.VehicleCtrl.Collective = controlElement._generalStepHandleRight.GeneralStep;
+                Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleRight.BtnTrim;
+                Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleRight.BtnStabilizer;
+                Hel.VehicleCtrl.NoseGear.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
+                Hel.VehicleCtrl.MainGearLeft.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
+                Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
+            }
+
+
 
             IntPtr ptrHel = GetIntPtr(Hel);
             var gg = Marshal.SizeOf(ResState);
@@ -143,7 +173,7 @@ namespace HxModel.FdmManager
 			IntPtr ptrRs = GetIntPtr(ResState);
 			IntPtr ptrRh = GetIntPtr(ResHel);
 
-			Step(0.02, ptrHel, ptrCe, ptrRs, ptrRh);
+			Step(0.01, ptrHel, ptrCe, ptrRs, ptrRh);
 
 			ResState = (KinematicsState)Marshal.PtrToStructure(ptrRs, typeof(KinematicsState));
 			ResHel = (VhclOutp)Marshal.PtrToStructure(ptrRh, typeof(VhclOutp));
@@ -151,8 +181,12 @@ namespace HxModel.FdmManager
 			_dataOut.VhclOutp = ResHel;
 			_dataOut.VhclInp = Hel;
 
-			_udpHelper.Send(GetByte(ResState), "255.255.255.255", 6100);
-			_udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
+            _udpHelper.Send(GetByte(ResState), "192.168.0.2", 6100);
+            _udpHelper.Send(GetByte(ResState), "192.168.0.4", 6100);
+            _udpHelper.Send(GetByte(ResState), "192.168.0.5", 6100);
+            _udpHelper.Send(GetByte(ResState), "192.168.0.6", 6100);
+            _udpHelper.Send(GetByte(ResState), "192.168.0.9", 6100);
+            _udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
 			_udpHelper.Send(GetByte(ResState), "255.255.255.255", 6105);
 			Marshal.FreeHGlobal(ptrHel);
 			Marshal.FreeHGlobal(ptrCe);
@@ -249,12 +283,19 @@ namespace HxModel.FdmManager
 					break;
 
 				case "ModelState":
-					{
-						byte[] bytes = new byte[Marshal.SizeOf(Hel.FCSState)];
-						Array.Copy(receivedBytes, 68, bytes, 0, 48);
-						Hel.FCSState= (FCSState)ConvertHelper.ByteToObject(bytes,  Hel.FCSState, Hel.FCSState.GetType());
-						
-					}
+                    {
+                        ConvertHelper.ByteToObject(receivedBytes, fCSCmds);
+                        Hel.FCSState.Mode = (uint)fCSCmds.Mode;
+                        Hel.FCSState.RoolLimit = fCSCmds.RoolLimit;
+                        Hel.FCSState.HorSpeedReq.Activated = (byte)fCSCmds.HorSpeedReq.Activated;
+                        Hel.FCSState.HorSpeedReq.Value = fCSCmds.HorSpeedReq.Value;
+                        Hel.FCSState.VertSpeedReq.Activated = (byte)fCSCmds.VertSpeedReq.Activated;
+                        Hel.FCSState.VertSpeedReq.Value = fCSCmds.VertSpeedReq.Value;
+                        Hel.FCSState.HdgReq.Activated = (byte)fCSCmds.HdgReq.Activated;
+                        Hel.FCSState.HdgReq.Value = fCSCmds.HdgReq.Value;
+                        Hel.FCSState.BaroAltitudeReq.Activated = (byte)fCSCmds.BaroAltitudeReq.Activated;
+                        Hel.FCSState.BaroAltitudeReq.Value = fCSCmds.BaroAltitudeReq.Value;
+                    }
 					break;
                 default:
 					if (receivedBytes.Length == 4)
@@ -265,13 +306,43 @@ namespace HxModel.FdmManager
 			}
 		}
 
-          void Send()
+        private void Cik_Step()
+        {
+            double ClockRate, StartTime;
+            double DeltaT;
+            float dt_din, dt_din2;
+            long intval100 = 0;
+            long intval50 = 0;
+            QueryPerformanceFrequency(out long QW);
+            ClockRate = (QW);
+            QueryPerformanceCounter(out QW);
+            StartTime = (QW);
+            while (_isSend)
+            {
+                QueryPerformanceCounter(out long ET);
+                DeltaT = (1000.0 * ((ET) - StartTime) / ClockRate); // миллисекунды
+                dt_din = Convert.ToSingle(DeltaT / 10); // 100 Гц
+                dt_din2 = Convert.ToSingle(DeltaT / 20); //  50 Гц
+
+                if (Convert.ToSingle((Math.Truncate(dt_din))) > intval100)
+                {
+                    if (_isStart)
+                        Step(_controlElement);
+                    intval100++;
+                }
+
+                if (Convert.ToSingle((Math.Truncate(dt_din2))) > intval50)
+                { intval50++; }
+            }
+        }
+
+        void Send()
 		{
 			while (_isSend)
 			{
 				if (_isStart)
 					Step(_controlElement);
-				Thread.Sleep(20);
+				Thread.Sleep(10);
 
 
 			}

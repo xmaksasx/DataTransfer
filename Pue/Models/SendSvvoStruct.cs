@@ -44,8 +44,7 @@ namespace Pue.Models
 
         public byte[] GetBytesRain(float rain)
         {
-	        _tpacketMeteo.data.parm = 9;
-               _tpacketMeteo.data.snow = 0;
+            _tpacketMeteo.data.snow = 0;
             _tpacketMeteo.data.season = rain == 0.9F ? 3 : 0;
             _tpacketMeteo.data.rain = rain;
             return ConvertHelper.ObjectToByte(_tpacketMeteo);

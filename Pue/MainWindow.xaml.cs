@@ -25,11 +25,16 @@ namespace Pue
 
 		public ObservableCollection<NameDataDesc> LstDataDesc { get; set; }
 		private BaseModel _baseModel;
+        private CommandPue _commandPue;
 		public MainWindow()
 		{
 			InitializeComponent();
 			_baseModel = new BaseModel();
-			Prepare3DModel();
+            _commandPue = new CommandPue();
+            _baseModel.Update3DEvent += Update3DEvent;
+
+            Prepare3DModel();
+
 			//// Prepare data in arrays
 			//const int N = 1000;
 			//double[] x = new double[N];
@@ -55,10 +60,19 @@ namespace Pue
 			//plotter.FitToView();
 			LoadLog();
 			LoadFault();
+            ListOfData.ItemsSource = _baseModel.DynamicInfos;
 
-		}
 
-		private void LoadLog()
+        }
+
+        private void Update3DEvent(double pitch, double roll, double heading)
+        {
+            Roll.Angle = roll * -1.0;
+            Pitch.Angle = pitch * -1.0;
+            Heading.Angle = heading * -1.0;
+        }
+
+        private void LoadLog()
 		{
 			LstDataDesc = new ObservableCollection<NameDataDesc>();
 			LstDataDesc.Add(new NameDataDesc() { Description = "Запуск приложения",  Name = "1", Value = DateTime.Now.ToShortTimeString() }); ;
@@ -159,35 +173,46 @@ namespace Pue
 
 		private void Start_OnClick(object sender, RoutedEventArgs e)
 		{
-			var t = myView.Camera;
-			myView.Camera.Position = new Point3D(0,16, 25);
-		}
+            Start.IsEnabled = false;
+            Pause.IsEnabled = true;
+            Stop.IsEnabled = true;
+            _commandPue.sps = 1;
+            _baseModel.SetCommand(_commandPue);
+        }
 
 		private void Pause_OnClick(object sender, RoutedEventArgs e)
 		{
-			
-		}
+            Start.IsEnabled = true;
+            Pause.IsEnabled = false;
+            Stop.IsEnabled = true;
+            _commandPue.sps = 2;
+            _baseModel.SetCommand(_commandPue);
+        }
 
 		private void Stop_OnClick(object sender, RoutedEventArgs e)
 		{
-	
-		}
+            Start.IsEnabled = true;
+            Pause.IsEnabled = false;
+            Stop.IsEnabled = false;
+            _commandPue.sps = -1;
+            _baseModel.SetCommand(_commandPue);
+        }
 
 		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 
-			xxx.Angle = e.NewValue*3;
+			
 
 		}
 
 		private void Slider_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			yyy.Angle = e.NewValue * 3;
+			
 		}
 
 		private void Slider_ValueChanged_2(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			zzz.Angle = e.NewValue * 3;
+			
 		}
 
 		private void SetTime_OnChecked(object sender, RoutedEventArgs e)
@@ -230,6 +255,7 @@ namespace Pue
 			lptp.lptp_show = Convert.ToByte(LptpShowOn.IsChecked);
 			lptp.lptp_cel_show = Convert.ToByte(LptpMarkOn.IsChecked);
 			lptp.lptp_tipgr = Convert.ToByte(LptpTypeCargo.Text);
+            _baseModel.SetLpTp(lptp);
 
 		}
 		private void PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -258,9 +284,28 @@ namespace Pue
 				}
 			
 		}
-	}
 
-	class FaultInfo
+      
+        private void Channel1_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_baseModel != null)
+            {
+                _commandPue.channel = 1;
+                _baseModel?.SetCommand(_commandPue);
+            }
+        }
+        private void Channel2_Checked(object sender, RoutedEventArgs e)
+        {
+            if (_baseModel != null)
+            {
+                _commandPue.channel = 2;
+                _baseModel.SetCommand(_commandPue);
+            }
+        }
+
+    }
+
+    class FaultInfo
 	{
 		public string Code { get; set; }
 		public bool IsSelected { get; set; }

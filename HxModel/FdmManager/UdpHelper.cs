@@ -14,24 +14,24 @@ namespace HxModel.FdmManager
 		//private UdpClient _receiveClient;
 		private UdpClient _sendClient;
 		IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-		public UdpHelper()
+        public UdpHelper()
         {
-            IPEndPoint localEP = new IPEndPoint(IPAddress.Parse("192.168.0.2"), 21222);
-            UdpClient cd = new UdpClient();
-            cd.Connect(localEP);
+
+            UdpClient cd = new UdpClient(21222);
+            cd.JoinMulticastGroup(IPAddress.Parse("239.255.255.255"));
             UdpReceivers.Add(new UdpClient(20030));
-			UdpReceivers.Add(new UdpClient(20031));
-			UdpReceivers.Add(new UdpClient(20032));
-			UdpReceivers.Add(cd);
-			_sendClient = new UdpClient();
-		}
+            UdpReceivers.Add(new UdpClient(20031));
+            UdpReceivers.Add(new UdpClient(20032));
+            UdpReceivers.Add(cd);
+            _sendClient = new UdpClient();
+        }
 
 		public byte[] Receive()
 		{
 			var id = IsAvailable;
 			if (id == -1) return new byte[0];
 			IPEndPoint ipendpoint = null;
-			return UdpReceivers[id].Receive(ref RemoteIpEndPoint);
+			return UdpReceivers[id].Receive(ref ipendpoint);
 		}
 
 

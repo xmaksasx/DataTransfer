@@ -94,6 +94,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\CollectionInfo.cs" />
+    <Compile Include="Models\CommandPue.cs" />
     <Compile Include="Models\ConvertHelper.cs" />
     <Compile Include="Models\DynamicModel.cs" />
     <Compile Include="Models\Eng.cs" />

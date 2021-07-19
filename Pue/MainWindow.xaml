@@ -20,7 +20,7 @@
 	Opacity="1"
 	ResizeMode="NoResize"
 	WindowStartupLocation="CenterScreen"
-	WindowState="Maximized"
+	WindowState="Normal"
 	WindowStyle="None"
 	mc:Ignorable="d">
 	<Grid Background="#FF222831">
@@ -165,9 +165,9 @@
 							Opacity="0.6">
 							<ListView.View>
 								<GridView>
-									<GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Name}">Параметр</GridViewColumn>
-									<GridViewColumn Width="300" DisplayMemberBinding="{Binding Path=Description}">Комментарий</GridViewColumn>
-									<GridViewColumn Width="200" DisplayMemberBinding="{Binding Path=Value}">Значение</GridViewColumn>
+									<GridViewColumn Width="200" DisplayMemberBinding="{Binding Path=Name}">Параметр</GridViewColumn>
+									<GridViewColumn Width="550" DisplayMemberBinding="{Binding Path=Description}">Комментарий</GridViewColumn>
+									<GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Value}">Значение</GridViewColumn>
 								</GridView>
 							</ListView.View>
 						</ListView>
@@ -209,7 +209,7 @@
 										<RotateTransform3D>
 											<RotateTransform3D.Rotation>
 												<AxisAngleRotation3D
-													x:Name="xxx"
+													x:Name="Roll"
 													Angle="0"
 													Axis="1,0,0" />
 											</RotateTransform3D.Rotation>
@@ -217,16 +217,16 @@
 										<RotateTransform3D>
 											<RotateTransform3D.Rotation>
 												<AxisAngleRotation3D
-													x:Name="yyy"
-													Angle="0"
+													x:Name="Heading"
+														Angle="0"
 													Axis="0,1,0" />
 											</RotateTransform3D.Rotation>
 										</RotateTransform3D>
 										<RotateTransform3D>
 											<RotateTransform3D.Rotation>
 												<AxisAngleRotation3D
-													x:Name="zzz"
-													Angle="0"
+													x:Name="Pitch"
+														Angle="0"
 													Axis="0,0,1" />
 											</RotateTransform3D.Rotation>
 										</RotateTransform3D>
@@ -467,7 +467,7 @@
 								Margin="5,0"
 								VerticalAlignment="Center"
 								PreviewTextInput="PreviewTextInput">
-								0
+								1
 							</TextBox>
 						</StackPanel>
 
@@ -503,7 +503,7 @@
 								Margin="5,0"
 								VerticalAlignment="Center"
 								PreviewTextInput="PreviewTextInput">
-								0
+								1000
 							</TextBox>
 						</StackPanel>
 
@@ -515,7 +515,7 @@
 								Margin="5,0"
 								VerticalAlignment="Center"
 								PreviewTextInput="PreviewTextInput">
-								0
+								1000
 							</TextBox>
 						</StackPanel>
 
@@ -524,6 +524,7 @@
 								Включить режим движущейся цели
 							</TextBlock>
 							<CheckBox
+                                IsChecked="True"
 								x:Name="LptpTargetOn"
 								Margin="5,0"
 								VerticalAlignment="Center" />
@@ -540,6 +541,7 @@
 						<StackPanel Margin="3" Orientation="Horizontal">
 							<TextBlock VerticalAlignment="Center" FontWeight="Bold">Показать ЛПТП</TextBlock>
 							<CheckBox
+                                IsChecked="True"
 								x:Name="LptpShowOn"
 								Margin="5,0"
 								VerticalAlignment="Center" />
@@ -801,6 +803,7 @@
 						<RadioButton
 							Height="Auto"
 							Margin="0"
+                            Checked="Channel1_Checked"
 							Foreground="#FFCCCCCC"
 							IsChecked="True"
 							Style="{StaticResource MaterialDesignTabRadioButton}">
@@ -808,6 +811,7 @@
 								<materialDesign:PackIcon
 									Width="40"
 									Height="40"
+                                    
 									HorizontalAlignment="Center"
 									VerticalAlignment="Center"
 									Kind="Numeric1BoxOutline" />
@@ -815,6 +819,7 @@
 							</StackPanel>
 						</RadioButton>
 						<RadioButton
+                              Checked="Channel2_Checked"
 							Height="Auto"
 							Margin="0"
 							Foreground="#FFCCCCCC"

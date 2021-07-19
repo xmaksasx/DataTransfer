@@ -6,7 +6,7 @@ namespace HxModel.Models
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	class ControlElement : Header
 	{
-		protected int Channel;
+        public int Channel;
 		public CyclicStepHandle _cyclicStepHandleLeft;
 		public CyclicStepHandle _cyclicStepHandleRight;
 		public GeneralStepHandle _generalStepHandleLeft;

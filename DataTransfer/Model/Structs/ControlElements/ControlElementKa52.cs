@@ -226,16 +226,20 @@ namespace DataTransfer.Model.Structs.ControlElements
 			if (joystickState.Buttons[28] == 0)
 				_cyclicStepHandleLeft.BtnGhPosition = 4;
 
-
-			//ФАРА ВЛЕВО
-			_cyclicStepHandleLeft.BtnJoystickX = -(1 - joystickState.Buttons[25]);
-			//ФАРА ВНИЗ
-			_cyclicStepHandleLeft.BtnJoystickY = -(1 - joystickState.Buttons[26]);
-			//ФАРА ВВЕРХ
-			_cyclicStepHandleLeft.BtnJoystickX = 1 - joystickState.Buttons[27];
-			//ФАРА ВПРАВО
-			_cyclicStepHandleLeft.BtnJoystickY = 1 - joystickState.Buttons[24];
-
+            _cyclicStepHandleLeft.BtnJoystickX = 0;
+            _cyclicStepHandleLeft.BtnJoystickY = 0;
+            //ФАРА ВЛЕВО
+            if (joystickState.Buttons[25] == 0)
+                _cyclicStepHandleLeft.BtnJoystickX = -1;
+            //ФАРА ВНИЗ
+            if (joystickState.Buttons[26] == 0)
+                _cyclicStepHandleLeft.BtnJoystickY = -1;
+            //ФАРА ВВЕРХ
+            if (joystickState.Buttons[27] == 0)
+                _cyclicStepHandleLeft.BtnJoystickX = 1;
+            //ФАРА ВПРАВО
+            if (joystickState.Buttons[24] == 0)
+                _cyclicStepHandleLeft.BtnJoystickY = 1;
 
 			//ОТКЛ АП
 			_cyclicStepHandleLeft.BtnAutopilotOff = 1 - joystickState.Buttons[23];
@@ -246,10 +250,12 @@ namespace DataTransfer.Model.Structs.ControlElements
 
 			_cyclicStepHandleLeft.BtnCargoOff = 1 - joystickState.Buttons[22];
 
-			_cyclicStepHandleLeft.BtnWheelBrake = 0;
-
-			//ТАНГАЖ
-			_cyclicStepHandleLeft.Elevator = (float)(Map(joystickState.Sliders[8], 488, 675, 189.99, -114.99) / 1.0);
+            if (joystickState.Sliders[14] > 250)
+                _cyclicStepHandleLeft.BtnWheelBrake = 1;
+            else
+                _cyclicStepHandleLeft.BtnWheelBrake = 0;
+            //ТАНГАЖ
+            _cyclicStepHandleLeft.Elevator = (float)(Map(joystickState.Sliders[8], 488, 675, 189.99, -114.99) / 1.0);
 			if (_cyclicStepHandleLeft.Elevator >= 0) _cyclicStepHandleLeft.Elevator = (float)(189.99 * Math.Pow(_cyclicStepHandleLeft.Elevator / 189.99, 2.5));
 			else _cyclicStepHandleLeft.Elevator = (float)(-114.99 * Math.Pow(_cyclicStepHandleLeft.Elevator / 114.99, 2));
 

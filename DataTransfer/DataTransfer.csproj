@@ -91,6 +91,7 @@
     <Compile Include="Model\Structs\ChannelRadar.cs" />
     <Compile Include="Model\Structs\ChannelThermalEffect.cs" />
     <Compile Include="Model\Structs\ChannelTvHeadEffect.cs" />
+    <Compile Include="Model\Structs\CommandPue.cs" />
     <Compile Include="Model\Structs\Config\Pue.cs" />
     <Compile Include="Model\Structs\Config\Bpmi.cs" />
     <Compile Include="Model\Structs\Config\Command.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\Overload.cs" />
     <Compile Include="Model\Structs\DynamicModelStruct\Vaps\DynamicModelToVaps.cs" />
     <Compile Include="Model\Structs\ParametersOfControl.cs" />
+    <Compile Include="Model\Structs\Pue\CommandPue.cs" />
     <Compile Include="Model\Structs\RouteStruct\Landing.cs" />
     <Compile Include="Model\Structs\RouteStruct\AerodromeStruct\Aerodrome.cs" />
     <Compile Include="Model\Structs\RouteStruct\NavigationPointStruct\GeoCoordinate.cs" />

@@ -1,10 +1,9 @@
-﻿using DataTransfer.Model.Component.BaseComponent;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace Pue.Models
 {
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
 	class Lptp : Header
 	{
 		public Lptp()

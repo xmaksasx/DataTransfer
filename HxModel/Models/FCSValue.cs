@@ -6,7 +6,7 @@ namespace HxModel.Models
 	[StructLayout(LayoutKind.Sequential,Pack = 1)]
 	struct FCSValue
 	{
-		double Value; // величина параметра
-		byte Activated; // признак активности данного параметра
+        public double Value; // величина параметра
+        public byte Activated; // признак активности данного параметра
 	}
 }

@@ -229,7 +229,46 @@
 							Style="{StaticResource MaterialDesignTabRadioButton}" />
 					</StackPanel>
 					<Separator />
-				</ToolBar>
+                    <StackPanel
+						Grid.Row="1"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Orientation="Horizontal">
+                        <RadioButton
+							Height="Auto"
+							Margin="0"
+                            Command="{Binding ChangeChannelComtrolElementCommand}"
+							CommandParameter="FirstChannel"
+                            
+							Foreground="#FFCCCCCC"
+							IsChecked="True"
+							Style="{StaticResource MaterialDesignTabRadioButton}">
+                            <StackPanel>
+                                <materialDesign:PackIcon
+							
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="Numeric1BoxOutline" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton
+							Height="Auto"
+							Margin="0"
+                            Command="{Binding ChangeChannelComtrolElementCommand}"
+							CommandParameter="SecondChannel"
+							Foreground="#FFCCCCCC"
+							Style="{StaticResource MaterialDesignTabRadioButton}">
+                            <StackPanel>
+                                <materialDesign:PackIcon
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									Kind="Numeric2BoxOutline" />
+                            </StackPanel>
+
+                        </RadioButton>
+
+                    </StackPanel>
+                </ToolBar>
 			</ToolBarTray>
 		</Grid>
 		<Grid Grid.Row="2">

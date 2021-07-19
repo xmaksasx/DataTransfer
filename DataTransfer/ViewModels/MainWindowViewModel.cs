@@ -228,10 +228,30 @@ namespace DataTransfer.ViewModels
 					break;
 			}
 		}
-		#endregion
+        #endregion
 
-		#region OpenDataDescriptionCreator
-		public ICommand OpenDataDescriptionCreatorCommand { get; set; }
+        #region ChangeChannelComtrolElement
+        public ICommand ChangeChannelComtrolElementCommand { get; set; }
+
+        private bool CanChangeChannelComtrolElementCommandExecute(object p) => true;
+
+        private void OnChangeChannelComtrolElementCommandExecuted(object p)
+        {
+
+            switch (p.ToString())
+            {
+                case "FirstChannel":
+                    _dataManager.SetChannelControlElement(1);
+                    break;
+                case "SecondChannel":
+                    _dataManager.SetChannelControlElement(2);
+                    break;
+            }
+        }
+        #endregion
+
+        #region OpenDataDescriptionCreator
+        public ICommand OpenDataDescriptionCreatorCommand { get; set; }
 
 		private bool CanOpenDataDescriptionCreatorCommandExecute(object p) => true;
 
@@ -253,7 +273,8 @@ namespace DataTransfer.ViewModels
 			PauseModelingCommand = new LambdaCommand(OnPauseModelingCommandExecuted, CanPauseModelingCommandExecute);
 			StopModelingCommand = new LambdaCommand(OnStopModelingCommandExecuted, CanStopModelingCommandExecute);
 			ChangeCollectionCommand = new LambdaCommand(OnChangeCollectionCommandExecuted, CanChangeCollectionCommandExecute);
-			OpenDataDescriptionCreatorCommand = new LambdaCommand(OnOpenDataDescriptionCreatorCommandExecuted, CanOpenDataDescriptionCreatorCommandExecute);
+            ChangeChannelComtrolElementCommand = new LambdaCommand(OnChangeChannelComtrolElementCommandExecuted, CanChangeChannelComtrolElementCommandExecute);
+            OpenDataDescriptionCreatorCommand = new LambdaCommand(OnOpenDataDescriptionCreatorCommandExecuted, CanOpenDataDescriptionCreatorCommandExecute);
 			UploadConfigCommand = new LambdaCommand(OnUploadConfigCommandExecuted, CanUploadConfigCommandExecute);
 			_dataManager = DataManager.GetInstance();
 			_deviceControlElement = DeviceControlElement.GetInstance();
@@ -265,13 +286,38 @@ namespace DataTransfer.ViewModels
 			_dataManager.StatusModelEvent += OnStatusModelEvent; 
 			_dataManager.StatusPacketEvent += OnStatusPacketEvent;
 			_dataManager.MessageEvent += OnMessageEvent;
-			_deviceControlElement.MessageEvent += OnMessageEvent;
+            _dataManager.ChangeBtnEvent += ChangeBtnEvent;
+
+            _deviceControlElement.MessageEvent += OnMessageEvent;
 
 		}
 
+        private void ChangeBtnEvent(string str)
+        {
+            switch (str)
+            {
+                case "Start":
+                    StartModelingCommand.Execute(null);
+                    break;
+                case "Pause":
+                    PauseModelingCommand.Execute(null);
+                    break;
+                case "Stop":
+                    StopModelingCommand.Execute(null);
+                    break;
 
+                case "Channel1":
+                    ChangeChannelComtrolElementCommand.Execute("FirstChannel");
+                    break;
+                case "Channel2":
+                    ChangeChannelComtrolElementCommand.Execute("SecondChannel");
+                    break;
+                default:
+                    break;
+            }
+        }
 
-		private void OnMessageEvent(string str)
+        private void OnMessageEvent(string str)
 		{
 			MessageQueue.Enqueue(
 			str,
