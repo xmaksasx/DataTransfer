@@ -11,6 +11,14 @@ using System.Windows.Media.Media3D;
 using Pue.Models;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Windows.Data;
+using System.Linq;
+using System.Globalization;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
+using System.Collections.Generic;
+using Microsoft.Research.DynamicDataDisplay;
+using System.Windows.Threading;
+using System.Windows.Controls.Primitives;
 
 //using Microsoft.Research.DynamicDataDisplay;
 //using Microsoft.Research.DynamicDataDisplay.DataSources;
@@ -24,14 +32,19 @@ namespace Pue
 	{
 
 		public ObservableCollection<NameDataDesc> LstDataDesc { get; set; }
+		private List<GraphInfo> _lstGraph { get; set; }
 		private BaseModel _baseModel;
         private CommandPue _commandPue;
+		private readonly DispatcherTimer _timer = new DispatcherTimer();
+		private DateTime _dateRec, _timeTitle, _timeChart;
 		public MainWindow()
 		{
 			InitializeComponent();
 			_baseModel = new BaseModel();
             _commandPue = new CommandPue();
-            _baseModel.Update3DEvent += Update3DEvent;
+			_lstGraph = new List<GraphInfo>();
+
+			_baseModel.Update3DEvent += Update3DEvent;
 
             Prepare3DModel();
 
@@ -60,12 +73,32 @@ namespace Pue
 			//plotter.FitToView();
 			LoadLog();
 			LoadFault();
-            ListOfData.ItemsSource = _baseModel.DynamicInfos;
+			LoadParam();
+			InitPlotter();
+			SetTimerInterrupts();
+
+			ListOfData.ItemsSource = _baseModel.DynamicInfos;
+			LstParameters.ItemsSource = _baseModel.ParameterInfos;
+
+		}
+		#region Инициализация Plotter
+
+		private void InitPlotter()
+		{
 
 
-        }
+			Plotter.Children.Remove(Plotter.DefaultContextMenu);
+			Plotter.Children.Remove(Plotter.KeyboardNavigation);
+			Plotter.Children.Remove(Plotter.MouseNavigation);
 
-        private void Update3DEvent(double pitch, double roll, double heading)
+			Plotter.Children.Remove(Plotter.VerticalAxisNavigation);
+			Plotter.Children.Remove(Plotter.HorizontalAxisNavigation);
+			Plotter.MainHorizontalAxisVisibility = Visibility.Hidden;
+		}
+
+		#endregion
+
+		private void Update3DEvent(double pitch, double roll, double heading)
         {
             Roll.Angle = roll * -1.0;
             Pitch.Angle = pitch * -1.0;
@@ -96,8 +129,24 @@ namespace Pue
 			LstFault.ItemsSource = lst;
 		}
 
+		private void LoadParam()
+		{
+			var lst = new ObservableCollection<FaultInfo>();
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Пожар левого двигателя", IsSelected = false, Code = "A" }); ;
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Пожар првого двигателя", IsSelected = false, Code = "A" });
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Отказ левого двигателя", IsSelected = false, Code = "A" });
+			lst.Add(new FaultInfo() { Description = "Двигатель", Name = "Отказ правого двигателя", IsSelected = false, Code = "A" });
 
-		
+			lst.Add(new FaultInfo() { Description = "Электрика", Name = "Отказ двух генераторов", IsSelected = false, Code = "Э" }); ;
+			lst.Add(new FaultInfo() { Description = "Топливо", Name = "Осталось 600 кг.", IsSelected = false, Code = "Т" });
+			lst.Add(new FaultInfo() { Description = "Радиовысотомер", Name = "Отказ радиовысотомера", IsSelected = false, Code = "Р" });
+			
+		}
+
+
+
+
+
 		private void Prepare3DModel()
 		{
 			ObjReader helixObjReader = new ObjReader();
@@ -156,6 +205,15 @@ namespace Pue
 		}
 
 
+		private void SetTimerInterrupts()
+		{
+			_timer.Interval = TimeSpan.FromMilliseconds(20);
+			_timer.Tick += OnTimerTick;
+			_timer.Start();
+			_timeChart = DateTime.Now;
+		}
+		
+
 		private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			DragMove();
@@ -198,22 +256,94 @@ namespace Pue
             _baseModel.SetCommand(_commandPue);
         }
 
-		private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
+		#region "Графики" Ввод, Снятие
 
+		private void ChkItemRecord_OnChecked(object sender, RoutedEventArgs e)
+		{
+			ToggleButton chkSelecttedItem = (ToggleButton)sender;
+			if (chkSelecttedItem.Content != null)
+			{
+				string nameLine = chkSelecttedItem.Tag.ToString();
+				var source = new ObservableDataSource<PointsGraph>();
+				source.SetXMapping(x => SpanAxis.ConvertToDouble(x.TimeG));
+				source.SetYMapping(y => y.PointG);
+				var uid =   ((string)chkSelecttedItem.Uid).Split('.').Last();
+				_lstGraph.Add(new GraphInfo
+				{
+				
+					LineGraph = Plotter.AddLineGraph(source, Colors.Black, 2,nameLine),
+					Source = source,
+					Uid = uid
+				});
+				AddToLog("Отображен график: " + nameLine);
+			}
+		}
+
+
+
+		private void ChkItemRecord_OnUnchecked(object sender, RoutedEventArgs e)
+		{
+			ToggleButton chkSelecttedItem = (ToggleButton)sender;
+			if (chkSelecttedItem.Content != null)
+			{
+				var uid = ((string)chkSelecttedItem.Uid).Split('.').Last();
+				GraphInfo lg = null;
+				foreach (var item in _lstGraph)
+					if (item.Uid == uid)
+						lg = item;
+
+				if (lg != null)
+				{
+					_lstGraph.RemoveAll(a => a.Uid == uid);
+					Plotter.Children.Remove(lg.LineGraph);
+					AddToLog("Удален график: " + chkSelecttedItem.Content);
+				}
+
+			}
+		}
+
+		private void OnTimerTick(object sender, EventArgs e)
+		{
 			
+			SetChartData();
 
 		}
 
-		private void Slider_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+		private void SetChartData()
 		{
+			if ((DateTime.Now - _timeChart).Milliseconds > 75)
+			{
+				_timeChart = DateTime.Now;
+				foreach (var t in _lstGraph)
+				{
+					var tim = DateTime.Now;
+					if (t.Source == null || t.Uid == null) continue;
+					var p1 = new PointsGraph
+					{
+						PointG = Math.Round(Convert.ToDouble(_baseModel.GetData(t.Uid)), 3),
+						TimeG = new TimeSpan(0, tim.Hour, tim.Minute, tim.Second, tim.Millisecond)
+					};
+					t.Source.AppendAsync(Dispatcher, p1);
+				}
+
 			
+			}
 		}
 
-		private void Slider_ValueChanged_2(object sender, RoutedPropertyChangedEventArgs<double> e)
+		#endregion
+
+		#region Лог событий
+
+		private void AddToLog(string Event)
 		{
-			
+			NameDataDesc itemLog = new NameDataDesc();
+			itemLog.Description = Event;
+			itemLog.Value = DateTime.Now.ToShortTimeString();
+			//LogList.Items.Add(itemLog);
+			//LogList.Items.Refresh();
 		}
+
+		#endregion
 
 		private void SetTime_OnChecked(object sender, RoutedEventArgs e)
 		{
@@ -303,9 +433,33 @@ namespace Pue
             }
         }
 
-    }
+		private void Window_Closing(object sender, CancelEventArgs e)
+		{
+			_baseModel.IsReceive = false;
+		}
 
-    class FaultInfo
+		private void ScrollViewer_PreviewMouseWheel(object sender,
+													MouseWheelEventArgs e)
+		{
+			ScrollViewer scrollViewer = (ScrollViewer)sender;
+			scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - e.Delta);
+		}
+	}
+
+	public class SplitConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return ((string)value).Split('.').Last();
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	class FaultInfo
 	{
 		public string Code { get; set; }
 		public bool IsSelected { get; set; }
@@ -313,6 +467,20 @@ namespace Pue
 		public string Description { get; set; }
 	}
 
+
+	public class PointsGraph
+	{
+		public TimeSpan TimeG;
+		public double PointG;
+
+	}
+
+	public class GraphInfo
+	{
+		public string Uid;
+		public ObservableDataSource<PointsGraph> Source;
+		public LineGraph LineGraph = new LineGraph();
+	}
 
 	[Serializable]
 	public class NameDataDesc : INotifyPropertyChanged

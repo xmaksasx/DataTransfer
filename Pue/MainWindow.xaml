@@ -16,6 +16,7 @@
 	fluentWpf:AcrylicWindow.Enabled="true"
 	Background="#FF222831"
 	BorderThickness="0"
+	Closing="Window_Closing"
 	MouseLeftButtonDown="Window_MouseLeftButtonDown"
 	Opacity="1"
 	ResizeMode="NoResize"
@@ -23,11 +24,15 @@
 	WindowState="Normal"
 	WindowStyle="None"
 	mc:Ignorable="d">
+	<Window.Resources>
+		<local:SplitConverter x:Key="SplitConverter" />
+	</Window.Resources>
 	<Grid Background="#FF222831">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="60" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
+
 		<Grid>
 			<Image
 				Width="40"
@@ -109,11 +114,12 @@
 							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
 						<Border
-							Grid.RowSpan="2"
+							Grid.RowSpan="3"
 							BorderBrush="#FF2A2D30"
 							BorderThickness="2" />
 						<TextBlock
 							Grid.Row="0"
+							Margin="294,7,294,6"
 							HorizontalAlignment="Center"
 							VerticalAlignment="Center"
 							FontSize="20"
@@ -121,13 +127,14 @@
 							Графическое представление данных
 						</TextBlock>
 						<d3:ChartPlotter
-							x:Name="plotter"
+							x:Name="Plotter"
 							Grid.Row="1"
 							Margin="3"
 							Background="#FF303030"
 							BorderBrush="{x:Null}"
 							Opacity="0.6"
 							RenderTransformOrigin="0.5,0.5">
+							<d3:HorizontalTimeSpanAxis x:Name="SpanAxis" />
 							<d3:IsolineGraph
 								Name="isolineGraph"
 								Foreground="#DDBF0000"
@@ -135,6 +142,115 @@
 							<d3:IsolineTrackingGraph Name="trackingGraph" />
 							<d3:CursorCoordinateGraph x:Name="coorgraph" Foreground="#DD000000" />
 						</d3:ChartPlotter>
+
+
+
+
+
+						<materialDesign:DrawerHost
+							Grid.RowSpan="2"
+							  Opacity="0.7"
+							HorizontalAlignment="Stretch"
+							VerticalAlignment="Stretch"
+							BorderBrush="{DynamicResource MaterialDesignDivider}"
+							BorderThickness="2">
+							<materialDesign:DrawerHost.Style>
+								<Style BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}" TargetType="materialDesign:DrawerHost">
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding IsChecked, ElementName=BackgroundToggle}" Value="True">
+											<Setter Property="OverlayBackground" Value="{DynamicResource PrimaryHueMidBrush}" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</materialDesign:DrawerHost.Style>
+							<materialDesign:DrawerHost.RightDrawerContent>
+								<Grid Width="280" Margin="16">
+									<Grid.RowDefinitions>
+										<RowDefinition Height="40" />
+										<RowDefinition Height="*" />
+									</Grid.RowDefinitions>
+									<Button
+										Grid.Row="0"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Top"
+										Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+										CommandParameter="{x:Static Dock.Right}"
+										Content="Закрыть"
+										Style="{DynamicResource MaterialDesignFlatButton}" />
+									<ScrollViewer
+										Grid.Row="1"
+										HorizontalScrollBarVisibility="Auto"
+												ScrollViewer.CanContentScroll="True"
+										VerticalScrollBarVisibility="Auto">
+										<ItemsControl x:Name="LstParameters">
+
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Grid>
+														<Border
+															x:Name="Border"
+															Padding="8"
+															BorderBrush="{DynamicResource MaterialDesignDivider}"
+															BorderThickness="0,0,0,1">
+															<StackPanel
+																Grid.Column="1"
+																Margin="8,0,0,0"
+																Orientation="Horizontal">
+																<ToggleButton
+																	Checked="ChkItemRecord_OnChecked"
+																	Unchecked="ChkItemRecord_OnUnchecked"
+																	HorizontalAlignment="Left"
+																	Uid="{Binding Name}"
+																	Tag="{Binding Description}"
+																	VerticalAlignment="Center"
+																	Style="{StaticResource MaterialDesignActionLightToggleButton}"
+																	ToolTip="{Binding Name}">
+																	<materialDesign:PackIcon Foreground="#FF313131" Kind="SineWave" />
+
+																</ToggleButton>
+
+																<TextBlock
+													
+																	Margin="10,0"
+																	HorizontalAlignment="Left"
+																	VerticalAlignment="Center"
+																	FontSize="10"
+																	Text="{Binding Description}" />
+															</StackPanel>
+														</Border>
+													</Grid>
+													<DataTemplate.Triggers>
+														<DataTrigger Binding="{Binding ElementName=toog, Path=IsChecked}" Value="True">
+															<Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}" />
+														</DataTrigger>
+													</DataTemplate.Triggers>
+												</DataTemplate>
+
+
+											</ItemsControl.ItemTemplate>
+
+										</ItemsControl>
+									</ScrollViewer>
+								</Grid>
+							</materialDesign:DrawerHost.RightDrawerContent>
+							<Grid>
+								<Grid
+									Grid.Row="0"
+									HorizontalAlignment="Right"
+									VerticalAlignment="top">
+
+									<Button
+										Grid.Row="1"
+										Grid.Column="2"
+										Margin="4"
+										Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+										CommandParameter="{x:Static Dock.Right}"
+										Content="{materialDesign:PackIcon Kind=ArrowLeft}"
+										Style="{StaticResource MaterialDesignOutlinedButton}" />
+
+								</Grid>
+							</Grid>
+						</materialDesign:DrawerHost>
 					</Grid>
 				</TabItem>
 				<TabItem Header="{materialDesign:PackIcon Kind=FormatListNumbered, Size=35}" Style="{StaticResource MaterialDesignNavigationRailTabItem}">
@@ -218,7 +334,7 @@
 											<RotateTransform3D.Rotation>
 												<AxisAngleRotation3D
 													x:Name="Heading"
-														Angle="0"
+													Angle="0"
 													Axis="0,1,0" />
 											</RotateTransform3D.Rotation>
 										</RotateTransform3D>
@@ -226,7 +342,7 @@
 											<RotateTransform3D.Rotation>
 												<AxisAngleRotation3D
 													x:Name="Pitch"
-														Angle="0"
+													Angle="0"
 													Axis="0,0,1" />
 											</RotateTransform3D.Rotation>
 										</RotateTransform3D>
@@ -524,10 +640,10 @@
 								Включить режим движущейся цели
 							</TextBlock>
 							<CheckBox
-                                IsChecked="True"
 								x:Name="LptpTargetOn"
 								Margin="5,0"
-								VerticalAlignment="Center" />
+								VerticalAlignment="Center"
+								IsChecked="True" />
 						</StackPanel>
 
 						<StackPanel Margin="3" Orientation="Horizontal">
@@ -541,10 +657,10 @@
 						<StackPanel Margin="3" Orientation="Horizontal">
 							<TextBlock VerticalAlignment="Center" FontWeight="Bold">Показать ЛПТП</TextBlock>
 							<CheckBox
-                                IsChecked="True"
 								x:Name="LptpShowOn"
 								Margin="5,0"
-								VerticalAlignment="Center" />
+								VerticalAlignment="Center"
+								IsChecked="True" />
 						</StackPanel>
 
 						<StackPanel Margin="3" Orientation="Horizontal">
@@ -559,12 +675,12 @@
 							<TextBlock VerticalAlignment="Center" FontWeight="Bold">Тип груза</TextBlock>
 
 							<TextBox
-								TextChanged="LptpTypeCargo_TextChanged"
 								x:Name="LptpTypeCargo"
 								Width="50"
 								Margin="5,0"
 								VerticalAlignment="Center"
-								PreviewTextInput="PreviewTextInput">
+								PreviewTextInput="PreviewTextInput"
+								TextChanged="LptpTypeCargo_TextChanged">
 								0
 							</TextBox>
 						</StackPanel>
@@ -803,7 +919,7 @@
 						<RadioButton
 							Height="Auto"
 							Margin="0"
-                            Checked="Channel1_Checked"
+							Checked="Channel1_Checked"
 							Foreground="#FFCCCCCC"
 							IsChecked="True"
 							Style="{StaticResource MaterialDesignTabRadioButton}">
@@ -811,7 +927,6 @@
 								<materialDesign:PackIcon
 									Width="40"
 									Height="40"
-                                    
 									HorizontalAlignment="Center"
 									VerticalAlignment="Center"
 									Kind="Numeric1BoxOutline" />
@@ -819,9 +934,9 @@
 							</StackPanel>
 						</RadioButton>
 						<RadioButton
-                              Checked="Channel2_Checked"
 							Height="Auto"
 							Margin="0"
+							Checked="Channel2_Checked"
 							Foreground="#FFCCCCCC"
 							Style="{StaticResource MaterialDesignTabRadioButton}">
 							<StackPanel>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -230,6 +231,7 @@ namespace DataTransfer.Services.DataManager
                     process.Kill();
                 foreach (var process in Process.GetProcessesByName("model_32_console"))
                     process.Kill();
+				if (File.Exists(@"D:\!Develop\Ka52Model\model_32_console.exe")) 
                 Process.Start(@"D:\!Develop\Ka52Model\model_32_console.exe");
                 _dynamicModel = new ModelKa52();
 				_controlElement = new ControlElementKa52();
@@ -255,7 +257,8 @@ namespace DataTransfer.Services.DataManager
                     process.Kill();
                 foreach (var process in Process.GetProcessesByName("model_32_console"))
                     process.Kill();
-                Process.Start(@"d:\!Develop\DataTransfer\HxModel\bin\Debug\HxModel.exe");
+				if (File.Exists(@"d:\!Develop\DataTransfer\HxModel\bin\Debug\HxModel.exe"))
+				Process.Start(@"d:\!Develop\DataTransfer\HxModel\bin\Debug\HxModel.exe");
                 _controlElement = new ControlElementKa50();
 				_dynamicModel = new ModelHx();
 				DynamicInfos.Clear();

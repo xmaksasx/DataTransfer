@@ -15,8 +15,8 @@ namespace Pue.Models
 		public UdpClient _receiveUdp { get; set; }
 		private SendSvvoStruct _sendSvvo;
 		private string _ipSvvo = "255.255.255.255";
-		bool _isReceive;
-		Thread _receiveThread;
+        public bool IsReceive { get; set; }
+        Thread _receiveThread;
 		DynamicModel _dynamicModel;
 
  
@@ -26,14 +26,18 @@ namespace Pue.Models
        
 
         public ObservableCollection<CollectionInfo> DynamicInfos { get; set; }
-      
+
+        public ObservableCollection<CollectionInfo> ParameterInfos { get; set; }
+
 
         public BaseModel()
 		{
             DynamicInfos = new ObservableCollection<CollectionInfo>();
-            _isReceive = true;
+            ParameterInfos = new ObservableCollection<CollectionInfo>();
+            IsReceive = true;
             _dynamicModel = new DynamicModel();
-			_sendSvvo = new SendSvvoStruct();
+            _dynamicModel.Update(ParameterInfos);
+            _sendSvvo = new SendSvvoStruct();
 			_sendUdp = new UdpClient();
 			_receiveUdp = new UdpClient(20100);
 			_receiveThread = new Thread(Receive);
@@ -94,7 +98,7 @@ namespace Pue.Models
 
         void Receive()
         {
-            while (_isReceive)
+            while (IsReceive)
             {
                 if (IsAvailable) continue;
                 IPEndPoint ipendpoint = null;
@@ -151,7 +155,27 @@ namespace Pue.Models
             
         
         }
-    
+
+        #endregion
+
+        #region Получить данные для графика
+
+        public double GetData(string name)
+        {
+
+            if (_dynamicModel != null)
+            {
+                var field = _dynamicModel.GetType().GetFields();
+                foreach (var item in field)
+                    if (item.Name == name)
+                    {
+                         double.TryParse(item.GetValue(_dynamicModel).ToString(), out double value);
+                        return value;
+                    }
+            }
+            return 0.0;
+        }
+
         #endregion
     }
 }
