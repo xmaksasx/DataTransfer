@@ -12,7 +12,7 @@ namespace HxModel.FdmManager
 
 		private List<UdpClient> UdpReceivers = new List<UdpClient>();
 		//private UdpClient _receiveClient;
-		private UdpClient _sendClient;
+		private UdpClient _sendClient; 
 		IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         public UdpHelper()
         {
@@ -25,6 +25,13 @@ namespace HxModel.FdmManager
             UdpReceivers.Add(cd);
             _sendClient = new UdpClient();
         }
+
+		public void Stop()
+		{
+			_sendClient.Close();
+			foreach (var udp in UdpReceivers)
+				udp.Close();
+		}
 
 		public byte[] Receive()
 		{

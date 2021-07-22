@@ -271,7 +271,7 @@ namespace Pue
 				_lstGraph.Add(new GraphInfo
 				{
 				
-					LineGraph = Plotter.AddLineGraph(source, Colors.Black, 2,nameLine),
+					LineGraph = Plotter.AddLineGraph(source, 2, nameLine),
 					Source = source,
 					Uid = uid
 				});

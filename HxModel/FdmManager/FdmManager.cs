@@ -60,6 +60,7 @@ namespace HxModel.FdmManager
 		private bool _isSend = true;
 		private bool _isReceive = true;
 		private bool _isStart;
+		private bool _isRecord = false;
 
 		private VhclInp Hel;
 		private ContactEnvironment ContactEnv;
@@ -72,9 +73,11 @@ namespace HxModel.FdmManager
 		private StartPosition _startPosition;
 		private ControlElement _controlElement;
 		private Svvo _svvo;
+		private RecordFlight _recordFlight;
 		private DataOut _dataOut;
 		private float _gmTerrainH;
         private FCSCmds fCSCmds;
+
         public FdmManager()
 		{
 			uint  version = 0;
@@ -93,7 +96,7 @@ namespace HxModel.FdmManager
 			releaseDay = (uint)Marshal.ReadInt32(preleaseDay);
 			releaseMonth = (uint)Marshal.ReadInt32(preleaseMonth);
 			releaseYear = (uint)Marshal.ReadInt32(preleaseYear);
-
+			
 			_udpHelper = new UdpHelper();
 			_startPosition = new StartPosition();
 			_controlElement = new ControlElement();
@@ -118,6 +121,20 @@ namespace HxModel.FdmManager
 			_sendThread.Start();
 		}
 
+		public void StopAll()
+		{
+			_isStart = false;
+			_isReceive = false;
+			_isSend = false;
+			Thread.Sleep(10);
+			_udpHelper.Stop();
+			Thread.Sleep(10);
+			_receiveThread?.Abort();
+			_sendThread?.Abort();
+			Thread.Sleep(10);
+			StopRecord();
+		}
+
 		private void InitModel(StartPosition startPosition)
 		{
 			KinematicsState initialState = default;
@@ -134,41 +151,41 @@ namespace HxModel.FdmManager
 		public void Step(ControlElement controlElement)
 		{
 			Hel.VehicleCtrl.AltimeterBaroPressure = 761.2;
-			ContactEnv.Elevation =_gmTerrainH;
+			ContactEnv.Elevation = _gmTerrainH;
 			ContactEnv.Normal = _normal;
 			Hel.AirState.WindSpeed = _windSpeed;
 			Hel.Mass = 10800.0;
 			Hel.InertialMoments = _inertialMoments;
 			Hel.PosCG = _posCg;
-            if (controlElement.Channel==1)
-            {
-                Hel.VehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleLeft.Elevator;
-                Hel.VehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleLeft.Aileron;
-                Hel.VehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
-                Hel.VehicleCtrl.Collective = controlElement._generalStepHandleLeft.GeneralStep;
-                Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleLeft.BtnTrim;
-                Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleLeft.BtnStabilizer;
-                Hel.VehicleCtrl.NoseGear.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
-                Hel.VehicleCtrl.MainGearLeft.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
-                Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
-            }
-            else if (controlElement.Channel == 2)
-            {
-                Hel.VehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleRight.Elevator;
-                Hel.VehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleRight.Aileron;
-                Hel.VehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
-                Hel.VehicleCtrl.Collective = controlElement._generalStepHandleRight.GeneralStep;
-                Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleRight.BtnTrim;
-                Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleRight.BtnStabilizer;
-                Hel.VehicleCtrl.NoseGear.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
-                Hel.VehicleCtrl.MainGearLeft.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
-                Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
-            }
+
+			if (controlElement.Channel == 1)
+			{
+				Hel.VehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleLeft.Elevator;
+				Hel.VehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleLeft.Aileron;
+				Hel.VehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
+				Hel.VehicleCtrl.Collective = controlElement._generalStepHandleLeft.GeneralStep;
+				Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleLeft.BtnTrim;
+				Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleLeft.BtnStabilizer;
+				Hel.VehicleCtrl.NoseGear.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
+				Hel.VehicleCtrl.MainGearLeft.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
+				Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleLeft.BtnWheelBrake;
+			}
+			else if (controlElement.Channel == 2)
+			{
+				Hel.VehicleCtrl.CyclicPitch = controlElement._cyclicStepHandleRight.Elevator;
+				Hel.VehicleCtrl.CyclicRoll = controlElement._cyclicStepHandleRight.Aileron;
+				Hel.VehicleCtrl.Direction = controlElement._pedalsLeft.Pedal;
+				Hel.VehicleCtrl.Collective = controlElement._generalStepHandleRight.GeneralStep;
+				Hel.VehicleCtrl.Trimmer = (byte)controlElement._cyclicStepHandleRight.BtnTrim;
+				Hel.VehicleCtrl.Friction = (byte)controlElement._generalStepHandleRight.BtnStabilizer;
+				Hel.VehicleCtrl.NoseGear.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
+				Hel.VehicleCtrl.MainGearLeft.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
+				Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
+			}
 
 
 
-            IntPtr ptrHel = GetIntPtr(Hel);
-            var gg = Marshal.SizeOf(ResState);
+			IntPtr ptrHel = GetIntPtr(Hel);
 			IntPtr ptrCe = GetIntPtr(ContactEnv);
 			IntPtr ptrRs = GetIntPtr(ResState);
 			IntPtr ptrRh = GetIntPtr(ResHel);
@@ -181,13 +198,15 @@ namespace HxModel.FdmManager
 			_dataOut.VhclOutp = ResHel;
 			_dataOut.VhclInp = Hel;
 
-            _udpHelper.Send(GetByte(ResState), "192.168.0.2", 6100);
-            _udpHelper.Send(GetByte(ResState), "192.168.0.4", 6100);
-            _udpHelper.Send(GetByte(ResState), "192.168.0.5", 6100);
-            _udpHelper.Send(GetByte(ResState), "192.168.0.6", 6100);
-            _udpHelper.Send(GetByte(ResState), "192.168.0.9", 6100);
-            _udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
+			_udpHelper.Send(GetByte(ResState), "192.168.0.2", 6100);
+			_udpHelper.Send(GetByte(ResState), "192.168.0.4", 6100);
+			_udpHelper.Send(GetByte(ResState), "192.168.0.5", 6100);
+			_udpHelper.Send(GetByte(ResState), "192.168.0.6", 6100);
+			_udpHelper.Send(GetByte(ResState), "192.168.0.9", 6100);
+			_udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
 			_udpHelper.Send(GetByte(ResState), "255.255.255.255", 6105);
+			if (_isRecord)
+				_recordFlight.RecordData(_dataOut, ResState);
 			Marshal.FreeHGlobal(ptrHel);
 			Marshal.FreeHGlobal(ptrCe);
 			Marshal.FreeHGlobal(ptrRs);
@@ -254,25 +273,25 @@ namespace HxModel.FdmManager
 					{
 						_isStart = false;
 						InitModel(_startPosition);
-						Console.WriteLine("Инициализация модели!");
+						Console.Write("\r\n\r\nИнициализация модели!");
 					}
 
 					if (_startPosition.flag == 1)
 					{
 						_isStart = true;
-						Console.WriteLine("Идет моделирование!");
+						Console.Write("\r\nИдет моделирование!");
 					}
 
 					if (_startPosition.flag == 2)
 					{
 						_isStart = false;
-						Console.WriteLine("Пауза!");
+						Console.Write("\r\nПауза!");
 					}
 
 					if (_startPosition.flag == -1)
 					{
 						_isStart = false;
-						Console.WriteLine("Стоп!");
+						Console.Write("\r\nСтоп!");
 					}
 
 
@@ -348,9 +367,25 @@ namespace HxModel.FdmManager
 			}
 		}
 
-
-
-
 		#endregion
+
+		public void StartRecord()
+		{
+			if (_isRecord)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("\r\n\r\nНеобходимо остановить процесс записи");
+				Console.ForegroundColor = ConsoleColor.Gray;
+				return;
+			}
+			_recordFlight = new RecordFlight();
+			_isRecord = true;
+		}
+
+		public void StopRecord() 
+		{
+			_isRecord = false;
+			_recordFlight?.Stop();
+		}
 	}
 }

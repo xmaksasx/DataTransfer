@@ -289,6 +289,7 @@ namespace DataTransfer.ViewModels
             _dataManager.ChangeBtnEvent += ChangeBtnEvent;
 
             _deviceControlElement.MessageEvent += OnMessageEvent;
+			ChangeChannelComtrolElementCommand.Execute("FirstChannel");
 
 		}
 

@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="FdmManager\ConvertHelper.cs" />
     <Compile Include="FdmManager\FdmManager.cs" />
+    <Compile Include="FdmManager\PlaybackFlight.cs" />
+    <Compile Include="FdmManager\RecordFlight.cs" />
     <Compile Include="FdmManager\UdpHelper.cs" />
     <Compile Include="Models\AirPars.cs" />
     <Compile Include="Models\AirState.cs" />
