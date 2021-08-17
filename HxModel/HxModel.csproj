@@ -47,31 +47,22 @@
     <Compile Include="FdmManager\PlaybackFlight.cs" />
     <Compile Include="FdmManager\RecordFlight.cs" />
     <Compile Include="FdmManager\UdpHelper.cs" />
-    <Compile Include="Models\AirPars.cs" />
-    <Compile Include="Models\AirState.cs" />
-    <Compile Include="Models\AngleTriplet.cs" />
+    <Compile Include="Models\Config\Base\Config.cs" />
+    <Compile Include="Models\Config\DataTransfer.cs" />
+    <Compile Include="Models\Config\DynamicModel.cs" />
+    <Compile Include="Models\Config\IPPoint.cs" />
+    <Compile Include="Models\Config\NetworkSettings.cs" />
+    <Compile Include="Models\Config\Position.cs" />
+    <Compile Include="Models\Config\Svvo.cs" />
     <Compile Include="Models\FCSCommand\FCSCmds.cs" />
-    <Compile Include="Models\ContactEnvironment.cs" />
     <Compile Include="Models\ControlElement.cs" />
     <Compile Include="Models\CyclicStepHandle.cs" />
     <Compile Include="Models\DataOut.cs" />
-    <Compile Include="Models\DGeoPosition.cs" />
-    <Compile Include="Models\Eng.cs" />
     <Compile Include="Models\FCSCommand\FCSCmd.cs" />
-    <Compile Include="Models\FCSState.cs" />
-    <Compile Include="Models\FCSValue.cs" />
-    <Compile Include="Models\GearRes.cs" />
-    <Compile Include="Models\GearState.cs" />
     <Compile Include="Models\GeneralStepHandle.cs" />
     <Compile Include="Models\Header.cs" />
-    <Compile Include="Models\InstrumentsState.cs" />
-    <Compile Include="Models\KinematicsState.cs" />
     <Compile Include="Models\Pedals.cs" />
     <Compile Include="Models\StartPosition.cs" />
-    <Compile Include="Models\VehicleCtrl.cs" />
-    <Compile Include="Models\VhclInp.cs" />
-    <Compile Include="Models\VhclOutp.cs" />
-    <Compile Include="Models\XVECTOR3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SvvoStruct\CameraPosition.cs" />
@@ -85,6 +76,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Logo.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StructHxModel\StructHxModel.csproj">
+      <Project>{494C782E-96DA-41D4-B7F5-257050FEB9E1}</Project>
+      <Name>StructHxModel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Config.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

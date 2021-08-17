@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-
 using DataTransfer.Model.Component.BaseComponent;
 using DataTransfer.Model.Structs.Bmpi;
 using DataTransfer.Model.Structs.DynamicModelStruct.Vaps;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<NetworkSettings>
+		<DataTransfer>
+			<DynamicModel>
+				<IPPoint Port="20020" Ip="127.0.0.1"/>
+			</DynamicModel>
+			</DataTransfer>
+			<Svvo>
+				<Position>
+				<IPPoint Port="6105" Ip="127.0.0.1"/>
+				<IPPoint Port="6107" Ip="127.0.0.1"/>
+				<IPPoint Port="6108" Ip="127.0.0.1"/>
+				<IPPoint Port="6109" Ip="127.0.0.1"/>
+				<IPPoint Port="6106" Ip="127.0.0.1"/>
+			</Position>
+		</Svvo>
+	</NetworkSettings>
+</Config>

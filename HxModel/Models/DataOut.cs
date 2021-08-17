@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using StructHxModel.Models;
+using System.Runtime.InteropServices;
 
 namespace HxModel.Models
 {

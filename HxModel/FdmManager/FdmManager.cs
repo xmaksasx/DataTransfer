@@ -1,6 +1,8 @@
 ﻿using HxModel.Models;
+using HxModel.Models.Config.Base;
 using HxModel.Models.FCSCommand;
 using HxModel.SvvoStruct;
+using StructHxModel.Models;
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -77,9 +79,10 @@ namespace HxModel.FdmManager
 		private DataOut _dataOut;
 		private float _gmTerrainH;
         private FCSCmds fCSCmds;
-
-        public FdmManager()
+		private Config _config;
+		public FdmManager()
 		{
+			_config = Config.Instance();
 			uint  version = 0;
 			uint  release = 0;
 			uint  releaseDay = 0;
@@ -137,6 +140,22 @@ namespace HxModel.FdmManager
 
 		private void InitModel(StartPosition startPosition)
 		{
+
+			Hel.FCSState.TurnCoordSpd = 80;
+			Hel.FCSState.TurnCoordination = 1;
+			Hel.FCSState.PitchChnl.StickTrimmedPos = 0.5;
+			Hel.FCSState.PitchChnl.StickAngleSpd = 9;
+			Hel.FCSState.PitchChnl.StickDeadzone = 0.02;
+			Hel.FCSState.PitchChnl.MinAngle = -12;
+			Hel.FCSState.PitchChnl.MaxAngle = 16;
+
+			Hel.FCSState.RollChnl.StickTrimmedPos = 0.5;
+			Hel.FCSState.RollChnl.StickAngleSpd = 22;
+			Hel.FCSState.RollChnl.StickDeadzone = 0.02;
+			Hel.FCSState.RollChnl.MinAngle = -24;
+			Hel.FCSState.RollChnl.MaxAngle = 24;
+
+
 			KinematicsState initialState = default;
 			initialState.AbsSpeed = new XVECTOR3() { X = 0, Y = 0, Z = 0 };
 			initialState.Angs.Psi = startPosition.in_Kurs0;
@@ -183,7 +202,15 @@ namespace HxModel.FdmManager
 				Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
 			}
 
-
+			//Hel.VehicleCtrl.CyclicPitch = 0.5;
+			//Hel.VehicleCtrl.CyclicRoll = 0.5;
+			//Hel.VehicleCtrl.Direction = 0.5; ;
+			//Hel.VehicleCtrl.Collective = 0.0;
+			//Hel.VehicleCtrl.Trimmer = 0;
+			//Hel.VehicleCtrl.Friction = 0;
+			//Hel.VehicleCtrl.NoseGear.Brake = 1;
+			//Hel.VehicleCtrl.MainGearLeft.Brake = 1;
+			//Hel.VehicleCtrl.MainGearRight.Brake = 1;
 
 			IntPtr ptrHel = GetIntPtr(Hel);
 			IntPtr ptrCe = GetIntPtr(ContactEnv);
@@ -198,13 +225,14 @@ namespace HxModel.FdmManager
 			_dataOut.VhclOutp = ResHel;
 			_dataOut.VhclInp = Hel;
 
-			_udpHelper.Send(GetByte(ResState), "192.168.0.2", 6100);
-			_udpHelper.Send(GetByte(ResState), "192.168.0.4", 6100);
-			_udpHelper.Send(GetByte(ResState), "192.168.0.5", 6100);
-			_udpHelper.Send(GetByte(ResState), "192.168.0.6", 6100);
-			_udpHelper.Send(GetByte(ResState), "192.168.0.9", 6100);
-			_udpHelper.Send(GetByte(_dataOut), "127.0.0.1", 20020);
-			_udpHelper.Send(GetByte(ResState), "255.255.255.255", 6105);
+
+
+			foreach (var ippoint in _config.NetworkSettings.Svvo.Position.IPPoint)
+				_udpHelper.Send(GetByte(ResState), ippoint.Ip, ippoint.Port);
+
+			foreach (var ippoint in _config.NetworkSettings.DataTransfer.DynamicModel.IPPoint)
+				_udpHelper.Send(GetByte(_dataOut), ippoint.Ip, ippoint.Port);
+
 			if (_isRecord)
 				_recordFlight.RecordData(_dataOut, ResState);
 			Marshal.FreeHGlobal(ptrHel);
@@ -305,7 +333,7 @@ namespace HxModel.FdmManager
                     {
                         ConvertHelper.ByteToObject(receivedBytes, fCSCmds);
                         Hel.FCSState.Mode = (uint)fCSCmds.Mode;
-                        Hel.FCSState.RoolLimit = fCSCmds.RoolLimit;
+                       // Hel.FCSState.RoolLimit = fCSCmds.RoolLimit;
                         Hel.FCSState.HorSpeedReq.Activated = (byte)fCSCmds.HorSpeedReq.Activated;
                         Hel.FCSState.HorSpeedReq.Value = fCSCmds.HorSpeedReq.Value;
                         Hel.FCSState.VertSpeedReq.Activated = (byte)fCSCmds.VertSpeedReq.Activated;

@@ -1,5 +1,7 @@
 ﻿using HxModel.Models;
+using HxModel.Models.Config.Base;
 using HxModel.SvvoStruct;
+using StructHxModel.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,9 +32,10 @@ namespace HxModel.FdmManager
 
 		private UdpClient _sendClient;
 		private Svvo _svvo;
-
+		private Config _config;
 		public PlaybackFlight()
 		{
+			_config = Config.Instance();
 			_sendClient = new UdpClient();
 			_svvo = new Svvo();
 			Step();
@@ -72,16 +75,11 @@ namespace HxModel.FdmManager
 					byte[] dataOutBytres = ConvertHelper.ObjectToByte(listOfPlay[idx].DataOut);
 					byte[] ksBytres = GetByte(listOfPlay[idx].KinematicsState);
 
-			
-					Send(ksBytres, "192.168.0.2", 6100);
-					Send(ksBytres, "192.168.0.4", 6100);
-					Send(ksBytres, "192.168.0.5", 6100);
-					Send(ksBytres, "192.168.0.6", 6100);
-					Send(ksBytres, "192.168.0.9", 6100);
-					Send(dataOutBytres, "127.0.0.1", 20020);
-					Send(ksBytres, "255.255.255.255", 6105);
+					foreach (var ippoint in _config.NetworkSettings.Svvo.Position.IPPoint)
+						Send(ksBytres, ippoint.Ip, ippoint.Port);
 
-
+					foreach (var ippoint in _config.NetworkSettings.DataTransfer.DynamicModel.IPPoint)
+						Send(dataOutBytres, ippoint.Ip, ippoint.Port);
 
 					idx++;
 					double percent = (double)Math.Round((double)idx / (double)lenght * 100.0, 2);

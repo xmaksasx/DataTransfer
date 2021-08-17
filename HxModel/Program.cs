@@ -1,4 +1,5 @@
 ﻿using HxModel.FdmManager;
+using HxModel.Models.Config.Base;
 using System;
 using System.IO;
 using System.Reflection;
@@ -11,7 +12,7 @@ namespace HxModel
 		FdmManager.FdmManager _fdmManager;
 		static void Main(string[] args)
 		{
-			FdmManager.FdmManager _fdmManager = new FdmManager.FdmManager();
+	
 
 			var assembly = Assembly.GetExecutingAssembly();
 			var resourceName = "HxModel.Logo.txt";
@@ -32,6 +33,10 @@ namespace HxModel
 				Console.WriteLine("");
 				Console.ForegroundColor = ConsoleColor.Gray;
 			}
+
+
+			FdmManager.FdmManager _fdmManager = new FdmManager.FdmManager();
+
 			string lastCommand = "Модель готова к работе!";
 			while (true)
 			{

@@ -1,16 +1,17 @@
 ﻿using DataTransfer.Infrastructure.Helpers;
 using DataTransfer.Model.Structs.DynamicModelStruct.Vaps;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using DataTransfer.Model.Structs.Bmpi;
+using StructHxModel.Models;
 
 namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 {
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	class ModelHx : DynamicModel
-	{
+	{ 
+
 		protected override void SetHead()
 		{
 			GetHeadDouble("ModelHx");
@@ -110,7 +111,7 @@ namespace DataTransfer.Model.Structs.DynamicModelStruct.Hx
 			modelToVaps.AngleDrift = hi * D2R;
 			modelToVaps.Angleslip = VhclOutp.InstrumentsState.AirPars.Beta;
 			modelToVaps.RollCurrent = KinematicsState.Angs.Gam;
-			modelToVaps.MaximumPermissibleRoll = VhclInp.FCSState.RoolLimit;
+			//modelToVaps.MaximumPermissibleRoll = VhclInp.FCSState.RoolLimit;
 			modelToVaps.RecommendedRollValue = 0;
 			modelToVaps.PitchCurrent = KinematicsState.Angs.Fi;
 			modelToVaps.RecommendedPitchValue = 0;
