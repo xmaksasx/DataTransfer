@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 using DataTransfer.Model.Structs.ControlElements;
 using MaterialDesignThemes.Wpf;
 
@@ -22,6 +24,13 @@ namespace DataTransfer.Views
 			InitializeComponent();
 
 		}
+
+		private void PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			Regex regex = new Regex("[^0-9.-]+");
+			e.Handled = regex.IsMatch(e.Text);
+		}
+
 
 		private char[] ToBigEndian(char[] str)
 		{

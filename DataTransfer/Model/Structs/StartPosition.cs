@@ -14,12 +14,12 @@ namespace DataTransfer.Model.Structs
 			GetHeadDouble("StartPosition");
 		}
 
-		public void InitPosition(int state)
+		public StartPosition()
 		{
-			flag = state;
+			flag = 0;
 			LAND = 0;
-			StartX = 0;
-			StartY = 0;
+			StartX = 43.44794255;
+			StartY = 39.94518977;
 			in_V = 0;
 			in_Hgeom = 14;
 			in_t = 0;
@@ -30,6 +30,23 @@ namespace DataTransfer.Model.Structs
 			in_Toplivo = 1500;
 			in_Kurs0 = 0; //90;
 			in_Hbar = in_Hgeom;
+		}
+		public void InitPosition(int state)
+		{
+			flag = state;
+			//LAND = 0;
+			//StartX = 43.44794255;
+			//StartY = 39.94518977;
+			//in_V = 0;
+			//in_Hgeom = 14;
+			//in_t = 0;
+			//in_Shag = 0.01f;
+			//in_TemperatVozd0 = 20;
+			//in_Massa0 = 10400;
+			//in_Center0 = 0.08f;
+			//in_Toplivo = 1500;
+			//in_Kurs0 = 0; //90;
+			//in_Hbar = in_Hgeom;
 			
 		}
 
@@ -53,25 +70,25 @@ namespace DataTransfer.Model.Structs
 		/// начальное положение по Х
 		/// </summary>
 		[Description("начальное положение по Х")]
-		double StartX;
+		public double StartX;
 
 		/// <summary>
 		/// начальное положение по Y
 		/// </summary>
 		[Description("начальное положение по Y")]
-		double StartY;
+		public double StartY;
 
 		/// <summary>
 		/// начальная скорость
 		/// </summary>
 		[Description("начальная скорость")]
-		float in_V;
+		public float in_V;
 
 		/// <summary>
 		/// Начальная высота
 		/// </summary>
 		[Description("Начальная высота")]
-		float in_Hgeom;
+		public float in_Hgeom;
 
 		/// <summary>
 		/// in_t
@@ -113,7 +130,7 @@ namespace DataTransfer.Model.Structs
 		/// начальный курс
 		/// </summary>
 		[Description("начальный курс")]
-		float in_Kurs0;
+		public float in_Kurs0;
 
 		/// <summary>
 		/// бараметрическая высота

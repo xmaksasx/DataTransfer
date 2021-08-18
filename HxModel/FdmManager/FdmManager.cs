@@ -159,9 +159,9 @@ namespace HxModel.FdmManager
 			KinematicsState initialState = default;
 			initialState.AbsSpeed = new XVECTOR3() { X = 0, Y = 0, Z = 0 };
 			initialState.Angs.Psi = startPosition.in_Kurs0;
-			initialState.Pos.Elevation = startPosition.in_Hbar+3;
-			initialState.Pos.Latitude = startPosition.StartX = 43.44794255;
-			initialState.Pos.Longitude = startPosition.StartY = 39.94518977;
+			initialState.Pos.Elevation = startPosition.in_Hgeom+3;
+			initialState.Pos.Latitude = startPosition.StartX;//= 43.44794255;
+			initialState.Pos.Longitude = startPosition.StartY;// = 39.94518977;
 			IntPtr ksPtr = GetIntPtr(initialState);
 			Init(ksPtr);
 			Marshal.FreeHGlobal(ksPtr);
@@ -202,15 +202,15 @@ namespace HxModel.FdmManager
 				Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
 			}
 
-			//Hel.VehicleCtrl.CyclicPitch = 0.5;
-			//Hel.VehicleCtrl.CyclicRoll = 0.5;
-			//Hel.VehicleCtrl.Direction = 0.5; ;
-			//Hel.VehicleCtrl.Collective = 0.0;
-			//Hel.VehicleCtrl.Trimmer = 0;
-			//Hel.VehicleCtrl.Friction = 0;
-			//Hel.VehicleCtrl.NoseGear.Brake = 1;
-			//Hel.VehicleCtrl.MainGearLeft.Brake = 1;
-			//Hel.VehicleCtrl.MainGearRight.Brake = 1;
+			Hel.VehicleCtrl.CyclicPitch = 0.5;
+			Hel.VehicleCtrl.CyclicRoll = 0.5;
+			Hel.VehicleCtrl.Direction = 0.5; ;
+			Hel.VehicleCtrl.Collective = 0.0;
+			Hel.VehicleCtrl.Trimmer = 0;
+			Hel.VehicleCtrl.Friction = 0;
+			Hel.VehicleCtrl.NoseGear.Brake = 1;
+			Hel.VehicleCtrl.MainGearLeft.Brake = 1;
+			Hel.VehicleCtrl.MainGearRight.Brake = 1;
 
 			IntPtr ptrHel = GetIntPtr(Hel);
 			IntPtr ptrCe = GetIntPtr(ContactEnv);

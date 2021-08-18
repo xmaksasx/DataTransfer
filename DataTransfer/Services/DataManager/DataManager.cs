@@ -221,7 +221,6 @@ namespace DataTransfer.Services.DataManager
 
 		#endregion
 
-
 		public void ChangeModel(string nameModel)
 		{
 			if (nameModel == "Ka52")
@@ -316,11 +315,25 @@ namespace DataTransfer.Services.DataManager
 			_stateModel = -1;
 		}
 
-        #endregion
+		public void SetStartPosition(StartPosition startPosition)
+		{
 
-        #region Method for thread
+			ConvertHelper.LocalCordToLatLon(43.44794255, 39.94518977, 
+				startPosition.StartX, startPosition.StartY, 
+				out double x, out double z);
 
-        private void Poll()
+			_startPosition.StartX = x;
+			_startPosition.StartY = z;
+			_startPosition.in_Hgeom = startPosition.in_Hgeom;
+			_startPosition.in_Kurs0 = startPosition.in_Kurs0;
+			_startPosition.in_V = startPosition.in_V;
+		}
+
+		#endregion
+
+		#region Method for thread
+
+		private void Poll()
 		{
 			while (_isPoll)
 			{
@@ -550,6 +563,7 @@ namespace DataTransfer.Services.DataManager
 		}
 
         #endregion
+
         public void SetChannelControlElement(int channel)
         {
             _controlElement.SetChannel(channel);
