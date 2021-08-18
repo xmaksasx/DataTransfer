@@ -202,15 +202,15 @@ namespace HxModel.FdmManager
 				Hel.VehicleCtrl.MainGearRight.Brake = controlElement._cyclicStepHandleRight.BtnWheelBrake;
 			}
 
-			Hel.VehicleCtrl.CyclicPitch = 0.5;
-			Hel.VehicleCtrl.CyclicRoll = 0.5;
-			Hel.VehicleCtrl.Direction = 0.5; ;
-			Hel.VehicleCtrl.Collective = 0.0;
-			Hel.VehicleCtrl.Trimmer = 0;
-			Hel.VehicleCtrl.Friction = 0;
-			Hel.VehicleCtrl.NoseGear.Brake = 1;
-			Hel.VehicleCtrl.MainGearLeft.Brake = 1;
-			Hel.VehicleCtrl.MainGearRight.Brake = 1;
+			//Hel.VehicleCtrl.CyclicPitch = 0.5;
+			//Hel.VehicleCtrl.CyclicRoll = 0.5;
+			//Hel.VehicleCtrl.Direction = 0.5; ;
+			//Hel.VehicleCtrl.Collective = 0.0;
+			//Hel.VehicleCtrl.Trimmer = 0;
+			//Hel.VehicleCtrl.Friction = 0;
+			//Hel.VehicleCtrl.NoseGear.Brake = 1;
+			//Hel.VehicleCtrl.MainGearLeft.Brake = 1;
+			//Hel.VehicleCtrl.MainGearRight.Brake = 1;
 
 			IntPtr ptrHel = GetIntPtr(Hel);
 			IntPtr ptrCe = GetIntPtr(ContactEnv);
