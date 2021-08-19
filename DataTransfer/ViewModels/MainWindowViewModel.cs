@@ -352,8 +352,8 @@ namespace DataTransfer.ViewModels
 		private void OnSetLandingCoordinateCommandExecuted(object p)
 		{
 
-			CoordX = "-3385";
-			CoordZ = "-7268";
+			CoordX = "-5103";
+			CoordZ = "-10892";
 			Elevation = 600;
 			Heading = 290;
 			Speed = 150;

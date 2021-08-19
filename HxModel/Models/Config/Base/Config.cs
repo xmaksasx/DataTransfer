@@ -31,8 +31,9 @@ namespace HxModel.Models.Config.Base
 
 			try
 			{
+				var path = System.AppDomain.CurrentDomain.BaseDirectory;
 				XmlSerializer serializer = new XmlSerializer(typeof(Config));
-				using (StreamReader reader = new StreamReader("Config.xml"))
+				using (StreamReader reader = new StreamReader(path + "/Config.xml"))
 					instance = (Config)serializer.Deserialize(reader);
 
 			}

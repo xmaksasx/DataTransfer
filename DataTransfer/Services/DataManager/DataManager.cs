@@ -317,8 +317,8 @@ namespace DataTransfer.Services.DataManager
 
 		public void SetStartPosition(StartPosition startPosition)
 		{
-
-			ConvertHelper.LocalCordToLatLon(43.44794255, 39.94518977, 
+			
+			ConvertHelper.LocalCordToLatLon(43.439489, 39.925886, 
 				startPosition.StartX, startPosition.StartY, 
 				out double x, out double z);
 
