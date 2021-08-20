@@ -422,7 +422,7 @@ namespace DataTransfer.Services.DataManager
 						_udpHelper.Send(_route.GetReverseBytes(), ippoint.Ip,ippoint.Port);
 					break;
 
-				case "Landing":
+				case "TacticalEditor_Landing":
 					_landing.Assign(receivedBytes);
 					break;
 
